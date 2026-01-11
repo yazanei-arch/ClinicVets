@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% set title = "Project Results" %}
+
+{% block content %}
+<style>
+    .result-container {
+        max-width: 700px;
+        margin: 5rem auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Back Link */
+    .back-link {
+        display: inline-block;
+        color: #a0a0b0;
+        text-decoration: none;
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover {
+        color: #fff;
+    }
+
+    /* Main Card */
+    .result-card {
+        background: rgba(30, 30, 40, 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 3rem;
+        text-align: center;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .project-meta {
+        margin-bottom: 2rem;
+    }
+
+    .project-meta h1 {
+        font-size: 2rem;
+        margin: 0;
+        color: #fff;
+    }
+
+    .project-meta p {
+        color: #a0a0b0;
+        margin-top: 0.5rem;
+    }
+
+    /* Published State Styling */
+    .score-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 4px solid #6C63FF;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 2rem auto;
+        background: rgba(108, 99, 255, 0.1);
+        box-shadow: 0 0 30px rgba(108, 99, 255, 0.2);
+    }
+
+    .score-number {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1;
+    }
+
+    .score-label {
+        font-size: 0.9rem;
+        color: #a0a0b0;
+        margin-top: 5px;
+    }
+
+    .feedback-box {
+        text-align: left;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border-left: 3px solid #6C63FF;
+        margin-top: 2rem;
+    }
+
+    .feedback-title {
+        color: #6C63FF;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .feedback-content {
+        color: #e0e0e0;
+        line-height: 1.6;
+        font-style: italic;
+    }
+
+    /* Pending State Styling */
+    .pending-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        animation: pulse 2s infinite;
+        opacity: 0.8;
+    }
+
+    .status-pill {
+        display: inline-block;
+        padding: 8px 24px;
+        background: rgba(255, 159, 67, 0.1);
+        color: #ff9f43;
+        border: 1px solid rgba(255, 159, 67, 0.3);
+        border-radius: 50px;
+        font-weight: 600;
+        margin-top: 1.5rem;
+    }
+
+    @keyframes pulse {
+        0% {
+            opacity: 0.6;
+            transform: scale(0.95);
+        }
+
+        50% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        100% {
+            opacity: 0.6;
+            transform: scale(0.95);
+        }
+    }
+</style>
+
+<div class="result-container">
+    <a href="{{ url_for('student_dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+    <div class="result-card">
+        <div class="project-meta">
+            <h1>{{ project.name }}</h1>
+            <p>{{ project.category }}</p>
+        </div>
+
+        {% if project.is_published %}
+        <div class="score-circle">
+            <span class="score-number">{{ project.average_score }}</span>
+            <span class="score-label">Final Score</span>
+        </div>
+
+        <div class="feedback-box">
+            <div class="feedback-title">Judges' Feedback</div>
+            <div class="feedback-content">
+                "{{ project.feedback if project.feedback else 'No written feedback provided.' }}"
+            </div>
+        </div>
+
+        {% else %}
+        <div style="padding: 2rem 0;">
+            <div class="pending-icon">⏳</div>
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Evaluation in Progress</h2>
+            <p style="color: #a0a0b0; line-height: 1.5;">
+                Your project is currently with our judges.<br>
+                Check back soon for your results.
+            </p>
+            <div class="status-pill">Status: {{ project.status }}</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

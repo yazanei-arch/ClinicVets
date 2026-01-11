@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% set title = event.name %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="auth-card" style="width: min(1000px, 95vw); text-align: left;">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <a href="{{ url_for('admin_dashboard') }}"
+                    style="color: #a0a0b0; text-decoration: none; font-size: 0.9rem;">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <h1 style="margin-top: 10px; margin-bottom: 5px;">{{ event.name }}</h1>
+                <p class="subtitle" style="margin: 0; opacity: 0.7;">
+                    {{ event.date.strftime('%Y-%m-%d') }} | Tracks: {{ event.tracks }}
+                </p>
+            </div>
+        </div>
+
+        <div
+            style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.1);">
+            <h3 style="margin-top: 0; margin-bottom: 1rem; font-size: 1.1rem;">Add Project to Event</h3>
+
+            <form method="POST" action="{{ url_for('add_project', event_id=event.id) }}"
+                style="display: grid; gap: 1rem; grid-template-columns: 1fr 1fr;">
+                <input name="name" placeholder="Project Name" class="field" required
+                    style="padding: 10px; border-radius: 6px; border: 1px solid #444; background: rgba(0,0,0,0.2); color: white;">
+
+                <input name="category" placeholder="Category" class="field" required
+                    style="padding: 10px; border-radius: 6px; border: 1px solid #444; background: rgba(0,0,0,0.2); color: white;">
+
+                <input name="team_members" placeholder="Team Members" class="field" required
+                    style="padding: 10px; border-radius: 6px; border: 1px solid #444; background: rgba(0,0,0,0.2); color: white;">
+
+                <input name="contact_email" placeholder="Email" class="field" required
+                    style="padding: 10px; border-radius: 6px; border: 1px solid #444; background: rgba(0,0,0,0.2); color: white;">
+
+                <input name="description" placeholder="Description" class="field" required
+                    style="grid-column: span 2; padding: 10px; border-radius: 6px; border: 1px solid #444; background: rgba(0,0,0,0.2); color: white;">
+
+                <select name="judge_id" class="field"
+                    style="padding: 10px; border-radius: 6px; border: 1px solid #444; background: rgba(0,0,0,0.2); color: white;">
+                    <option value="" style="color: black;">-- Assign Judge (Optional) --</option>
+                    {% for judge in judges %}
+                    <option value="{{ judge.id }}" style="color: black;">{{ judge.full_name }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit" class="btn-primary"
+                    style="grid-column: span 2; justify-self: start; padding: 0.6rem 1.5rem;">
+                    + Add Project
+                </button>
+            </form>
+        </div>
+
+        <h3 style="margin-bottom: 1rem;">Projects in this Event</h3>
+
+        {% if projects %}
+        <div
+            style="overflow-x: auto; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+            <table style="width: 100%; border-collapse: collapse; color: white;">
+                <thead>
+                    <tr
+                        style="border-bottom: 1px solid rgba(255,255,255,0.1); text-align: left; background: rgba(255,255,255,0.05);">
+                        <th style="padding: 12px;">Name</th>
+                        <th style="padding: 12px;">Category</th>
+                        <th style="padding: 12px;">Assigned Judge</th>
+                        <th style="padding: 12px;">Score</th>
+                        <th style="padding: 12px; text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in projects %}
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 12px; font-weight: bold; color: var(--accent);">{{ p.name }}</td>
+                        <td style="padding: 12px;">{{ p.category }}</td>
+                        <td style="padding: 12px;">
+                            {% if p.judge_id %}
+                            <span
+                                style="color: #2ecc71; font-size: 0.9em; border: 1px solid rgba(46, 204, 113, 0.3); padding: 2px 8px; border-radius: 12px;">Has
+                                Judge</span>
+                            {% else %}
+                            <span
+                                style="color: #e74c3c; font-size: 0.9em; border: 1px solid rgba(231, 76, 60, 0.3); padding: 2px 8px; border-radius: 12px;">Unassigned</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 12px;">
+                            {% if p.status == 'Graded' or p.is_published %}
+                            <strong>{{ p.average_score }}</strong>
+                            {% else %}
+                            <span style="opacity: 0.4;">--</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 12px; text-align: right;">
+                            <form action="{{ url_for('delete_project', project_id=p.id) }}" method="POST"
+                                onsubmit="return confirm('Delete project \'{{ p.name }}\'? This cannot be undone.');"
+                                style="display: inline-block;">
+                                <button type="submit" title="Delete Project"
+                                    style="background: rgba(231, 76, 60, 0.1); border: 1px solid rgba(231, 76, 60, 0.3); cursor: pointer; color: #e74c3c; padding: 6px 10px; border-radius: 6px; transition: all 0.2s;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div
+            style="padding: 3rem; background: rgba(255,255,255,0.05); border-radius: 8px; text-align: center; border: 1px dashed rgba(255,255,255,0.2);">
+            <p style="opacity: 0.6; margin: 0; font-size: 1.1rem;">No projects added to this event yet.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
