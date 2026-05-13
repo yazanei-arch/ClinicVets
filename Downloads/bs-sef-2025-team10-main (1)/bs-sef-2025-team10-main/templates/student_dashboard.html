@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% set title = "Student Dashboard" %}
+
+{% block content %}
+<style>
+  /* Dashboard Container */
+  .dashboard-container {
+    max-width: 1000px;
+    margin: 4rem auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Header Section */
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .welcome-text h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #fff, #a0a0b0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+  }
+
+  .welcome-text p {
+    color: #a0a0b0;
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  /* Modern Glass Table Card */
+  .project-card {
+    background: rgba(30, 30, 40, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fff;
+  }
+
+  .modern-table th {
+    text-align: left;
+    padding: 1.5rem;
+    color: #8b8b9e;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .modern-table td {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
+  }
+
+  .modern-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .modern-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  /* Typography & Badges */
+  .project-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .category-tag {
+    color: #a0a0b0;
+    font-size: 0.95rem;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .status-pending {
+    background: rgba(255, 159, 67, 0.15);
+    color: #ff9f43;
+    border: 1px solid rgba(255, 159, 67, 0.3);
+  }
+
+  .status-submitted {
+    background: rgba(84, 160, 255, 0.15);
+    color: #54a0ff;
+    border: 1px solid rgba(84, 160, 255, 0.3);
+  }
+
+  .status-completed {
+    background: rgba(29, 209, 161, 0.15);
+    color: #1dd1a1;
+    border: 1px solid rgba(29, 209, 161, 0.3);
+  }
+
+  .score-value {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #fff;
+  }
+
+  /* Buttons */
+  .btn-create {
+    background: #6C63FF;
+    color: white;
+    text-decoration: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+    transition: all 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-create:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 99, 255, 0.5);
+  }
+
+  .btn-details {
+    text-decoration: none;
+    color: #a0a0b0;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s;
+    font-size: 0.9rem;
+  }
+
+  .btn-details:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 5rem 1rem;
+    color: #a0a0b0;
+  }
+</style>
+
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <div class="welcome-text">
+      <h1>Dashboard</h1>
+      <p>Welcome back, {{ user.full_name }}</p>
+    </div>
+    <a href="{{ url_for('submit_project') }}" class="btn-create">
+      + New Project
+    </a>
+  </div>
+
+  <div class="project-card">
+    {% if projects %}
+    <div class="table-responsive">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th width="35%">Project Name</th>
+            <th width="20%">Category</th>
+            <th width="20%">Status</th>
+            <th width="10%">Score</th>
+            <th width="15%" style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for project in projects %}
+          <tr>
+            <td>
+              <div class="project-title">{{ project.name }}</div>
+            </td>
+            <td><span class="category-tag">{{ project.category }}</span></td>
+            <td>
+              {% if project.status == 'Graded' or project.status == 'Completed' %}
+              <span class="status-badge status-completed">Graded</span>
+              {% elif project.status == 'Submitted' %}
+              <span class="status-badge status-submitted">Submitted</span>
+              {% else %}
+              <span class="status-badge status-pending">{{ project.status }}</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if project.is_published %}
+              <span class="score-value">{{ project.average_score }}</span>
+              {% else %}
+              <span style="opacity: 0.3;">--</span>
+              {% endif %}
+            </td>
+            <td style="text-align: right;">
+              <a href="{{ url_for('my_results') }}" class="btn-details">
+                View
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.5;">📂</div>
+      <p>No projects submitted yet.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

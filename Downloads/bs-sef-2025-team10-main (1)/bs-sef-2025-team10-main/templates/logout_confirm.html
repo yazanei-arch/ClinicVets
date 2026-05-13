@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% set title = "Confirm Logout" %}
+
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-card" style="text-align: center;">
+    <div class="auth-header">
+      <h1 class="auth-title" style="color: #dc3545;">Log Out?</h1> <p class="auth-subtitle">Are you sure you want to sign out?</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('logout') }}">
+      <div class="auth-actions" style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+        
+        <a href="{{ url_for('home') }}" class="btn" 
+           style="text-decoration: none; padding: 10px 20px; background-color: #6c757d; color: white; border-radius: 4px;">
+           Cancel
+        </a>
+
+        <button type="submit" class="btn" 
+                style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Yes, Log Out
+        </button>
+
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

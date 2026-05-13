@@ -1,0 +1,66 @@
+/* static/css/register.css */
+.auth-wrap{
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.card-head{
+  margin-bottom: 14px;
+}
+
+.form{
+  display: grid;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.field{
+  display: grid;
+  gap: 8px;
+}
+
+label{
+  font-size: 14px;
+  color: rgba(255,255,255,.82);
+}
+
+input, select{
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.25);
+  color: rgba(255,255,255,.92);
+  outline: none;
+}
+
+input::placeholder{ color: rgba(255,255,255,.45); }
+
+input:focus, select:focus{
+  border-color: rgba(79,124,255,.55);
+  box-shadow: 0 0 0 4px rgba(79,124,255,.18);
+}
+
+.btn{
+  margin-top: 6px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 0;
+  cursor: pointer;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(180deg, var(--primary), var(--primary2));
+  box-shadow: 0 12px 30px rgba(79,124,255,.25);
+}
+
+.btn:hover{
+  filter: brightness(1.05);
+}
+
+.footnote{
+  margin: 14px 4px 0;
+  font-size: 13px;
+  line-height: 1.35;
+}

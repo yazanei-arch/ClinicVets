@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% set title = "Judge Dashboard" %}
+{% set page_css = "judge_dashboard.css" %}
+
+{% block content %}
+<section class="dashboard">
+  <div class="dash-header">
+    <div class="dash-title">
+      <h1>Judge Dashboard</h1>
+      <p>
+        Welcome, {{ user.full_name }}. Review assigned projects and submit evaluations.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <!-- MOBILE VIEW -->
+<div class="mobile-projects">
+  {% for p in projects %}
+    {% set st = (p.status or "pending")|lower %}
+    <div class="project-card">
+      <h3>{{ p.name }}</h3>
+
+      <p class="muted">Team: {{ p.team_members }}</p>
+      <p><strong>Category:</strong> {{ p.category }}</p>
+
+      {% if st in ["graded", "done", "completed"] %}
+        <span class="pill good">Graded</span>
+      {% else %}
+        <span class="pill warn">Pending</span>
+      {% endif %}
+
+      <a class="btn primary full"
+         href="{{ url_for('evaluation_page', project_id=p.id) }}">
+        Evaluate
+      </a>
+    </div>
+  {% endfor %}
+</div>
+    <!-- DESKTOP VIEW -->
+    <h2>Assigned Projects</h2>
+    <p>List of projects assigned to you for evaluation.</p>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width: 90px;">ID</th>
+            <th>Project Info</th>
+            <th style="width: 120px;">Category</th>
+            <th style="width: 140px;">Status</th>
+            <th style="width: 200px;">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% if projects and projects|length > 0 %}
+            {% for p in projects %}
+            {% set st = (p.status or "pending")|lower %}
+            <tr>
+              <td>#{{ p.id }}</td>
+              <td>
+                <strong>{{ p.name }}</strong><br />
+                <span style="color: rgba(255,255,255,0.70); font-size: 12px;">
+                  Student/Team: {{ p.team_members }}
+                </span>
+              </td>
+
+              <td>{{ p.category }}</td>
+
+              <td>
+                {% if st in ["graded", "done", "completed"] %}
+                  <span class="pill good">Graded</span>
+                {% else %}
+                  <span class="pill warn">Pending</span>
+                {% endif %}
+              </td>
+
+              <td>
+                <div class="actions">
+                  <a class="btn primary"
+   href="{{ url_for('evaluation_page', project_id=p.id) }}">
+   Evaluate
+</a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 30px; color: rgba(255,255,255,0.6);">
+                No projects assigned yet.
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dashboard { max-width: 1000px; margin: 0 auto; padding: 20px; }
+  .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; }
+  .table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  .table th { text-align: left; color: #aaa; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .table td { padding: 15px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #fff; }
+  .pill { padding: 4px 8px; border-radius: 4px; font-size: 12px; background: #333; color: #ccc; }
+  .pill.good { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+  .pill.warn { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+  .btn { text-decoration: none; padding: 8px 16px; border-radius: 6px; background: rgba(255,255,255,0.1); color: #fff; font-size: 14px; }
+  .btn.primary { background: #4f7cff; }
+  .btn:hover { opacity: 0.9; }
+</style>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% set title = "Submit Project - SmartEval" %}
+{% set page_css = "login.css" %}
+
+{% block content %}
+<div class="content">
+  <div class="auth-card" style="width: min(700px, 95vw);">
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}" style="padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; background: rgba(255,255,255,0.1); border: 1px solid white;">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="auth-header">
+      <h1>Submit Project</h1>
+    </div>
+
+    <form method="POST" action="/submit-project" class="auth-form">
+      <div class="field">
+        <label for="name">Project Title</label>
+        <input id="name" name="name" type="text" placeholder="Project Name" required>
+      </div>
+
+      <div class="field">
+        <label for="category">Category / Track</label>
+        <input id="category" name="category" type="text" placeholder="e.g., IOT, AI" required>
+      </div>
+
+      <div class="field">
+        <label for="description">Short Description</label>
+        <textarea id="description" name="description" required 
+                  style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--field-border); background: var(--field-bg); color: var(--text);"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="team_members">Team Members</label>
+        <input id="team_members" name="team_members" type="text" placeholder="John, Jane..." required>
+      </div>
+
+      <div class="field">
+        <label for="contact_email">Contact Email</label>
+        <input id="contact_email" name="contact_email" type="email" required>
+      </div>
+
+      <div class="auth-actions">
+        <button class="btn-primary" type="submit">Submit Project</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

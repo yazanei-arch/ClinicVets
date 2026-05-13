@@ -1,0 +1,18 @@
+<form method="post" action="/assignments/auto-assign" style="margin-top: 20px;">
+  <button type="submit">Auto-Assign</button>
+</form>
+<td>
+  {% set jid = assignments_map.get(project.id) %}
+  {{ judge_name_by_id.get(jid, "—") if jid else "—" }}
+</td>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div style="margin: 12px 0;">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}" style="padding:10px; border:1px solid #ccc; margin-bottom:8px;">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}

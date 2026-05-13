@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="28" failures="0" errors="0" time="20.698">
+  <testsuite name="Resources panel test suite" errors="0" failures="0" skipped="0" timestamp="2024-04-23T09:20:47" time="13.726" tests="3">
+    <testcase classname="Resources panel test suite it should render resources panel" name="Resources panel test suite it should render resources panel" time="0.102">
+    </testcase>
+    <testcase classname="Resources panel test suite it should call onClose on close btn click" name="Resources panel test suite it should call onClose on close btn click" time="0.023">
+    </testcase>
+    <testcase classname="Resources panel test suite it should track link clicked event on click of any link" name="Resources panel test suite it should track link clicked event on click of any link" time="0.044">
+    </testcase>
+  </testsuite>
+  <testsuite name="ConnectionStatus test suite" errors="0" failures="0" skipped="0" timestamp="2024-04-23T09:20:47" time="14.258" tests="8">
+    <testcase classname="ConnectionStatus test suite it should show a loading status by default" name="ConnectionStatus test suite it should show a loading status by default" time="0.04">
+    </testcase>
+    <testcase classname="ConnectionStatus test suite it should periodically request connection status" name="ConnectionStatus test suite it should periodically request connection status" time="0.007">
+    </testcase>
+    <testcase classname="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a disconnecting state it should show a disconnecting status" name="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a disconnecting state it should show a disconnecting status" time="0.007">
+    </testcase>
+    <testcase classname="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a disconnected state it should show a disconnected status" name="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a disconnected state it should show a disconnected status" time="0.007">
+    </testcase>
+    <testcase classname="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a connecting state it should show a connecting status" name="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a connecting state it should show a connecting status" time="0.006">
+    </testcase>
+    <testcase classname="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a connected state it should show a connected status" name="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a connected state it should show a connected status" time="0.091">
+    </testcase>
+    <testcase classname="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a connected state it should allow editing the name of the connection" name="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a connected state it should allow editing the name of the connection" time="0.038">
+    </testcase>
+    <testcase classname="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a connected state it should allow creating new playground" name="ConnectionStatus test suite when GET_CONNECTION_STATUS gets responded with a connected state it should allow creating new playground" time="0.088">
+    </testcase>
+  </testsuite>
+  <testsuite name="AtlasCta test suite" errors="0" failures="0" skipped="0" timestamp="2024-04-23T09:21:01" time="3.133" tests="3">
+    <testcase classname="AtlasCta test suite it should render Atlas CTA" name="AtlasCta test suite it should render Atlas CTA" time="0.05">
+    </testcase>
+    <testcase classname="AtlasCta test suite it should track clicks on MongoDB Atlas link" name="AtlasCta test suite it should track clicks on MongoDB Atlas link" time="0.014">
+    </testcase>
+    <testcase classname="AtlasCta test suite when clicked on &quot;Create free cluster&quot; button, it should open create account page on atlas and also track the link" name="AtlasCta test suite when clicked on &quot;Create free cluster&quot; button, it should open create account page on atlas and also track the link" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="ConnectHelper test suite" errors="0" failures="0" skipped="1" timestamp="2024-04-23T09:21:01" time="3.263" tests="3">
+    <testcase classname="ConnectHelper test suite when rendered it should show both connection options" name="ConnectHelper test suite when rendered it should show both connection options" time="0.058">
+    </testcase>
+    <testcase classname="ConnectHelper test suite when connecting with string, it should call vscode to open connection string input" name="ConnectHelper test suite when connecting with string, it should call vscode to open connection string input" time="0.011">
+    </testcase>
+    <testcase classname="ConnectHelper test suite when clicked on open connection form, it should open connection form" name="ConnectHelper test suite when clicked on open connection form, it should open connection form" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="OverviewPage test suite" errors="0" failures="0" skipped="0" timestamp="2024-04-23T09:20:47" time="19.114" tests="9">
+    <testcase classname="OverviewPage test suite it should render OverviewPage" name="OverviewPage test suite it should render OverviewPage" time="0.268">
+    </testcase>
+    <testcase classname="OverviewPage test suite on click of resources, it should open resources panel" name="OverviewPage test suite on click of resources, it should open resources panel" time="0.117">
+    </testcase>
+    <testcase classname="OverviewPage test suite on click of close button on resources panel, it should close resources panel" name="OverviewPage test suite on click of close button on resources panel, it should close resources panel" time="0.069">
+    </testcase>
+    <testcase classname="OverviewPage test suite Connection Form it is able to open and close the new connection form" name="OverviewPage test suite Connection Form it is able to open and close the new connection form" time="1.405">
+    </testcase>
+    <testcase classname="OverviewPage test suite Connection Form should send connect request to webview controller when clicked on Connect button" name="OverviewPage test suite Connection Form should send connect request to webview controller when clicked on Connect button" time="0.706">
+    </testcase>
+    <testcase classname="OverviewPage test suite Connection Form should display error message returned from connection attempt" name="OverviewPage test suite Connection Form should display error message returned from connection attempt" time="0.757">
+    </testcase>
+    <testcase classname="OverviewPage test suite Connection Form should close the connection modal when connected successfully" name="OverviewPage test suite Connection Form should close the connection modal when connected successfully" time="0.468">
+    </testcase>
+    <testcase classname="OverviewPage test suite Connection Form should handle editing a connection" name="OverviewPage test suite Connection Form should handle editing a connection" time="0.42">
+    </testcase>
+    <testcase classname="OverviewPage test suite Connection Form should not display results from other connection attempts" name="OverviewPage test suite Connection Form should not display results from other connection attempts" time="0.457">
+    </testcase>
+  </testsuite>
+  <testsuite name="App Component Test Suite" errors="0" failures="0" skipped="0" timestamp="2024-04-23T09:21:04" time="2.977" tests="2">
+    <testcase classname="App Component Test Suite it renders the old overview page when useOldConnectionForm is falsy" name="App Component Test Suite it renders the old overview page when useOldConnectionForm is falsy" time="0.075">
+    </testcase>
+    <testcase classname="App Component Test Suite it renders the new overview page when useOldConnectionForm is truthy" name="App Component Test Suite it renders the new overview page when useOldConnectionForm is truthy" time="0.011">
+    </testcase>
+  </testsuite>
+</testsuites>

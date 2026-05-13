@@ -1,0 +1,16 @@
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\bin\Debug\net5.0\ClinicVets.AuthCustomers.exe
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\bin\Debug\net5.0\ClinicVets.AuthCustomers.deps.json
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\bin\Debug\net5.0\ClinicVets.AuthCustomers.runtimeconfig.json
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\bin\Debug\net5.0\ClinicVets.AuthCustomers.runtimeconfig.dev.json
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\bin\Debug\net5.0\ClinicVets.AuthCustomers.dll
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\bin\Debug\net5.0\ref\ClinicVets.AuthCustomers.dll
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\bin\Debug\net5.0\ClinicVets.AuthCustomers.pdb
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.csproj.AssemblyReference.cache
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.AssemblyInfoInputs.cache
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.AssemblyInfo.cs
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.csproj.CoreCompileInputs.cache
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.dll
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\obj\Debug\net5.0\ref\ClinicVets.AuthCustomers.dll
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.pdb
+C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.genruntimeconfig.cache
