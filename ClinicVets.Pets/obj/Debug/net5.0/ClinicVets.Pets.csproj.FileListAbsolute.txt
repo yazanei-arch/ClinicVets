@@ -1,0 +1,17 @@
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\bin\Debug\net5.0\ClinicVets.Pets.exe
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\bin\Debug\net5.0\ClinicVets.Pets.deps.json
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\bin\Debug\net5.0\ClinicVets.Pets.runtimeconfig.json
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\bin\Debug\net5.0\ClinicVets.Pets.runtimeconfig.dev.json
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\bin\Debug\net5.0\ClinicVets.Pets.dll
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\bin\Debug\net5.0\ClinicVets.Pets.pdb
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.csproj.AssemblyReference.cache
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.AssemblyInfoInputs.cache
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.AssemblyInfo.cs
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.csproj.CoreCompileInputs.cache
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.sourcelink.json
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.dll
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\refint\ClinicVets.Pets.dll
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.pdb
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.genruntimeconfig.cache
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ref\ClinicVets.Pets.dll
