@@ -33,12 +33,16 @@ namespace ClinicVets.UI
 
         private void btnShowAllPets_Click(object sender, EventArgs e)
         {
-            
+            AllPetsForm form = new AllPetsForm();
+            form.ShowDialog();
+            this.Hide();
         }
 
         private void btnAnimalTypes_Click(object sender, EventArgs e)
         {
-            
+            AnimalTypesForm form = new AnimalTypesForm();
+            form.ShowDialog();
+            this.Hide();
         }
     }
 }

@@ -41,6 +41,7 @@ namespace ClinicVets.UI
             this.btnClear2 = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -189,11 +190,24 @@ namespace ClinicVets.UI
             this.btnBack.UseVisualStyleBackColor = false;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
+            this.label3.Location = new System.Drawing.Point(338, 87);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(461, 25);
+            this.label3.TabIndex = 25;
+            this.label3.Text = "Search and view pet records by name or chip number";
+            // 
             // SearchPetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1182, 653);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnClear2);
@@ -234,5 +248,6 @@ namespace ClinicVets.UI
         private System.Windows.Forms.Button btnClear2;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Label label3;
     }
 }
