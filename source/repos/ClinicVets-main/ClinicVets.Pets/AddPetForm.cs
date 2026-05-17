@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using ClosedXML.Excel;
 using System.Drawing;
 using System.Windows.Forms;
 using ClinicVets.UI;
@@ -7,9 +9,52 @@ namespace ClinicVets.UI
 {
     public partial class AddPetForm : Form
     {
+        private readonly string filePath = ExcelFileManager.FilePath;
         public AddPetForm()
         {
             InitializeComponent();
+            LoadAnimalTypes();
+        }
+
+        private void LoadAnimalTypes()
+        {
+            cmbAnimalType.Items.Clear();
+
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("Excel file not found");
+                return;
+            }
+
+            using (var workbook = new XLWorkbook(filePath))
+            {
+                if (!workbook.Worksheets.Contains("AnimalTypes"))
+                {
+                    MessageBox.Show("AnimalTypes sheet not found");
+                    return;
+                }
+
+                var sheet = workbook.Worksheet("AnimalTypes");
+                var range = sheet.RangeUsed();
+
+                if (range == null)
+                    return;
+
+                foreach (var row in range.RowsUsed())
+                {
+                    if (row.RowNumber() == 1)
+                        continue;
+
+                    string animalType = row.Cell(1).GetValue<string>().Trim();
+
+                    if (!string.IsNullOrWhiteSpace(animalType))
+                    {
+                        cmbAnimalType.Items.Add(animalType);
+                    }
+                }
+            }
+
+            cmbAnimalType.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         private void ClearErrorLabels()

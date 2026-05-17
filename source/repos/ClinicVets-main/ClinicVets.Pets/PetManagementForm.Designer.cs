@@ -35,6 +35,7 @@ namespace ClinicVets.UI
             this.btnShowAllPets = new System.Windows.Forms.Button();
             this.btnAnimalTypes = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -111,11 +112,25 @@ namespace ClinicVets.UI
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
+            this.label2.Location = new System.Drawing.Point(117, 89);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(811, 25);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "Manage pets, search records, view registered pets, and control animal types in th" +
+    "e clinic system";
+            // 
             // PetManagementForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1182, 653);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnAnimalTypes);
             this.Controls.Add(this.btnShowAllPets);
             this.Controls.Add(this.btnSearchPet);
@@ -143,6 +158,7 @@ namespace ClinicVets.UI
         private System.Windows.Forms.Button btnSearchPet;
         private System.Windows.Forms.Button btnShowAllPets;
         private System.Windows.Forms.Button btnAnimalTypes;
+        private System.Windows.Forms.Label label2;
     }
 }
 

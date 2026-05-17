@@ -32,36 +32,37 @@ namespace ClinicVets.UI
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblPetNameError = new System.Windows.Forms.Label();
             this.txtPetName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lblAnimalTypeError = new System.Windows.Forms.Label();
             this.cmbAnimalType = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.lblWeightError = new System.Windows.Forms.Label();
             this.txtWeight = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.lblBirthDateError = new System.Windows.Forms.Label();
             this.dtpBirthDate = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.lblOwnerError = new System.Windows.Forms.Label();
             this.txtOwner = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.lblChipNumberError = new System.Windows.Forms.Label();
             this.txtChipNumber = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.lblLastVaccineError = new System.Windows.Forms.Label();
             this.dtpLastVaccineDate = new System.Windows.Forms.DateTimePicker();
             this.label8 = new System.Windows.Forms.Label();
             this.btnBack = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
-            this.lblPetNameError = new System.Windows.Forms.Label();
-            this.lblAnimalTypeError = new System.Windows.Forms.Label();
-            this.lblWeightError = new System.Windows.Forms.Label();
-            this.lblBirthDateError = new System.Windows.Forms.Label();
-            this.lblLastVaccineError = new System.Windows.Forms.Label();
-            this.lblChipNumberError = new System.Windows.Forms.Label();
-            this.lblOwnerError = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -100,10 +101,20 @@ namespace ClinicVets.UI
             this.panel1.Controls.Add(this.lblPetNameError);
             this.panel1.Controls.Add(this.txtPetName);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(599, 111);
+            this.panel1.Location = new System.Drawing.Point(599, 167);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(359, 96);
             this.panel1.TabIndex = 3;
+            // 
+            // lblPetNameError
+            // 
+            this.lblPetNameError.AutoSize = true;
+            this.lblPetNameError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.lblPetNameError.ForeColor = System.Drawing.Color.Red;
+            this.lblPetNameError.Location = new System.Drawing.Point(139, 62);
+            this.lblPetNameError.Name = "lblPetNameError";
+            this.lblPetNameError.Size = new System.Drawing.Size(0, 19);
+            this.lblPetNameError.TabIndex = 2;
             // 
             // txtPetName
             // 
@@ -133,23 +144,25 @@ namespace ClinicVets.UI
             this.panel2.Controls.Add(this.lblAnimalTypeError);
             this.panel2.Controls.Add(this.cmbAnimalType);
             this.panel2.Controls.Add(this.label3);
-            this.panel2.Location = new System.Drawing.Point(599, 213);
+            this.panel2.Location = new System.Drawing.Point(599, 269);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(359, 91);
             this.panel2.TabIndex = 4;
+            // 
+            // lblAnimalTypeError
+            // 
+            this.lblAnimalTypeError.AutoSize = true;
+            this.lblAnimalTypeError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.lblAnimalTypeError.ForeColor = System.Drawing.Color.Red;
+            this.lblAnimalTypeError.Location = new System.Drawing.Point(139, 59);
+            this.lblAnimalTypeError.Name = "lblAnimalTypeError";
+            this.lblAnimalTypeError.Size = new System.Drawing.Size(0, 19);
+            this.lblAnimalTypeError.TabIndex = 3;
             // 
             // cmbAnimalType
             // 
             this.cmbAnimalType.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.cmbAnimalType.FormattingEnabled = true;
-            this.cmbAnimalType.Items.AddRange(new object[] {
-            "Dog",
-            "",
-            "Cat",
-            "",
-            "Reptile",
-            "",
-            "Bird"});
             this.cmbAnimalType.Location = new System.Drawing.Point(139, 17);
             this.cmbAnimalType.Name = "cmbAnimalType";
             this.cmbAnimalType.Size = new System.Drawing.Size(200, 33);
@@ -172,10 +185,20 @@ namespace ClinicVets.UI
             this.panel3.Controls.Add(this.lblWeightError);
             this.panel3.Controls.Add(this.txtWeight);
             this.panel3.Controls.Add(this.label4);
-            this.panel3.Location = new System.Drawing.Point(599, 318);
+            this.panel3.Location = new System.Drawing.Point(599, 374);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(359, 96);
             this.panel3.TabIndex = 5;
+            // 
+            // lblWeightError
+            // 
+            this.lblWeightError.AutoSize = true;
+            this.lblWeightError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.lblWeightError.ForeColor = System.Drawing.Color.Red;
+            this.lblWeightError.Location = new System.Drawing.Point(139, 64);
+            this.lblWeightError.Name = "lblWeightError";
+            this.lblWeightError.Size = new System.Drawing.Size(0, 19);
+            this.lblWeightError.TabIndex = 4;
             // 
             // txtWeight
             // 
@@ -205,10 +228,20 @@ namespace ClinicVets.UI
             this.panel4.Controls.Add(this.lblBirthDateError);
             this.panel4.Controls.Add(this.dtpBirthDate);
             this.panel4.Controls.Add(this.label5);
-            this.panel4.Location = new System.Drawing.Point(29, 220);
+            this.panel4.Location = new System.Drawing.Point(29, 276);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(503, 97);
             this.panel4.TabIndex = 6;
+            // 
+            // lblBirthDateError
+            // 
+            this.lblBirthDateError.AutoSize = true;
+            this.lblBirthDateError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.lblBirthDateError.ForeColor = System.Drawing.Color.Red;
+            this.lblBirthDateError.Location = new System.Drawing.Point(278, 65);
+            this.lblBirthDateError.Name = "lblBirthDateError";
+            this.lblBirthDateError.Size = new System.Drawing.Size(0, 19);
+            this.lblBirthDateError.TabIndex = 5;
             // 
             // dtpBirthDate
             // 
@@ -235,10 +268,20 @@ namespace ClinicVets.UI
             this.panel5.Controls.Add(this.lblOwnerError);
             this.panel5.Controls.Add(this.txtOwner);
             this.panel5.Controls.Add(this.label6);
-            this.panel5.Location = new System.Drawing.Point(29, 335);
+            this.panel5.Location = new System.Drawing.Point(29, 391);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(503, 94);
             this.panel5.TabIndex = 7;
+            // 
+            // lblOwnerError
+            // 
+            this.lblOwnerError.AutoSize = true;
+            this.lblOwnerError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.lblOwnerError.ForeColor = System.Drawing.Color.Red;
+            this.lblOwnerError.Location = new System.Drawing.Point(278, 60);
+            this.lblOwnerError.Name = "lblOwnerError";
+            this.lblOwnerError.Size = new System.Drawing.Size(0, 19);
+            this.lblOwnerError.TabIndex = 8;
             // 
             // txtOwner
             // 
@@ -268,10 +311,20 @@ namespace ClinicVets.UI
             this.panel6.Controls.Add(this.lblChipNumberError);
             this.panel6.Controls.Add(this.txtChipNumber);
             this.panel6.Controls.Add(this.label7);
-            this.panel6.Location = new System.Drawing.Point(583, 433);
+            this.panel6.Location = new System.Drawing.Point(583, 489);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(375, 95);
             this.panel6.TabIndex = 8;
+            // 
+            // lblChipNumberError
+            // 
+            this.lblChipNumberError.AutoSize = true;
+            this.lblChipNumberError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.lblChipNumberError.ForeColor = System.Drawing.Color.Red;
+            this.lblChipNumberError.Location = new System.Drawing.Point(139, 60);
+            this.lblChipNumberError.Name = "lblChipNumberError";
+            this.lblChipNumberError.Size = new System.Drawing.Size(0, 19);
+            this.lblChipNumberError.TabIndex = 7;
             // 
             // txtChipNumber
             // 
@@ -301,10 +354,20 @@ namespace ClinicVets.UI
             this.panel7.Controls.Add(this.lblLastVaccineError);
             this.panel7.Controls.Add(this.dtpLastVaccineDate);
             this.panel7.Controls.Add(this.label8);
-            this.panel7.Location = new System.Drawing.Point(29, 111);
+            this.panel7.Location = new System.Drawing.Point(29, 167);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(503, 96);
             this.panel7.TabIndex = 9;
+            // 
+            // lblLastVaccineError
+            // 
+            this.lblLastVaccineError.AutoSize = true;
+            this.lblLastVaccineError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.lblLastVaccineError.ForeColor = System.Drawing.Color.Red;
+            this.lblLastVaccineError.Location = new System.Drawing.Point(278, 62);
+            this.lblLastVaccineError.Name = "lblLastVaccineError";
+            this.lblLastVaccineError.Size = new System.Drawing.Size(0, 19);
+            this.lblLastVaccineError.TabIndex = 6;
             // 
             // dtpLastVaccineDate
             // 
@@ -343,7 +406,7 @@ namespace ClinicVets.UI
             this.btnSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(152)))), ((int)(((byte)(184)))), ((int)(((byte)(213)))));
             this.btnSave.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.btnSave.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.btnSave.Location = new System.Drawing.Point(170, 453);
+            this.btnSave.Location = new System.Drawing.Point(170, 509);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(160, 45);
             this.btnSave.TabIndex = 14;
@@ -356,7 +419,7 @@ namespace ClinicVets.UI
             this.btnClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(152)))), ((int)(((byte)(184)))), ((int)(((byte)(213)))));
             this.btnClear.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.btnClear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.btnClear.Location = new System.Drawing.Point(372, 453);
+            this.btnClear.Location = new System.Drawing.Point(372, 509);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(160, 45);
             this.btnClear.TabIndex = 15;
@@ -364,81 +427,24 @@ namespace ClinicVets.UI
             this.btnClear.UseVisualStyleBackColor = false;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // lblPetNameError
+            // label9
             // 
-            this.lblPetNameError.AutoSize = true;
-            this.lblPetNameError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.lblPetNameError.ForeColor = System.Drawing.Color.Red;
-            this.lblPetNameError.Location = new System.Drawing.Point(139, 62);
-            this.lblPetNameError.Name = "lblPetNameError";
-            this.lblPetNameError.Size = new System.Drawing.Size(0, 19);
-            this.lblPetNameError.TabIndex = 2;
-            // 
-            // lblAnimalTypeError
-            // 
-            this.lblAnimalTypeError.AutoSize = true;
-            this.lblAnimalTypeError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.lblAnimalTypeError.ForeColor = System.Drawing.Color.Red;
-            this.lblAnimalTypeError.Location = new System.Drawing.Point(139, 59);
-            this.lblAnimalTypeError.Name = "lblAnimalTypeError";
-            this.lblAnimalTypeError.Size = new System.Drawing.Size(0, 19);
-            this.lblAnimalTypeError.TabIndex = 3;
-            // 
-            // lblWeightError
-            // 
-            this.lblWeightError.AutoSize = true;
-            this.lblWeightError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.lblWeightError.ForeColor = System.Drawing.Color.Red;
-            this.lblWeightError.Location = new System.Drawing.Point(139, 64);
-            this.lblWeightError.Name = "lblWeightError";
-            this.lblWeightError.Size = new System.Drawing.Size(0, 19);
-            this.lblWeightError.TabIndex = 4;
-            // 
-            // lblBirthDateError
-            // 
-            this.lblBirthDateError.AutoSize = true;
-            this.lblBirthDateError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.lblBirthDateError.ForeColor = System.Drawing.Color.Red;
-            this.lblBirthDateError.Location = new System.Drawing.Point(278, 65);
-            this.lblBirthDateError.Name = "lblBirthDateError";
-            this.lblBirthDateError.Size = new System.Drawing.Size(0, 19);
-            this.lblBirthDateError.TabIndex = 5;
-            // 
-            // lblLastVaccineError
-            // 
-            this.lblLastVaccineError.AutoSize = true;
-            this.lblLastVaccineError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.lblLastVaccineError.ForeColor = System.Drawing.Color.Red;
-            this.lblLastVaccineError.Location = new System.Drawing.Point(278, 62);
-            this.lblLastVaccineError.Name = "lblLastVaccineError";
-            this.lblLastVaccineError.Size = new System.Drawing.Size(0, 19);
-            this.lblLastVaccineError.TabIndex = 6;
-            // 
-            // lblChipNumberError
-            // 
-            this.lblChipNumberError.AutoSize = true;
-            this.lblChipNumberError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.lblChipNumberError.ForeColor = System.Drawing.Color.Red;
-            this.lblChipNumberError.Location = new System.Drawing.Point(139, 60);
-            this.lblChipNumberError.Name = "lblChipNumberError";
-            this.lblChipNumberError.Size = new System.Drawing.Size(0, 19);
-            this.lblChipNumberError.TabIndex = 7;
-            // 
-            // lblOwnerError
-            // 
-            this.lblOwnerError.AutoSize = true;
-            this.lblOwnerError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.lblOwnerError.ForeColor = System.Drawing.Color.Red;
-            this.lblOwnerError.Location = new System.Drawing.Point(278, 60);
-            this.lblOwnerError.Name = "lblOwnerError";
-            this.lblOwnerError.Size = new System.Drawing.Size(0, 19);
-            this.lblOwnerError.TabIndex = 8;
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
+            this.label9.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.label9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
+            this.label9.Location = new System.Drawing.Point(313, 86);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(506, 25);
+            this.label9.TabIndex = 25;
+            this.label9.Text = "Enter pet details and save a new record in the clinic system";
             // 
             // AddPetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1182, 653);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnBack);
@@ -513,5 +519,6 @@ namespace ClinicVets.UI
         private System.Windows.Forms.Label lblOwnerError;
         private System.Windows.Forms.Label lblChipNumberError;
         private System.Windows.Forms.Label lblLastVaccineError;
+        private System.Windows.Forms.Label label9;
     }
 }

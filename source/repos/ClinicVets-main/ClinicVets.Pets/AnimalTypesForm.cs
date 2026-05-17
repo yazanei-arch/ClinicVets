@@ -11,11 +11,11 @@ using System.IO;
 using ClosedXML.Excel;
 
 
-namespace ClinicVets.Pets
+namespace ClinicVets.UI
 {
     public partial class AnimalTypesForm : Form
     {
-        string filePath = @"C:\Users\ENTER\OneDrive - ac.sce.ac.il\שולחן העבודה\ClinicVets\ClinicVetsData.xlsx";
+        private readonly string filePath = ExcelFileManager.FilePath;
 
         public AnimalTypesForm()
         {
@@ -35,14 +35,27 @@ namespace ClinicVets.Pets
 
             using (var workbook = new XLWorkbook(filePath))
             {
-                var sheet = workbook.Worksheet("AnimalTypes");
+                if (!workbook.Worksheets.Contains("AnimalTypes"))
+                {
+                    MessageBox.Show("AnimalTypes sheet not found");
+                    return;
+                }
 
-                foreach (var row in sheet.RangeUsed().RowsUsed())
+                var sheet = workbook.Worksheet("AnimalTypes");
+                var range = sheet.RangeUsed();
+
+                if (range == null)
+                    return;
+
+                foreach (var row in range.RowsUsed())
                 {
                     if (row.RowNumber() == 1)
                         continue;
 
-                    lstTypes.Items.Add(row.Cell(1).GetValue<string>());
+                    string type = row.Cell(1).GetValue<string>();
+
+                    if (!string.IsNullOrWhiteSpace(type))
+                        lstTypes.Items.Add(type);
                 }
             }
         }
@@ -56,37 +69,6 @@ namespace ClinicVets.Pets
             }
 
             return false;
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            string type = txtType.Text.Trim();
-
-            if (type == "")
-            {
-                MessageBox.Show("Enter animal type");
-                return;
-            }
-
-            if (TypeExists(type))
-            {
-                MessageBox.Show("Animal type already exists");
-                return;
-            }
-
-            using (var workbook = new XLWorkbook(filePath))
-            {
-                var sheet = workbook.Worksheet("AnimalTypes");
-                int lastRow = sheet.LastRowUsed().RowNumber() + 1;
-
-                sheet.Cell(lastRow, 1).Value = type;
-                workbook.Save();
-            }
-
-            txtType.Clear();
-            LoadTypesFromExcel();
-
-            MessageBox.Show("Animal type added");
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -157,19 +139,52 @@ namespace ClinicVets.Pets
                 txtType.Text = lstTypes.SelectedItem.ToString();
         }
 
-        private void btnUpdate_Click_1(object sender, EventArgs e)
+        private void btnBack_Click(object sender, EventArgs e)
         {
-            btnUpdate_Click(sender, e);
+            PetManagementForm form = new PetManagementForm();
+            form.ShowDialog();
+            this.Hide();
         }
 
-        private void btnDelete_Click_1(object sender, EventArgs e)
+        private void btnDelete_Click_2(object sender, EventArgs e)
         {
             btnDelete_Click(sender, e);
         }
 
-        private void btnBack_Click_1(object sender, EventArgs e)
+        private void btnUpdate_Click_2(object sender, EventArgs e)
         {
-            this.Close();
+            btnUpdate_Click(sender, e);
+        }
+
+        private void btnAdd_Click_1(object sender, EventArgs e)
+        {
+            string type = txtType.Text.Trim();
+
+            if (type == "")
+            {
+                MessageBox.Show("Enter animal type");
+                return;
+            }
+
+            if (TypeExists(type))
+            {
+                MessageBox.Show("Animal type already exists");
+                return;
+            }
+
+            using (var workbook = new XLWorkbook(filePath))
+            {
+                var sheet = workbook.Worksheet("AnimalTypes");
+                int lastRow = sheet.LastRowUsed().RowNumber() + 1;
+
+                sheet.Cell(lastRow, 1).Value = type;
+                workbook.Save();
+            }
+
+            txtType.Clear();
+            LoadTypesFromExcel();
+
+            MessageBox.Show("Animal type added");
         }
     }
 }

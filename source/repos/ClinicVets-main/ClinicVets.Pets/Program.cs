@@ -15,7 +15,7 @@ namespace ClinicVets.Pets
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new AllPetsForm());
+            Application.Run(new PetManagementForm());
         }
     }
 }
