@@ -5,28 +5,13 @@ using System.Windows.Forms;
 
 namespace ClinicVets
 {
-    /// <summary>
-    /// Rounded button with drop shadow, vertical gradient face, and hover/press feedback.
-    /// </summary>
+    /// <summary>Premium rounded button with gradient fill and hover glow.</summary>
     public class RoundedActionButton : Button
     {
-        private static readonly Color PrimaryTop = Color.FromArgb(255, 66, 165, 245);
-        private static readonly Color PrimaryBottom = Color.FromArgb(255, 13, 92, 196);
-        private static readonly Color PrimaryHoverTop = Color.FromArgb(255, 92, 181, 250);
-        private static readonly Color PrimaryHoverBottom = Color.FromArgb(255, 21, 118, 214);
-        private static readonly Color PrimaryPressedTop = Color.FromArgb(255, 18, 100, 188);
-        private static readonly Color PrimaryPressedBottom = Color.FromArgb(255, 10, 70, 160);
-
-        private static readonly Color OutlineBorder = Color.FromArgb(25, 118, 210);
-        private static readonly Color OutlineTop = Color.FromArgb(255, 255, 255, 255);
-        private static readonly Color OutlineBottom = Color.FromArgb(255, 225, 240, 252);
-        private static readonly Color OutlineHoverTop = Color.FromArgb(255, 242, 249, 255);
-        private static readonly Color OutlineHoverBottom = Color.FromArgb(255, 210, 232, 250);
-        private static readonly Color OutlinePressedTop = Color.FromArgb(255, 210, 230, 248);
-        private static readonly Color OutlinePressedBottom = Color.FromArgb(255, 188, 218, 244);
-
-        private bool _hover;
         private bool _pressed;
+        private float _hoverAmount;
+        private float _hoverTarget;
+        private readonly Timer _hoverTimer;
 
         public RoundedActionButton()
         {
@@ -34,8 +19,8 @@ namespace ClinicVets
             FlatAppearance.BorderSize = 0;
             UseVisualStyleBackColor = false;
             Cursor = Cursors.Hand;
-            Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            CornerRadius = 12;
+            Font = ClinicUiTheme.ButtonFont;
+            CornerRadius = ClinicUiTheme.ButtonRadius;
             SetStyle(
                 ControlStyles.AllPaintingInWmPaint |
                 ControlStyles.UserPaint |
@@ -45,25 +30,43 @@ namespace ClinicVets
                 true);
             DoubleBuffered = true;
             BackColor = Color.Transparent;
+
+            _hoverTimer = new Timer { Interval = 16 };
+            _hoverTimer.Tick += HoverTimer_Tick;
         }
 
         public bool IsOutlineStyle { get; set; }
 
         public int CornerRadius { get; set; }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _hoverTimer.Stop();
+                _hoverTimer.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs pevent)
+        {
+        }
+
         protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);
-            _hover = true;
-            Invalidate();
+            _hoverTarget = 1f;
+            _hoverTimer.Start();
         }
 
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
-            _hover = false;
             _pressed = false;
-            Invalidate();
+            _hoverTarget = 0f;
+            _hoverTimer.Start();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -92,150 +95,138 @@ namespace ClinicVets
             Invalidate();
         }
 
+        private void HoverTimer_Tick(object sender, EventArgs e)
+        {
+            float step = 0.14f;
+            if (Math.Abs(_hoverTarget - _hoverAmount) <= step)
+            {
+                _hoverAmount = _hoverTarget;
+                _hoverTimer.Stop();
+            }
+            else if (_hoverAmount < _hoverTarget)
+            {
+                _hoverAmount = Math.Min(_hoverTarget, _hoverAmount + step);
+            }
+            else
+            {
+                _hoverAmount = Math.Max(_hoverTarget, _hoverAmount - step);
+            }
+
+            Invalidate();
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
-            Rectangle bounds = new Rectangle(0, 0, Width - 1, Height - 1);
-            int r = Math.Max(2, Math.Min(CornerRadius, Math.Min(bounds.Width, bounds.Height) / 2));
+            var bounds = new Rectangle(0, 0, Width - 1, Height - 1);
+            int lift = (int)Math.Round(_hoverAmount * 2f);
+            bounds.Offset(0, -lift);
+            int r = Math.Max(6, Math.Min(CornerRadius, Math.Min(bounds.Width, bounds.Height) / 2));
 
             if (!Enabled)
             {
-                using (GraphicsPath path = UiPaths.RoundedRectangle(bounds, r))
-                using (var b = new SolidBrush(Color.FromArgb(189, 189, 189)))
-                {
-                    g.FillPath(b, path);
-                }
-
-                TextRenderer.DrawText(
-                    g,
-                    Text,
-                    Font,
-                    bounds,
-                    Color.White,
-                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+                PaintDisabled(g, bounds, r, Text, Font);
                 return;
             }
 
-            DrawButtonShadow(g, bounds, r);
+            if (!IsOutlineStyle && _hoverAmount > 0.05f)
+            {
+                var glowRect = new Rectangle(bounds.X - 2, bounds.Y, bounds.Width + 4, bounds.Height + 6);
+                using (GraphicsPath glowPath = UiPaths.RoundedRectangle(glowRect, r + 2))
+                using (var glowBrush = new SolidBrush(Blend(Color.FromArgb(0, 0, 0, 0), ClinicUiTheme.ButtonGlow, _hoverAmount * 0.85f)))
+                {
+                    g.FillPath(glowBrush, glowPath);
+                }
+            }
 
             using (GraphicsPath path = UiPaths.RoundedRectangle(bounds, r))
             {
                 if (IsOutlineStyle)
                 {
-                    Color top = OutlineTop;
-                    Color bottom = OutlineBottom;
-                    if (_pressed)
-                    {
-                        top = OutlinePressedTop;
-                        bottom = OutlinePressedBottom;
-                    }
-                    else if (_hover)
-                    {
-                        top = OutlineHoverTop;
-                        bottom = OutlineHoverBottom;
-                    }
-
-                    using (var grad = new LinearGradientBrush(bounds, top, bottom, LinearGradientMode.Vertical))
-                    {
-                        g.FillPath(grad, path);
-                    }
-
-                    using (var pen = new Pen(OutlineBorder, 1.8f))
-                    {
-                        pen.Alignment = PenAlignment.Inset;
-                        g.DrawPath(pen, path);
-                    }
-
-                    DrawTopSheen(g, path);
-                    TextRenderer.DrawText(
-                        g,
-                        Text,
-                        Font,
-                        bounds,
-                        OutlineBorder,
-                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+                    PaintOutline(g, path, bounds);
                 }
                 else
                 {
-                    Color top = PrimaryTop;
-                    Color bottom = PrimaryBottom;
-                    if (_pressed)
-                    {
-                        top = PrimaryPressedTop;
-                        bottom = PrimaryPressedBottom;
-                    }
-                    else if (_hover)
-                    {
-                        top = PrimaryHoverTop;
-                        bottom = PrimaryHoverBottom;
-                    }
-
-                    using (var grad = new LinearGradientBrush(bounds, top, bottom, LinearGradientMode.Vertical))
-                    {
-                        g.FillPath(grad, path);
-                    }
-
-                    DrawTopSheen(g, path);
-                    TextRenderer.DrawText(
-                        g,
-                        Text,
-                        Font,
-                        bounds,
-                        Color.White,
-                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+                    PaintPrimary(g, path, bounds);
                 }
             }
         }
 
-        private static void DrawButtonShadow(Graphics g, Rectangle bounds, int r)
+        private void PaintPrimary(Graphics g, GraphicsPath path, Rectangle bounds)
         {
-            var layers = new[]
+            Color start = _pressed ? ClinicUiTheme.ButtonPrimaryPress : ClinicUiTheme.ButtonPrimaryStart;
+            Color end = _pressed ? ClinicUiTheme.ButtonPrimaryPress : ClinicUiTheme.ButtonPrimaryEnd;
+            if (!_pressed && _hoverAmount > 0f)
             {
-                new { OffX = 4, OffY = 5, Inflate = -6, Alpha = 18 },
-                new { OffX = 3, OffY = 4, Inflate = -4, Alpha = 26 },
-                new { OffX = 2, OffY = 3, Inflate = -2, Alpha = 34 },
-            };
-
-            foreach (var layer in layers)
-            {
-                var rect = new Rectangle(
-                    bounds.X + layer.OffX,
-                    bounds.Y + layer.OffY,
-                    bounds.Width + layer.Inflate,
-                    bounds.Height + layer.Inflate);
-                using (GraphicsPath p = UiPaths.RoundedRectangle(rect, Math.Max(2, r - 1)))
-                using (var brush = new SolidBrush(Color.FromArgb(layer.Alpha, 12, 40, 90)))
-                {
-                    g.FillPath(brush, p);
-                }
+                start = Blend(start, ClinicUiTheme.AccentBlueHover, _hoverAmount * 0.35f);
+                end = Blend(end, ClinicUiTheme.AccentCyan, _hoverAmount * 0.25f);
             }
+
+            using (var brush = new LinearGradientBrush(bounds, start, end, LinearGradientMode.Horizontal))
+            {
+                g.FillPath(brush, path);
+            }
+
+            TextRenderer.DrawText(
+                g,
+                Text,
+                Font,
+                bounds,
+                Color.White,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
         }
 
-        private static void DrawTopSheen(Graphics g, GraphicsPath path)
+        private void PaintOutline(Graphics g, GraphicsPath path, Rectangle bounds)
         {
-            RectangleF b = path.GetBounds();
-            float bandH = Math.Max(6f, b.Height * 0.32f);
-            var topBand = new RectangleF(b.X + 2, b.Y + 2, b.Width - 4, bandH);
-            g.SetClip(path);
-            try
+            Color fill = Blend(ClinicUiTheme.ButtonOutlineFill, ClinicUiTheme.ButtonOutlineHover, _hoverAmount);
+            using (var brush = new SolidBrush(fill))
             {
-                using (var br = new LinearGradientBrush(
-                    topBand,
-                    Color.FromArgb(72, 255, 255, 255),
-                    Color.FromArgb(0, 255, 255, 255),
-                    LinearGradientMode.Vertical))
-                {
-                    g.FillRectangle(br, Rectangle.Round(topBand));
-                }
+                g.FillPath(brush, path);
             }
-            finally
+
+            using (var pen = new Pen(ClinicUiTheme.AccentBlue, 1.2f))
             {
-                g.ResetClip();
+                pen.Alignment = PenAlignment.Inset;
+                g.DrawPath(pen, path);
             }
+
+            TextRenderer.DrawText(
+                g,
+                Text,
+                Font,
+                bounds,
+                ClinicUiTheme.AccentBlue,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+        }
+
+        private static void PaintDisabled(Graphics g, Rectangle bounds, int r, string text, Font font)
+        {
+            using (GraphicsPath path = UiPaths.RoundedRectangle(bounds, r))
+            using (var brush = new SolidBrush(Color.FromArgb(90, 30, 45, 68)))
+            {
+                g.FillPath(brush, path);
+            }
+
+            TextRenderer.DrawText(
+                g,
+                text ?? string.Empty,
+                font,
+                bounds,
+                ClinicUiTheme.MutedText,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+        }
+
+        private static Color Blend(Color from, Color to, float amount)
+        {
+            amount = Math.Max(0f, Math.Min(1f, amount));
+            return Color.FromArgb(
+                from.A,
+                (int)(from.R + (to.R - from.R) * amount),
+                (int)(from.G + (to.G - from.G) * amount),
+                (int)(from.B + (to.B - from.B) * amount));
         }
     }
 }

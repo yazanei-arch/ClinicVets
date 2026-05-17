@@ -9,24 +9,66 @@ namespace ClinicVets
 {
     internal static class VetBackgroundHelper
     {
+        private static Image _cachedHeroImage;
+
         internal static void ApplyVetBackground(Form form)
+        {
+            ApplyPremiumBackground(form);
+        }
+
+        internal static void ApplySoftFallbackBackground(Form form)
+        {
+            ApplyPremiumBackground(form);
+        }
+
+        internal static void ApplyPremiumBackground(Form form)
         {
             if (form == null)
             {
                 return;
             }
 
-            string path = FindVetBackgroundImagePath();
-            if (path == null)
+            ClearBackgroundImage(form);
+            form.BackColor = ClinicUiTheme.BgTop;
+            form.Invalidate(true);
+        }
+
+        internal static void ClearBackgroundImage(Form form)
+        {
+            if (form == null)
             {
                 return;
             }
 
             Image previous = form.BackgroundImage;
-            form.BackgroundImage = Image.FromFile(path);
+            form.BackgroundImage = null;
+            form.BackgroundImageLayout = ImageLayout.None;
             previous?.Dispose();
-            form.BackgroundImageLayout = ImageLayout.Stretch;
-            form.Invalidate(true);
+        }
+
+        internal static Image GetLoginHeroImage()
+        {
+            if (_cachedHeroImage != null)
+            {
+                return _cachedHeroImage;
+            }
+
+            string path = FindVetBackgroundImagePath();
+            if (path == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                _cachedHeroImage = Image.FromFile(path);
+            }
+            catch
+            {
+                _cachedHeroImage = null;
+            }
+
+            return _cachedHeroImage;
         }
 
         private static string FindVetBackgroundImagePath()

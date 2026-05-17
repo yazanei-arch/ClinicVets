@@ -7,11 +7,42 @@ using System.Windows.Forms;
 
 namespace ClinicVets
 {
-    /// <summary>
-    /// Subtle raised chrome behind a text field (soft shadow + rounded plate). TextBox is docked inside.
-    /// </summary>
+    /// <summary>Rounded input host with focus glow and soft error state.</summary>
     public class ChromeTextPlate : Panel
     {
+        private bool _isInvalid;
+        private bool _isFocused;
+
+        public bool IsInvalid
+        {
+            get => _isInvalid;
+            set
+            {
+                if (_isInvalid == value)
+                {
+                    return;
+                }
+
+                _isInvalid = value;
+                Invalidate();
+            }
+        }
+
+        public bool IsFocused
+        {
+            get => _isFocused;
+            set
+            {
+                if (_isFocused == value)
+                {
+                    return;
+                }
+
+                _isFocused = value;
+                Invalidate();
+            }
+        }
+
         public ChromeTextPlate()
         {
             SetStyle(
@@ -23,57 +54,52 @@ namespace ClinicVets
                 true);
             DoubleBuffered = true;
             BackColor = Color.Transparent;
-            Padding = new Padding(2, 2, 2, 3);
+            Padding = new Padding(2, 2, 2, 2);
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs pevent)
+        {
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            Rectangle outer = new Rectangle(1, 1, Width - 3, Height - 3);
-            int r = Math.Max(4, Math.Min(10, Math.Min(outer.Width, outer.Height) / 3));
+            var rect = new Rectangle(0, 0, Width - 1, Height - 1);
+            int radius = ClinicUiTheme.FieldRadius;
 
-            var shadow = new Rectangle(outer.X + 2, outer.Y + 2, outer.Width - 2, outer.Height - 2);
-            using (GraphicsPath sp = UiPaths.RoundedRectangle(shadow, r))
-            using (var sb = new SolidBrush(Color.FromArgb(28, 18, 55, 100)))
+            if (_isFocused && !_isInvalid)
             {
-                g.FillPath(sb, sp);
+                var glowRect = new Rectangle(rect.X - 1, rect.Y - 1, rect.Width + 2, rect.Height + 2);
+                using (GraphicsPath glowPath = UiPaths.RoundedRectangle(glowRect, radius + 2))
+                using (var glowBrush = new SolidBrush(ClinicUiTheme.FieldFocusGlow))
+                {
+                    g.FillPath(glowBrush, glowPath);
+                }
             }
 
-            using (GraphicsPath path = UiPaths.RoundedRectangle(outer, r))
+            Color fill = _isInvalid ? ClinicUiTheme.FieldInvalidFill : ClinicUiTheme.FieldFill;
+            Color borderColor = _isInvalid
+                ? ClinicUiTheme.FieldBorderError
+                : (_isFocused ? ClinicUiTheme.FieldBorderFocus : ClinicUiTheme.FieldBorder);
+
+            using (GraphicsPath path = UiPaths.RoundedRectangle(rect, radius))
             {
-                using (var fill = new LinearGradientBrush(
-                    outer,
-                    Color.FromArgb(255, 254, 255, 255),
-                    Color.FromArgb(255, 244, 249, 255),
-                    LinearGradientMode.Vertical))
+                using (var brush = new SolidBrush(fill))
                 {
-                    g.FillPath(fill, path);
+                    g.FillPath(brush, path);
                 }
 
-                using (var pen = new Pen(Color.FromArgb(110, 144, 202, 230), 1f))
+                float borderWidth = _isFocused && !_isInvalid ? 1.6f : 1f;
+                using (var pen = new Pen(borderColor, borderWidth))
                 {
                     pen.Alignment = PenAlignment.Inset;
                     g.DrawPath(pen, path);
                 }
-
-                using (var hi = new Pen(Color.FromArgb(70, 255, 255, 255), 1f))
-                {
-                    hi.Alignment = PenAlignment.Inset;
-                    var inner = new Rectangle(outer.X + 1, outer.Y + 1, outer.Width - 3, outer.Height - 3);
-                    using (GraphicsPath ip = UiPaths.RoundedRectangle(inner, Math.Max(2, r - 2)))
-                    {
-                        g.DrawPath(hi, ip);
-                    }
-                }
             }
         }
 
-        /// <summary>
-        /// Wraps each direct child <see cref="TextBox"/> of <paramref name="host"/> in a chrome plate (once).
-        /// </summary>
         public static void WrapDirectTextBoxes(Panel host)
         {
             if (host == null)
@@ -81,41 +107,115 @@ namespace ClinicVets
                 return;
             }
 
-            List<TextBox> boxes = host.Controls.OfType<TextBox>().ToList();
-            foreach (TextBox tb in boxes)
+            foreach (Control child in host.Controls.Cast<Control>().ToList())
             {
-                if (tb.Parent is ChromeTextPlate)
-                {
-                    continue;
-                }
-
-                AnchorStyles anchor = tb.Anchor;
-                int tab = tb.TabIndex;
-                Point loc = tb.Location;
-                Size sz = tb.Size;
-                int z = host.Controls.GetChildIndex(tb);
-
-                var plate = new ChromeTextPlate
-                {
-                    Location = new Point(loc.X - 2, loc.Y - 2),
-                    Size = new Size(sz.Width + 4, sz.Height + 5),
-                    TabIndex = tab,
-                    TabStop = false,
-                };
-
-                host.Controls.Remove(tb);
-                host.Controls.Add(plate);
-                host.Controls.SetChildIndex(plate, z);
-
-                tb.BorderStyle = BorderStyle.None;
-                tb.BackColor = Color.FromArgb(255, 252, 253, 255);
-                tb.TabIndex = tab;
-                plate.Controls.Add(tb);
-                tb.Location = new Point(plate.Padding.Left, plate.Padding.Top);
-                tb.Width = plate.ClientSize.Width - plate.Padding.Horizontal;
-                tb.Height = plate.ClientSize.Height - plate.Padding.Vertical;
-                tb.Anchor = anchor;
+                CardPanel.ApplyChildChrome(child);
             }
+
+            foreach (TextBox tb in host.Controls.OfType<TextBox>().ToList())
+            {
+                WrapTextBox(host, tb);
+            }
+
+            foreach (ComboBox combo in host.Controls.OfType<ComboBox>().ToList())
+            {
+                WrapComboBox(host, combo);
+            }
+        }
+
+        private static void WrapTextBox(Panel host, TextBox tb)
+        {
+            if (tb.Parent is ChromeTextPlate)
+            {
+                return;
+            }
+
+            AnchorStyles anchor = tb.Anchor;
+            int tab = tb.TabIndex;
+            Point loc = tb.Location;
+            Size sz = tb.Size;
+            int z = host.Controls.GetChildIndex(tb);
+
+            var plate = new ChromeTextPlate
+            {
+                Location = loc,
+                Size = sz,
+                TabIndex = tab,
+                TabStop = true,
+            };
+
+            host.Controls.Remove(tb);
+            host.Controls.Add(plate);
+            host.Controls.SetChildIndex(plate, z);
+
+            try
+            {
+                tb.BorderStyle = BorderStyle.None;
+                tb.BackColor = System.Drawing.Color.FromArgb(245, 250, 255);
+                tb.ForeColor = System.Drawing.Color.FromArgb(20, 70, 110);
+            }
+            catch
+            {
+            }
+            tb.TabIndex = 0;
+            plate.Controls.Add(tb);
+            FitInnerControl(tb, plate);
+            tb.Anchor = anchor;
+            WireFocusHandlers(plate, tb);
+        }
+
+        private static void WrapComboBox(Panel host, ComboBox combo)
+        {
+            if (combo.Parent is ChromeTextPlate)
+            {
+                return;
+            }
+
+            AnchorStyles anchor = combo.Anchor;
+            int tab = combo.TabIndex;
+            Point loc = combo.Location;
+            Size sz = combo.Size;
+            int z = host.Controls.GetChildIndex(combo);
+
+            var plate = new ChromeTextPlate
+            {
+                Location = loc,
+                Size = sz,
+                TabIndex = tab,
+                TabStop = true,
+            };
+
+            host.Controls.Remove(combo);
+            host.Controls.Add(plate);
+            host.Controls.SetChildIndex(plate, z);
+
+            combo.FlatStyle = FlatStyle.Flat;
+            combo.BackColor = ClinicUiTheme.FieldFill;
+            combo.ForeColor = ClinicUiTheme.TitleText;
+            combo.TabIndex = 0;
+            plate.Controls.Add(combo);
+            FitInnerControl(combo, plate);
+            combo.Anchor = anchor;
+            WireFocusHandlers(plate, combo);
+        }
+
+        private static void WireFocusHandlers(ChromeTextPlate plate, Control inner)
+        {
+            inner.GotFocus += (sender, args) => plate.IsFocused = true;
+            inner.LostFocus += (sender, args) =>
+            {
+                if (!plate.ContainsFocus)
+                {
+                    plate.IsFocused = false;
+                }
+            };
+        }
+
+        private static void FitInnerControl(Control inner, ChromeTextPlate plate)
+        {
+            inner.Location = new Point(plate.Padding.Left + 4, plate.Padding.Top + 3);
+            inner.Width = Math.Max(10, plate.ClientSize.Width - plate.Padding.Horizontal - 8);
+            inner.Height = Math.Max(10, plate.ClientSize.Height - plate.Padding.Vertical - 6);
         }
     }
 }

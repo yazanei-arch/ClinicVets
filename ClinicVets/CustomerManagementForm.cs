@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ClinicVets
@@ -8,6 +9,9 @@ namespace ClinicVets
     public partial class CustomerManagementForm : Form
     {
         private readonly ExcelHelper _excelHelper = new ExcelHelper();
+        private readonly List<Customer> _allCustomers = new List<Customer>();
+        private ValidationFieldBinder _validation;
+        private int _fieldsBottom;
 
         public CustomerManagementForm()
             : this(null)
@@ -25,46 +29,165 @@ namespace ClinicVets
 
         private void CustomerManagementForm_Load(object sender, EventArgs e)
         {
-            WinFormsUi.SetDoubleBuffered(this);
-            VetBackgroundHelper.ApplyVetBackground(this);
+            ThemeHelper.ApplyThemedShell(
+                this,
+                pnlCard,
+                centerCardVertically: false,
+                headerSubtitle: "Customer records & appointments",
+                backgroundStyle: FormBackgroundStyle.DashboardWorkspace);
+            ThemeHelper.ApplyStandardLabels(
+                lblTitle,
+                lblSubtitle,
+                lblCustomerId,
+                lblFirstName,
+                lblLastName,
+                lblPhone,
+                lblEmail,
+                lblAddress);
+            ThemeHelper.ApplyStandardButtons(
+                btnAddCustomer,
+                btnUpdateCustomer,
+                btnDeleteCustomer,
+                btnOpenSearch,
+                btnBack);
+            btnOpenSearch.IsOutlineStyle = true;
+            ClinicUiTheme.ApplyOutlineButton(btnOpenSearch);
+
+            pnlCard.AutoScroll = true;
             ChromeTextPlate.WrapDirectTextBoxes(pnlCard);
-            CenterCard();
+            SetupValidation();
             SetupGrid();
             ReloadCustomersFromExcel();
-            txtFullName.Focus();
+            FitCustomerLayout();
+            Resize += CustomerManagementForm_Resize;
+            txtCustomerId.Focus();
+        }
+
+        private void CustomerManagementForm_Resize(object sender, EventArgs e)
+        {
+            FitCustomerLayout();
+        }
+
+        private void SetupValidation()
+        {
+            _validation = new ValidationFieldBinder(pnlCard);
+
+            ValidationFieldBinder.FieldEntry customerId = _validation.BindTextBox(txtCustomerId, ValidationHelper.ValidateIdNumber, lblCustomerId);
+            ValidationFieldBinder.FieldEntry firstName = _validation.BindTextBox(txtFirstName, ValidationHelper.ValidateName, lblFirstName);
+            ValidationFieldBinder.FieldEntry lastName = _validation.BindTextBox(txtLastName, ValidationHelper.ValidateName, lblLastName);
+            ValidationFieldBinder.FieldEntry phone = _validation.BindTextBox(txtPhone, ValidationHelper.ValidatePhone, lblPhone);
+            ValidationFieldBinder.FieldEntry email = _validation.BindTextBox(txtEmail, ValidationHelper.ValidateEmail, lblEmail);
+            ValidationFieldBinder.FieldEntry address = _validation.BindTextBox(txtAddress, ValidationHelper.ValidateAddress, lblAddress);
+
+            _validation.ReflowTwoColumn(
+                88,
+                44,
+                420,
+                16,
+                new[] { customerId, lastName, email },
+                new[] { firstName, phone, address },
+                872,
+                4,
+                4);
+
+            _fieldsBottom = Math.Max(address.HostControl.Bottom, email.HostControl.Bottom);
+            foreach (ValidationFieldBinder.FieldEntry entry in _validation.Entries)
+            {
+                _fieldsBottom = Math.Max(_fieldsBottom, entry.ErrorLabel.Bottom);
+            }
+        }
+
+        private void FitCustomerLayout()
+        {
+            int pad = pnlCard.Padding.Left;
+            int contentW = Math.Max(500, pnlCard.ClientSize.Width - (pad * 2));
+            int headerBottom = ThemeHelper.GetHeaderBottom(this);
+            int cardTop = headerBottom + 8;
+            int cardHeight = Math.Max(400, ClientSize.Height - cardTop - 12);
+            int cardLeft = Math.Max(12, (ClientSize.Width - Math.Min(960, ClientSize.Width - 24)) / 2);
+            int cardWidth = Math.Min(960, ClientSize.Width - 24);
+
+            pnlCard.SetBounds(cardLeft, cardTop, cardWidth, cardHeight);
+
+            lblTitle.SetBounds(pad, 20, contentW, 34);
+            lblSubtitle.SetBounds(pad, 54, contentW, 26);
+
+            int y = _fieldsBottom + 8;
+            int actionGap = 8;
+            int actionW = (contentW - (actionGap * 2)) / 3;
+            btnAddCustomer.SetBounds(pad, y, actionW, 40);
+            btnUpdateCustomer.SetBounds(pad + actionW + actionGap, y, actionW, 40);
+            btnDeleteCustomer.SetBounds(pad + (actionW + actionGap) * 2, y, actionW, 40);
+
+            y = btnAddCustomer.Bottom + 8;
+            int gridHeight = GetGridHeight(cardHeight, y, pad);
+            dgvCustomers.SetBounds(pad, y, contentW, gridHeight);
+
+            y = dgvCustomers.Bottom + 8;
+            int half = (contentW - actionGap) / 2;
+            btnOpenSearch.SetBounds(pad, y, half, 40);
+            btnBack.SetBounds(pad + half + actionGap, y, half, 40);
+
+            int scrollHeight = btnBack.Bottom + pnlCard.Padding.Bottom + 8;
+            pnlCard.AutoScrollMinSize = new Size(cardWidth, scrollHeight);
+        }
+
+        private static int GetGridHeight(int cardHeight, int gridTop, int pad)
+        {
+            int reservedBottom = 56 + pad;
+            int available = cardHeight - gridTop - reservedBottom;
+            return Math.Max(120, Math.Min(200, available));
         }
 
         private void SetupGrid()
         {
             dgvCustomers.AutoGenerateColumns = false;
             dgvCustomers.Columns.Clear();
-            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "FullName", HeaderText = "Full Name", FillWeight = 30 });
-            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "CustomerId", HeaderText = "ID", FillWeight = 15 });
-            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "Phone", HeaderText = "Phone", FillWeight = 20 });
-            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "Email", HeaderText = "Email", FillWeight = 35 });
+            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "CustomerId", HeaderText = "Customer ID", FillWeight = 14 });
+            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "FirstName", HeaderText = " First Name", FillWeight = 16 });
+            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "LastName", HeaderText = "Last Name", FillWeight = 16 });
+            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "Phone", HeaderText = "Phone", FillWeight = 14 });
+            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "Email", HeaderText = "Email", FillWeight = 20 });
+            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "Address", HeaderText = "Address", FillWeight = 20 });
             dgvCustomers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvCustomers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCustomers.MultiSelect = false;
             dgvCustomers.RowHeadersVisible = false;
             dgvCustomers.AllowUserToAddRows = false;
-            dgvCustomers.BackgroundColor = Color.FromArgb(252, 253, 255);
-            dgvCustomers.BorderStyle = BorderStyle.None;
-            dgvCustomers.EnableHeadersVisualStyles = true;
+            ClinicUiTheme.ApplyDataGridView(dgvCustomers);
+            dgvCustomers.SelectionChanged += dgvCustomers_SelectionChanged;
+        }
+
+        private void dgvCustomers_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvCustomers.CurrentRow == null || dgvCustomers.CurrentRow.IsNewRow)
+            {
+                return;
+            }
+
+            _validation.ClearAll();
+
+            DataGridViewRow row = dgvCustomers.CurrentRow;
+            txtCustomerId.Text = Convert.ToString(row.Cells["CustomerId"].Value) ?? string.Empty;
+            txtFirstName.Text = Convert.ToString(row.Cells["FirstName"].Value) ?? string.Empty;
+            txtLastName.Text = Convert.ToString(row.Cells["LastName"].Value) ?? string.Empty;
+            txtPhone.Text = Convert.ToString(row.Cells["Phone"].Value) ?? string.Empty;
+            txtEmail.Text = Convert.ToString(row.Cells["Email"].Value) ?? string.Empty;
+            txtAddress.Text = Convert.ToString(row.Cells["Address"].Value) ?? string.Empty;
         }
 
         private void ReloadCustomersFromExcel()
         {
+            _allCustomers.Clear();
             dgvCustomers.Rows.Clear();
             try
             {
                 foreach (Customer customer in _excelHelper.ReadCustomers())
                 {
-                    dgvCustomers.Rows.Add(
-                        customer.FullName ?? string.Empty,
-                        GridIdDisplay(customer),
-                        customer.Phone ?? string.Empty,
-                        customer.Email ?? string.Empty);
+                    _allCustomers.Add(customer);
                 }
+
+                BindCustomersToGrid(_allCustomers);
             }
             catch (Exception ex)
             {
@@ -77,57 +200,67 @@ namespace ClinicVets
             }
         }
 
-        private static string GridIdDisplay(Customer customer)
+        private void BindCustomersToGrid(IEnumerable<Customer> customers)
         {
-            if (!string.IsNullOrWhiteSpace(customer.IDNumber))
+            dgvCustomers.Rows.Clear();
+            foreach (Customer customer in customers)
             {
-                return customer.IDNumber.Trim();
+                dgvCustomers.Rows.Add(
+                    customer.CustomerID ?? string.Empty,
+                    customer.FirstName ?? string.Empty,
+                    customer.LastName ?? string.Empty,
+                    customer.Phone ?? string.Empty,
+                    customer.Email ?? string.Empty,
+                    customer.Address ?? string.Empty);
             }
-
-            return customer.CustomerID ?? string.Empty;
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            Image img = BackgroundImage;
-            BackgroundImage = null;
-            img?.Dispose();
+            VetBackgroundHelper.ClearBackgroundImage(this);
             base.OnFormClosed(e);
         }
 
-        private void CenterCard()
+        private bool TryGetValidCustomer(out Customer customer)
         {
-            pnlCard.Left = (ClientSize.Width - pnlCard.Width) / 2;
-            pnlCard.Top = (ClientSize.Height - pnlCard.Height) / 2;
+            customer = null;
+            if (!_validation.ValidateAll())
+            {
+                return false;
+            }
+
+            customer = new Customer
+            {
+                CustomerID = txtCustomerId.Text.Trim(),
+                FirstName = txtFirstName.Text.Trim(),
+                LastName = txtLastName.Text.Trim(),
+                Phone = txtPhone.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                Address = txtAddress.Text.Trim()
+            };
+            return true;
         }
 
         private void btnAddCustomer_Click(object sender, EventArgs e)
         {
-            var errors = new List<string>();
-            AddIfInvalid(errors, ValidateFullName(txtFullName.Text));
-            AddIfInvalid(errors, ValidateCustomerId(txtCustomerId.Text));
-            AddIfInvalid(errors, ValidatePhone(txtPhone.Text));
-            AddIfInvalid(errors, ValidateEmail(txtEmail.Text));
-
-            if (errors.Count > 0)
+            if (!TryGetValidCustomer(out Customer customer))
             {
-                MessageBox.Show(
-                    this,
-                    string.Join(Environment.NewLine, errors),
-                    "Customer — validation",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
                 return;
             }
 
-            var customer = new Customer
+            if (_allCustomers.Any(c => string.Equals(c.CustomerID, customer.CustomerID, StringComparison.OrdinalIgnoreCase)))
             {
-                CustomerID = Guid.NewGuid().ToString("N"),
-                FullName = txtFullName.Text.Trim(),
-                IDNumber = txtCustomerId.Text.Trim(),
-                Phone = txtPhone.Text.Trim(),
-                Email = txtEmail.Text.Trim()
-            };
+                var customerIdEntry = _validation.Entries.First(entry => entry.InputControl == txtCustomerId);
+                customerIdEntry.ErrorLabel.Text = "A customer with this ID already exists.";
+                customerIdEntry.ErrorLabel.Visible = true;
+                if (customerIdEntry.HostControl is ChromeTextPlate plate)
+                {
+                    plate.IsInvalid = true;
+                }
+
+                txtCustomerId.Focus();
+                return;
+            }
 
             try
             {
@@ -145,119 +278,123 @@ namespace ClinicVets
                 return;
             }
 
-            dgvCustomers.Rows.Add(
-                customer.FullName,
-                customer.IDNumber,
-                customer.Phone,
-                customer.Email);
-
-            MessageBox.Show(this, "Customer added to the list.", "Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            _allCustomers.Add(customer);
+            BindCustomersToGrid(_allCustomers);
+            MessageBox.Show(this, "Customer added successfully.", "Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void btnUpdateCustomer_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(this, "Search will be connected to your data source later.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void btnShowPets_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(this, "Pet list for the selected customer will open here later.", "Customer pets", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private static void AddIfInvalid(List<string> errors, string message)
-        {
-            if (message != null)
+            if (!TryGetValidCustomer(out Customer customer))
             {
-                errors.Add(message);
-            }
-        }
-
-        private static string ValidateFullName(string value)
-        {
-            value = (value ?? string.Empty).Trim();
-            if (value.Length == 0)
-            {
-                return "Full name is required.";
+                return;
             }
 
-            bool hasLetter = false;
-            foreach (char c in value)
+            try
             {
-                if (c == ' ')
+                _excelHelper.UpdateCustomer(customer);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    this,
+                    "Could not update the customer in Excel. Close the workbook if it is open, then try again."
+                    + Environment.NewLine + Environment.NewLine + ex.Message,
+                    "Customer — update",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Customer existing = _allCustomers.FirstOrDefault(c =>
+                string.Equals(c.CustomerID, customer.CustomerID, StringComparison.OrdinalIgnoreCase));
+            if (existing != null)
+            {
+                existing.FirstName = customer.FirstName;
+                existing.LastName = customer.LastName;
+                existing.Phone = customer.Phone;
+                existing.Email = customer.Email;
+                existing.Address = customer.Address;
+            }
+            else
+            {
+                _allCustomers.Add(customer);
+            }
+
+            BindCustomersToGrid(_allCustomers);
+            MessageBox.Show(this, "Customer updated successfully.", "Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnDeleteCustomer_Click(object sender, EventArgs e)
+        {
+            _validation.ClearField(txtCustomerId);
+            string customerId = txtCustomerId.Text.Trim();
+            string idError = ValidationHelper.ValidateIdNumber(customerId);
+            if (idError != null)
+            {
+                var customerIdEntry = _validation.Entries.First(entry => entry.InputControl == txtCustomerId);
+                customerIdEntry.ErrorLabel.Text = idError;
+                customerIdEntry.ErrorLabel.Visible = true;
+                if (customerIdEntry.HostControl is ChromeTextPlate plate)
                 {
-                    continue;
+                    plate.IsInvalid = true;
                 }
 
-                if (IsEnglishLetter(c))
-                {
-                    hasLetter = true;
-                }
-                else
-                {
-                    return "Full name may only contain English letters and spaces.";
-                }
+                txtCustomerId.Focus();
+                return;
             }
 
-            if (!hasLetter)
+            DialogResult confirm = MessageBox.Show(
+                this,
+                "Delete customer " + customerId + "?",
+                "Confirm delete",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes)
             {
-                return "Full name must include at least one letter.";
+                return;
             }
 
-            return null;
+            try
+            {
+                _excelHelper.DeleteCustomer(customerId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    this,
+                    "Could not delete the customer from Excel. Close the workbook if it is open, then try again."
+                    + Environment.NewLine + Environment.NewLine + ex.Message,
+                    "Customer — delete",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            _allCustomers.RemoveAll(c => string.Equals(c.CustomerID, customerId, StringComparison.OrdinalIgnoreCase));
+            BindCustomersToGrid(_allCustomers);
+            ClearFields();
+            MessageBox.Show(this, "Customer deleted successfully.", "Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private static bool IsEnglishLetter(char c)
+        private void btnOpenSearch_Click(object sender, EventArgs e)
         {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+            using (var searchForm = new CustomerSearchForm(this))
+            {
+                searchForm.ShowDialog(this);
+            }
         }
 
-        private static string ValidateCustomerId(string value)
+        private void ClearFields()
         {
-            value = (value ?? string.Empty).Trim();
-            if (value.Length != 9)
-            {
-                return "Customer ID must be exactly 9 digits.";
-            }
-
-            foreach (char c in value)
-            {
-                if (!char.IsDigit(c))
-                {
-                    return "Customer ID must contain only digits (exactly 9).";
-                }
-            }
-
-            return null;
-        }
-
-        private static string ValidatePhone(string value)
-        {
-            value = (value ?? string.Empty).Trim();
-            if (value.Length < 7 || value.Length > 15)
-            {
-                return "Phone must be between 7 and 15 digits.";
-            }
-
-            foreach (char c in value)
-            {
-                if (!char.IsDigit(c))
-                {
-                    return "Phone may only contain digits.";
-                }
-            }
-
-            return null;
-        }
-
-        private static string ValidateEmail(string email)
-        {
-            email = email ?? string.Empty;
-            if (!email.Contains("@"))
-            {
-                return "Email must contain an '@' character.";
-            }
-
-            return null;
+            _validation.ClearAll();
+            txtCustomerId.Clear();
+            txtFirstName.Clear();
+            txtLastName.Clear();
+            txtPhone.Clear();
+            txtEmail.Clear();
+            txtAddress.Clear();
+            dgvCustomers.ClearSelection();
         }
     }
 }

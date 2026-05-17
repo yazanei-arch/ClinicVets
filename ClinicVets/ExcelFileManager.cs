@@ -4,9 +4,13 @@ using System.IO;
 public static class ExcelFileManager
 {
     public const string CustomerSheetName = "Customer";
+    public const string EmployeeSheetName = "Employees";
 
-    /// <summary>Column order in the Customer sheet: A–E.</summary>
-    public static readonly string[] CustomerColumnHeaders = { "Email", "Phone", "IDNumber", "FullName", "CustomerID" };
+    /// <summary>Column order in the Customer sheet: A–F.</summary>
+    public static readonly string[] CustomerColumnHeaders = { "Email", "Phone", "Address", "LastName", "FirstName", "CustomerID" };
+
+    /// <summary>Column order in the Employees sheet: A–F.</summary>
+    public static readonly string[] EmployeeColumnHeaders = { "EmployeeID", "Username", "Password", "Email", "NationalID", "Role" };
 
     public static string FilePath = @"C:\Users\abdal\source\repos\ClinicVets\ClinicVetsData.xlsx";
 
