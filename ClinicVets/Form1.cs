@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ClinicVets
@@ -11,7 +12,15 @@ namespace ClinicVets
         private const int FieldGap = 10;
         private const int SectionGap = 14;
 
+        private static readonly Color LoginTitleColor = Color.FromArgb(21, 101, 192);
+        private static readonly Color LoginSubtitleColor = Color.FromArgb(71, 95, 120);
+        private static readonly Color LoginLabelColor = Color.FromArgb(0, 137, 168);
+        private static readonly Color LoginLinkColor = Color.FromArgb(25, 118, 210);
+        private static readonly Color LoginLinkHoverColor = Color.FromArgb(0, 151, 167);
+        private static readonly Color LoginErrorColor = Color.FromArgb(211, 47, 47);
+
         private ValidationFieldBinder _validation;
+        private LinkLabel _passwordToggle;
 
         public Form1()
         {
@@ -20,39 +29,86 @@ namespace ClinicVets
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            VetBackgroundHelper.ClearBackgroundImage(this);
+            WinFormsUi.SetDoubleBuffered(this);
+            VetBackgroundHelper.ApplyLoginBackground(this);
 
-            ThemeHelper.ApplyThemedShell(
-                this,
-                pnlCard,
-                centerCardVertically: true,
-                showHeader: false,
-                backgroundStyle: FormBackgroundStyle.LoginMinimal);
+            pnlCard.CornerRadius = 12;
+            pnlCard.Padding = new Padding(32, 28, 32, 28);
+            pnlCard.Width = 400;
 
-            pnlCard.UseOpaqueFill = true;
-            pnlCard.ShowCornerDecorations = false;
-            pnlCard.Padding = new Padding(36, 32, 36, 32);
-            pnlCard.Width = 440;
+            lblTitle.Text = "Welcome Back";
+            lblSubtitle.Text = "Sign in to access your clinic workspace";
 
-            lblTitle.Text = "Sign In";
-            lblSubtitle.Text = "Welcome back. Sign in to access the clinic management hub.";
+            ApplyLoginTypography();
 
-            ThemeHelper.ApplyStandardLabels(lblTitle, lblSubtitle, lblUsername, lblPassword);
-            ThemeHelper.ApplyErrorLabels(lblUsernameError, lblPasswordError);
-            ThemeHelper.ApplyStandardButtons(btnLogin, btnRegister);
+            lnkForgotPassword.LinkColor = LoginLinkColor;
+            lnkForgotPassword.ActiveLinkColor = LoginLinkHoverColor;
+            lnkForgotPassword.VisitedLinkColor = LoginLinkColor;
+            lnkForgotPassword.BackColor = ClinicUiTheme.SoftChromeSurface;
 
-            lnkForgotPassword.LinkColor = ClinicUiTheme.AccentCyan;
-            lnkForgotPassword.ActiveLinkColor = ClinicUiTheme.AccentBlueHover;
-            lnkForgotPassword.VisitedLinkColor = ClinicUiTheme.AccentCyan;
-            lnkForgotPassword.BackColor = Color.Transparent;
+            btnLogin.UseLoginLightStyle = true;
+            btnLogin.IsOutlineStyle = false;
+            btnLogin.CornerRadius = 10;
+            btnRegister.UseLoginLightStyle = true;
+            btnRegister.IsOutlineStyle = true;
+            btnRegister.CornerRadius = 10;
 
             ChromeTextPlate.WrapDirectTextBoxes(pnlCard);
-            PasswordVisibilityHelper.Attach(txtPassword);
-            SetupValidation();
+            ApplyLoginFieldChrome();
+            _passwordToggle = PasswordVisibilityHelper.Attach(txtPassword);
+            if (_passwordToggle != null)
+            {
+                _passwordToggle.LinkColor = LoginLinkColor;
+                _passwordToggle.ActiveLinkColor = LoginLinkHoverColor;
+                _passwordToggle.VisitedLinkColor = LoginLinkColor;
+            }
 
+            SetupValidation();
             LayoutLoginControls();
             Resize += Form1_Resize;
             txtUsername.Focus();
+        }
+
+        private void ApplyLoginTypography()
+        {
+            lblTitle.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point);
+            lblTitle.ForeColor = LoginTitleColor;
+            lblTitle.BackColor = Color.Transparent;
+
+            lblSubtitle.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            lblSubtitle.ForeColor = LoginSubtitleColor;
+            lblSubtitle.BackColor = Color.Transparent;
+
+            foreach (Label label in new[] { lblUsername, lblPassword })
+            {
+                label.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+                label.ForeColor = LoginLabelColor;
+                label.BackColor = Color.Transparent;
+            }
+
+            lblUsernameError.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            lblUsernameError.ForeColor = LoginErrorColor;
+            lblUsernameError.BackColor = Color.Transparent;
+
+            lblPasswordError.Font = lblUsernameError.Font;
+            lblPasswordError.ForeColor = LoginErrorColor;
+            lblPasswordError.BackColor = Color.Transparent;
+
+            btnLogin.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            btnRegister.Font = btnLogin.Font;
+        }
+
+        private void ApplyLoginFieldChrome()
+        {
+            foreach (ChromeTextPlate plate in pnlCard.Controls.OfType<ChromeTextPlate>())
+            {
+                plate.UseLoginLightStyle = true;
+                foreach (TextBox box in plate.Controls.OfType<TextBox>())
+                {
+                    box.ForeColor = Color.FromArgb(33, 52, 72);
+                    box.BackColor = Color.White;
+                }
+            }
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -74,15 +130,15 @@ namespace ClinicVets
             int contentW = Math.Max(200, pnlCard.ClientSize.Width - padL - padR);
             int x = padL;
             int y = pnlCard.Padding.Top;
-            int fieldH = ClinicUiTheme.FieldHeight;
+            int fieldH = 38;
 
             lblTitle.SetBounds(x, y, contentW, 36);
             lblTitle.TextAlign = ContentAlignment.MiddleCenter;
             y += 40;
 
-            lblSubtitle.SetBounds(x, y, contentW, 32);
+            lblSubtitle.SetBounds(x, y, contentW, 36);
             lblSubtitle.TextAlign = ContentAlignment.TopCenter;
-            y += 36 + SectionGap;
+            y += 40 + SectionGap;
 
             lblUsername.SetBounds(x, y, contentW, 22);
             lblUsername.AutoSize = false;
@@ -110,14 +166,25 @@ namespace ClinicVets
             lnkForgotPassword.Location = new Point(x, y);
             y += lnkForgotPassword.Height + SectionGap;
 
-            btnLogin.SetBounds(x, y, contentW, ClinicUiTheme.ButtonHeight);
-            y += ClinicUiTheme.ButtonHeight + 12;
+            btnLogin.SetBounds(x, y, contentW, 44);
+            y += 44 + 12;
 
-            btnRegister.SetBounds(x, y, contentW, ClinicUiTheme.ButtonHeight);
-            y += ClinicUiTheme.ButtonHeight;
+            btnRegister.SetBounds(x, y, contentW, 44);
+            y += 44;
 
             pnlCard.Height = y + pnlCard.Padding.Bottom;
-            ThemeHelper.CenterCardInClient(this, pnlCard, verticalBias: 0);
+            PositionLoginCard();
+        }
+
+        private void PositionLoginCard()
+        {
+            const int margin = 36;
+            int zoneStart = (int)(ClientSize.Width * 0.54f);
+            int zoneEnd = ClientSize.Width - margin;
+            int zoneWidth = Math.Max(0, zoneEnd - zoneStart);
+            pnlCard.Left = zoneStart + Math.Max(0, (zoneWidth - pnlCard.Width) / 2);
+            pnlCard.Top = Math.Max(margin, (ClientSize.Height - pnlCard.Height) / 2);
+            pnlCard.BringToFront();
         }
 
         private static Control GetFieldHost(TextBox textBox)

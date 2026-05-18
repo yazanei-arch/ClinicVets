@@ -4,7 +4,6 @@ C:\Users\abdal\source\repos\ClinicVets\ClinicVets.AuthCustomers\bin\Debug\net5.0
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.AuthCustomers\bin\Debug\net5.0\ClinicVets.AuthCustomers.runtimeconfig.dev.json
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.AuthCustomers\bin\Debug\net5.0\ClinicVets.AuthCustomers.dll
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.AuthCustomers\bin\Debug\net5.0\ClinicVets.AuthCustomers.pdb
-C:\Users\abdal\source\repos\ClinicVets\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.csproj.AssemblyReference.cache
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.AssemblyInfoInputs.cache
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.AuthCustomers\obj\Debug\net5.0\ClinicVets.AuthCustomers.AssemblyInfo.cs

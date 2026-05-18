@@ -22,7 +22,7 @@ namespace ClinicVets
             {
                 Text = "Show",
                 AutoSize = true,
-                BackColor = Color.Transparent,
+                BackColor = ClinicUiTheme.SoftChromeSurface,
                 Cursor = Cursors.Hand,
                 LinkColor = ClinicUiTheme.AccentBlue,
                 ActiveLinkColor = ClinicUiTheme.AccentBlueHover,

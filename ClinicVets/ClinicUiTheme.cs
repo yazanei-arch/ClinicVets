@@ -47,6 +47,9 @@ namespace ClinicVets
         internal static readonly Color HeaderUserChip = Color.FromArgb(180, 30, 58, 92);
         internal static readonly Color HeaderUserText = Color.FromArgb(186, 230, 253);
 
+        // Light login/register chrome (opaque; avoids Transparent on Panel/Button)
+        internal static readonly Color SoftChromeSurface = Color.FromArgb(245, 250, 255);
+
         // Fields
         internal static readonly Color FieldFill = Color.FromArgb(245, 18, 30, 50);
         internal static readonly Color FieldInvalidFill = Color.FromArgb(245, 40, 28, 36);

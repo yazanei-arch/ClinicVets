@@ -8,7 +8,6 @@ C:\Users\abdal\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.csproj.Ge
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.csproj.CoreCompileInputs.cache
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.exe
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.pdb
-c:\Users\abdal\source\repos\ClinicVets\ClinicVets\bin\Debug\images\vet_background.png
 c:\Users\abdal\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.RegisterEmployeeForm.resources
 c:\Users\abdal\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.CustomerManagementForm.resources
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets\bin\Debug\DocumentFormat.OpenXml.dll
@@ -41,3 +40,10 @@ C:\Users\asus\Source\Repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.exe
 C:\Users\asus\Source\Repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.pdb
 c:\Users\asus\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.ForgotPasswordForm.resources
 c:\Users\asus\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.CustomerSearchForm.resources
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets\bin\Debug\System.Buffers.dll
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.CustomerSearchForm.resources
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.ForgotPasswordForm.resources
+C:\Users\abdal\source\repos\ClinicVets\ClinicVets\bin\Debug\images\login_background.png
+c:\Users\abdal\source\repos\ClinicVets\ClinicVets\bin\Debug\images\register-bg.png
+c:\Users\abdal\source\repos\ClinicVets\ClinicVets\obj\Debug\ClinicVets.RegistrationSuccessForm.resources

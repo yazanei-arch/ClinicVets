@@ -17,7 +17,7 @@
 
         private void InitializeComponent()
         {
-            this.pnlCard = new ClinicVets.CardPanel();
+            this.pnlCard = new ClinicVets.LoginCardPanel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblSubtitle = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
@@ -35,7 +35,7 @@
             // pnlCard
             // 
             this.pnlCard.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pnlCard.BackColor = System.Drawing.Color.Transparent;
+            this.pnlCard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(250)))), ((int)(((byte)(255)))));
             this.pnlCard.Controls.Add(this.lblTitle);
             this.pnlCard.Controls.Add(this.lblSubtitle);
             this.pnlCard.Controls.Add(this.lblUsername);
@@ -47,10 +47,10 @@
             this.pnlCard.Controls.Add(this.lnkForgotPassword);
             this.pnlCard.Controls.Add(this.btnLogin);
             this.pnlCard.Controls.Add(this.btnRegister);
-            this.pnlCard.Location = new System.Drawing.Point(280, 90);
+            this.pnlCard.Location = new System.Drawing.Point(620, 120);
             this.pnlCard.Name = "pnlCard";
-            this.pnlCard.Padding = new System.Windows.Forms.Padding(36, 32, 36, 32);
-            this.pnlCard.Size = new System.Drawing.Size(440, 520);
+            this.pnlCard.Padding = new System.Windows.Forms.Padding(32, 28, 32, 28);
+            this.pnlCard.Size = new System.Drawing.Size(400, 480);
             this.pnlCard.TabIndex = 0;
             // 
             // lblTitle
@@ -59,35 +59,35 @@
             this.lblTitle.BackColor = System.Drawing.Color.Transparent;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(101)))), ((int)(((byte)(192)))));
-            this.lblTitle.Location = new System.Drawing.Point(44, 36);
+            this.lblTitle.Location = new System.Drawing.Point(32, 28);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(452, 44);
+            this.lblTitle.Size = new System.Drawing.Size(336, 36);
             this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "Sign In";
+            this.lblTitle.Text = "Welcome Back";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblSubtitle
             // 
             this.lblSubtitle.AutoSize = false;
             this.lblSubtitle.BackColor = System.Drawing.Color.Transparent;
-            this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(78)))), ((int)(((byte)(96)))));
-            this.lblSubtitle.Location = new System.Drawing.Point(44, 84);
+            this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(95)))), ((int)(((byte)(120)))));
+            this.lblSubtitle.Location = new System.Drawing.Point(32, 68);
             this.lblSubtitle.Name = "lblSubtitle";
-            this.lblSubtitle.Size = new System.Drawing.Size(452, 36);
+            this.lblSubtitle.Size = new System.Drawing.Size(336, 36);
             this.lblSubtitle.TabIndex = 1;
-            this.lblSubtitle.Text = "Welcome back. Sign in to access the clinic management hub.";
-            this.lblSubtitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblSubtitle.Text = "Sign in to access your clinic workspace";
+            this.lblSubtitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblUsername
             // 
             this.lblUsername.AutoSize = true;
             this.lblUsername.BackColor = System.Drawing.Color.Transparent;
-            this.lblUsername.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
-            this.lblUsername.Location = new System.Drawing.Point(44, 132);
+            this.lblUsername.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(137)))), ((int)(((byte)(168)))));
+            this.lblUsername.Location = new System.Drawing.Point(32, 128);
             this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(89, 23);
+            this.lblUsername.Size = new System.Drawing.Size(71, 17);
             this.lblUsername.TabIndex = 3;
             this.lblUsername.Text = "Username";
             // 
@@ -95,20 +95,21 @@
             // 
             this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtUsername.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtUsername.Location = new System.Drawing.Point(44, 156);
+            this.txtUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(52)))), ((int)(((byte)(72)))));
+            this.txtUsername.Location = new System.Drawing.Point(32, 152);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(452, 30);
+            this.txtUsername.Size = new System.Drawing.Size(336, 25);
             this.txtUsername.TabIndex = 4;
             // 
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
             this.lblPassword.BackColor = System.Drawing.Color.Transparent;
-            this.lblPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
-            this.lblPassword.Location = new System.Drawing.Point(44, 200);
+            this.lblPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(137)))), ((int)(((byte)(168)))));
+            this.lblPassword.Location = new System.Drawing.Point(32, 196);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(84, 23);
+            this.lblPassword.Size = new System.Drawing.Size(67, 17);
             this.lblPassword.TabIndex = 5;
             this.lblPassword.Text = "Password";
             // 
@@ -116,9 +117,10 @@
             // 
             this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPassword.Location = new System.Drawing.Point(44, 224);
+            this.txtPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(52)))), ((int)(((byte)(72)))));
+            this.txtPassword.Location = new System.Drawing.Point(32, 220);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(452, 30);
+            this.txtPassword.Size = new System.Drawing.Size(336, 25);
             this.txtPassword.TabIndex = 6;
             this.txtPassword.UseSystemPasswordChar = true;
             // 
@@ -128,9 +130,9 @@
             this.lblUsernameError.BackColor = System.Drawing.Color.Transparent;
             this.lblUsernameError.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUsernameError.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.lblUsernameError.Location = new System.Drawing.Point(44, 188);
+            this.lblUsernameError.Location = new System.Drawing.Point(32, 184);
             this.lblUsernameError.Name = "lblUsernameError";
-            this.lblUsernameError.Size = new System.Drawing.Size(452, 18);
+            this.lblUsernameError.Size = new System.Drawing.Size(336, 18);
             this.lblUsernameError.TabIndex = 9;
             this.lblUsernameError.Visible = false;
             // 
@@ -140,25 +142,25 @@
             this.lblPasswordError.BackColor = System.Drawing.Color.Transparent;
             this.lblPasswordError.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPasswordError.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.lblPasswordError.Location = new System.Drawing.Point(44, 256);
+            this.lblPasswordError.Location = new System.Drawing.Point(32, 252);
             this.lblPasswordError.Name = "lblPasswordError";
-            this.lblPasswordError.Size = new System.Drawing.Size(452, 18);
+            this.lblPasswordError.Size = new System.Drawing.Size(336, 18);
             this.lblPasswordError.TabIndex = 10;
             this.lblPasswordError.Visible = false;
             // 
             // lnkForgotPassword
             // 
             this.lnkForgotPassword.AutoSize = true;
-            this.lnkForgotPassword.BackColor = System.Drawing.Color.Transparent;
+            this.lnkForgotPassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(250)))), ((int)(((byte)(255)))));
             this.lnkForgotPassword.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lnkForgotPassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lnkForgotPassword.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkForgotPassword.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.lnkForgotPassword.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(165)))), ((int)(((byte)(245)))));
+            this.lnkForgotPassword.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(151)))), ((int)(((byte)(167)))));
             this.lnkForgotPassword.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.lnkForgotPassword.Location = new System.Drawing.Point(44, 278);
+            this.lnkForgotPassword.Location = new System.Drawing.Point(32, 278);
             this.lnkForgotPassword.Name = "lnkForgotPassword";
-            this.lnkForgotPassword.Size = new System.Drawing.Size(120, 20);
+            this.lnkForgotPassword.Size = new System.Drawing.Size(103, 15);
             this.lnkForgotPassword.TabIndex = 11;
             this.lnkForgotPassword.TabStop = true;
             this.lnkForgotPassword.Text = "Forgot Password?";
@@ -166,17 +168,16 @@
             // 
             // btnLogin
             // 
-            this.btnLogin.CornerRadius = 8;
+            this.btnLogin.CornerRadius = 10;
             this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLogin.FlatAppearance.BorderSize = 0;
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogin.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogin.ForeColor = System.Drawing.Color.White;
             this.btnLogin.IsOutlineStyle = false;
-            this.btnLogin.BackColor = System.Drawing.Color.Transparent;
-            this.btnLogin.Location = new System.Drawing.Point(44, 306);
+            this.btnLogin.Location = new System.Drawing.Point(32, 308);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(452, 46);
+            this.btnLogin.Size = new System.Drawing.Size(336, 44);
             this.btnLogin.TabIndex = 7;
             this.btnLogin.Text = "Login";
             this.btnLogin.UseVisualStyleBackColor = false;
@@ -184,17 +185,16 @@
             // 
             // btnRegister
             // 
-            this.btnRegister.CornerRadius = 8;
+            this.btnRegister.CornerRadius = 10;
             this.btnRegister.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegister.FlatAppearance.BorderSize = 0;
             this.btnRegister.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRegister.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegister.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.btnRegister.IsOutlineStyle = true;
-            this.btnRegister.BackColor = System.Drawing.Color.Transparent;
-            this.btnRegister.Location = new System.Drawing.Point(44, 366);
+            this.btnRegister.Location = new System.Drawing.Point(32, 364);
             this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(452, 46);
+            this.btnRegister.Size = new System.Drawing.Size(336, 44);
             this.btnRegister.TabIndex = 8;
             this.btnRegister.Text = "Register New Employee";
             this.btnRegister.UseVisualStyleBackColor = false;
@@ -204,7 +204,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(960, 640);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(244)))), ((int)(((byte)(252)))));
+            this.ClientSize = new System.Drawing.Size(1120, 700);
             this.Controls.Add(this.pnlCard);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -221,7 +222,7 @@
 
         #endregion
 
-        private CardPanel pnlCard;
+        private LoginCardPanel pnlCard;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblSubtitle;
         private System.Windows.Forms.Label lblUsername;

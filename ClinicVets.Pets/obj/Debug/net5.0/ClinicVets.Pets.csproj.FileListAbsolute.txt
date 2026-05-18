@@ -4,7 +4,6 @@ C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\bin\Debug\net5.0\ClinicVe
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\bin\Debug\net5.0\ClinicVets.Pets.runtimeconfig.dev.json
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\bin\Debug\net5.0\ClinicVets.Pets.dll
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\bin\Debug\net5.0\ClinicVets.Pets.pdb
-C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.csproj.AssemblyReference.cache
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.AssemblyInfoInputs.cache
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.Pets\obj\Debug\net5.0\ClinicVets.Pets.AssemblyInfo.cs

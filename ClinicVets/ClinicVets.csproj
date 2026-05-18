@@ -121,6 +121,15 @@
     <Compile Include="RegisterEmployeeForm.Designer.cs">
       <DependentUpon>RegisterEmployeeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="RegistrationSuccessForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegistrationSuccessForm.Designer.cs">
+      <DependentUpon>RegistrationSuccessForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SuccessCheckmarkControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="RoundedActionButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -145,6 +154,9 @@
     <EmbeddedResource Include="RegisterEmployeeForm.resx">
       <DependentUpon>RegisterEmployeeForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="RegistrationSuccessForm.resx">
+      <DependentUpon>RegistrationSuccessForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -167,12 +179,29 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <Target Name="CopyVetBackgroundImage" AfterTargets="AfterBuild">
+  <ItemGroup>
+    <None Include="images\login_background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="images\register-bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Target Name="CopyLoginBackgroundImage" AfterTargets="AfterBuild">
     <PropertyGroup>
-      <_VetBgSource>$(ProjectDir)images\vet_background.png</_VetBgSource>
-      <_VetBgDest>$(OutputPath)images\vet_background.png</_VetBgDest>
+      <_LoginBgSource>$(ProjectDir)images\login_background.png</_LoginBgSource>
+      <_LoginBgDest>$(OutputPath)images\login_background.png</_LoginBgDest>
     </PropertyGroup>
-    <Copy SourceFiles="$(_VetBgSource)" DestinationFiles="$(_VetBgDest)" SkipUnchangedFiles="false" Condition="Exists('$(_VetBgSource)')" />
+    <MakeDir Directories="$(OutputPath)images" Condition="Exists('$(_LoginBgSource)')" />
+    <Copy SourceFiles="$(_LoginBgSource)" DestinationFiles="$(_LoginBgDest)" SkipUnchangedFiles="true" Condition="Exists('$(_LoginBgSource)')" />
+  </Target>
+  <Target Name="CopyRegisterBackgroundImage" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <_RegisterBgSource>$(ProjectDir)images\register-bg.png</_RegisterBgSource>
+      <_RegisterBgDest>$(OutputPath)images\register-bg.png</_RegisterBgDest>
+    </PropertyGroup>
+    <MakeDir Directories="$(OutputPath)images" Condition="Exists('$(_RegisterBgSource)')" />
+    <Copy SourceFiles="$(_RegisterBgSource)" DestinationFiles="$(_RegisterBgDest)" SkipUnchangedFiles="true" Condition="Exists('$(_RegisterBgSource)')" />
   </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
