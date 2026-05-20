@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ClinicVets.AuthCustomers")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd646c7004a0970c477edb8d1e58d09d5bd33c41")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("ClinicVets.AuthCustomers")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ClinicVets.AuthCustomers")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

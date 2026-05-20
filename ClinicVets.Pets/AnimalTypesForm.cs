@@ -73,41 +73,76 @@ namespace ClinicVets.UI
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (lstTypes.SelectedIndex == -1)
+            if (lstTypes.SelectedItem == null)
             {
-                MessageBox.Show("Select type first");
-                return;
-            }
-
-            string newType = txtType.Text.Trim();
-
-            if (newType == "")
-            {
-                MessageBox.Show("Enter new type");
+                MessageBox.Show("Please select animal type to update.");
                 return;
             }
 
             string oldType = lstTypes.SelectedItem.ToString();
+            string newType = txtType.Text.Trim();
 
-            if (!oldType.Equals(newType, StringComparison.OrdinalIgnoreCase) && TypeExists(newType))
+            if (string.IsNullOrWhiteSpace(newType))
             {
-                MessageBox.Show("Animal type already exists");
+                MessageBox.Show("Please enter new animal type.");
                 return;
             }
 
-            using (var workbook = new XLWorkbook(filePath))
+            if (!File.Exists(filePath))
             {
-                var sheet = workbook.Worksheet("AnimalTypes");
-                int rowNumber = lstTypes.SelectedIndex + 2;
-
-                sheet.Cell(rowNumber, 1).Value = newType;
-                workbook.Save();
+                MessageBox.Show("Excel file not found");
+                return;
             }
 
-            txtType.Clear();
-            LoadTypesFromExcel();
+            try
+            {
+                using (var workbook = new XLWorkbook(filePath))
+                {
+                    if (!workbook.Worksheets.Contains("AnimalTypes"))
+                    {
+                        MessageBox.Show("AnimalTypes sheet not found");
+                        return;
+                    }
 
-            MessageBox.Show("Animal type updated");
+                    var sheet = workbook.Worksheet("AnimalTypes");
+                    var range = sheet.RangeUsed();
+
+                    if (range == null)
+                        return;
+
+                    foreach (var row in range.RowsUsed())
+                    {
+                        if (row.RowNumber() == 1)
+                            continue;
+
+                        string currentType = row.Cell(1).GetValue<string>().Trim();
+
+                        if (currentType.Equals(oldType, StringComparison.OrdinalIgnoreCase))
+                        {
+                            row.Cell(1).Value = newType;
+                            break;
+                        }
+                    }
+
+                    workbook.Save();
+                }
+
+                // כאן העדכון החשוב:
+                UpdatePetsAnimalTypeInExcel(oldType, newType);
+
+                txtType.Clear();
+                LoadTypesFromExcel();
+
+                MessageBox.Show("Animal type updated successfully.");
+            }
+            catch (IOException)
+            {
+                MessageBox.Show("Please close the Excel file before updating.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error while updating animal type: " + ex.Message);
+            }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -187,14 +222,55 @@ namespace ClinicVets.UI
             MessageBox.Show("Animal type added");
         }
 
-        private void txtType_TextChanged(object sender, EventArgs e)
+        private void UpdatePetsAnimalTypeInExcel(string oldType, string newType)
         {
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("Excel file not found");
+                return;
+            }
 
-        }
+            try
+            {
+                using (var workbook = new XLWorkbook(filePath))
+                {
+                    if (!workbook.Worksheets.Contains("Pets"))
+                        return;
 
-        private void label2_Click(object sender, EventArgs e)
-        {
+                    var petsSheet = workbook.Worksheet("Pets");
+                    var range = petsSheet.RangeUsed();
 
+                    if (range == null)
+                        return;
+
+                    foreach (var row in range.RowsUsed())
+                    {
+                        if (row.RowNumber() == 1)
+                            continue;
+
+                        // לפי הסדר שלנו:
+                        // A = PetID
+                        // B = PetName
+                        // C = AnimalType
+                        string currentAnimalType = row.Cell(3).GetValue<string>().Trim();
+
+                        if (currentAnimalType.Equals(oldType, StringComparison.OrdinalIgnoreCase))
+                        {
+                            row.Cell(3).Value = newType;
+                        }
+                    }
+
+                    workbook.Save();
+                }
+            }
+            catch (IOException)
+            {
+                MessageBox.Show("Please close the Excel file before updating.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error while updating pets animal type: " + ex.Message);
+            }
         }
     }
 }

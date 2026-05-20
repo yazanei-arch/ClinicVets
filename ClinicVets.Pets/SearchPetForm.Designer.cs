@@ -131,7 +131,6 @@ namespace ClinicVets.UI
             this.dgvPets.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPets.Size = new System.Drawing.Size(753, 323);
             this.dgvPets.TabIndex = 10;
-            this.dgvPets.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPets_CellContentClick);
             // 
             // btnClear2
             // 

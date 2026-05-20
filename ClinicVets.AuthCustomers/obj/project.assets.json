@@ -8,19 +8,19 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\asus\\.nuget\\packages\\": {}
+    "C:\\Users\\royal\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\asus\\Source\\Repos\\ClinicVets\\ClinicVets.AuthCustomers\\ClinicVets.AuthCustomers.csproj",
+      "projectUniqueName": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.AuthCustomers\\ClinicVets.AuthCustomers.csproj",
       "projectName": "ClinicVets.AuthCustomers",
-      "projectPath": "C:\\Users\\asus\\Source\\Repos\\ClinicVets\\ClinicVets.AuthCustomers\\ClinicVets.AuthCustomers.csproj",
-      "packagesPath": "C:\\Users\\asus\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\asus\\Source\\Repos\\ClinicVets\\ClinicVets.AuthCustomers\\obj\\",
+      "projectPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.AuthCustomers\\ClinicVets.AuthCustomers.csproj",
+      "packagesPath": "C:\\Users\\royal\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.AuthCustomers\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\royal\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -40,11 +40,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -56,8 +51,7 @@
           "net47",
           "net471",
           "net472",
-          "net48",
-          "net481"
+          "net48"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -66,7 +60,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.416\\RuntimeIdentifierGraph.json"
       }
     }
   }

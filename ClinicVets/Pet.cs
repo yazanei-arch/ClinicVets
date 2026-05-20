@@ -9,4 +9,5 @@ public class Pet
     public string ChipNumber { get; set; }
     public string OwnerID { get; set; }
     public DateTime LastVaccineDate { get; set; }
+    public string Owner { get; set; }
 }
