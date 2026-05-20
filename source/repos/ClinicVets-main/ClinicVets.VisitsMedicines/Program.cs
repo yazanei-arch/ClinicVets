@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace ClinicVets.VisitsMedicines
 {
@@ -6,7 +7,10 @@ namespace ClinicVets.VisitsMedicines
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Application.SetHighDpiMode(HighDpiMode.SystemAware); // Adds crispness
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new VisitForm());
         }
     }
 }

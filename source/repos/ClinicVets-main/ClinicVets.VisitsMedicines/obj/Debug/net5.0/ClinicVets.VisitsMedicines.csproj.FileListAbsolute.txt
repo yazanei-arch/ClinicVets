@@ -14,3 +14,8 @@ C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.VisitsMedicines\obj\Debug
 C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ref\ClinicVets.VisitsMedicines.dll
 C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.pdb
 C:\Users\royal\source\repos\ClinicVets-main\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.genruntimeconfig.cache
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.csproj.AssemblyReference.cache
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.VisitForm.resources
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.csproj.GenerateResource.cache
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.dll
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.pdb

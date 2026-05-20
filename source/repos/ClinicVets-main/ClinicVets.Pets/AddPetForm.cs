@@ -3,17 +3,52 @@ using System.IO;
 using ClosedXML.Excel;
 using System.Drawing;
 using System.Windows.Forms;
-using ClinicVets.UI;
 
 namespace ClinicVets.UI
 {
     public partial class AddPetForm : Form
     {
         private readonly string filePath = ExcelFileManager.FilePath;
+
+        private Label lblPetNameError = new Label();
+        private Label lblAnimalTypeError = new Label();
+        private Label lblWeightError = new Label();
+        private Label lblBirthDateError = new Label();
+        private Label lblOwnerError = new Label();
+        private Label lblChipNumberError = new Label();
+        private Label lblLastVaccineError = new Label();
+
         public AddPetForm()
         {
             InitializeComponent();
+            EnsureErrorLabels();
             LoadAnimalTypes();
+        }
+
+        private void EnsureErrorLabels()
+        {
+            SetupErrorLabel(lblPetNameError, txtPetName);
+            SetupErrorLabel(lblAnimalTypeError, cmbAnimalType);
+            SetupErrorLabel(lblWeightError, txtWeight);
+            SetupErrorLabel(lblBirthDateError, dtpBirthDate);
+            SetupErrorLabel(lblOwnerError, txtOwner);
+            SetupErrorLabel(lblChipNumberError, txtChipNumber);
+            SetupErrorLabel(lblLastVaccineError, dtpLastVaccineDate);
+        }
+
+        private void SetupErrorLabel(Label label, Control control)
+        {
+            label.Text = "";
+            label.ForeColor = Color.Red;
+            label.BackColor = Color.Transparent;
+            label.AutoSize = true;
+            label.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            label.Location = new Point(control.Left, control.Bottom + 3);
+
+            if (!this.Controls.Contains(label))
+                this.Controls.Add(label);
+
+            label.BringToFront();
         }
 
         private void LoadAnimalTypes()
@@ -48,9 +83,7 @@ namespace ClinicVets.UI
                     string animalType = row.Cell(1).GetValue<string>().Trim();
 
                     if (!string.IsNullOrWhiteSpace(animalType))
-                    {
                         cmbAnimalType.Items.Add(animalType);
-                    }
                 }
             }
 
@@ -71,12 +104,7 @@ namespace ClinicVets.UI
             cmbAnimalType.BackColor = Color.White;
             txtWeight.BackColor = Color.White;
             txtChipNumber.BackColor = Color.White;
-
-            if (this.Controls.Find("txtOwner", true).Length > 0)
-                txtOwner.BackColor = Color.White;
-
-            if (this.Controls.Find("txtOwner", true).Length > 0)
-                txtOwner.BackColor = Color.White;
+            txtOwner.BackColor = Color.White;
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -85,12 +113,7 @@ namespace ClinicVets.UI
             cmbAnimalType.SelectedIndex = -1;
             txtWeight.Clear();
             txtChipNumber.Clear();
-
-            if (this.Controls.Find("txtOwner", true).Length > 0)
-                txtOwner.Clear();
-
-            if (this.Controls.Find("cmbOwner", true).Length > 0)
-                txtOwner.Clear();
+            txtOwner.Clear();
 
             dtpBirthDate.Value = DateTime.Now;
             dtpLastVaccineDate.Value = DateTime.Now;
@@ -108,15 +131,8 @@ namespace ClinicVets.UI
             string animalType = cmbAnimalType.Text.Trim();
             string weightText = txtWeight.Text.Trim();
             string chipNumber = txtChipNumber.Text.Trim();
+            string owner = txtOwner.Text.Trim();
 
-            string owner = "";
-            if (this.Controls.Find("txtOwner", true).Length > 0)
-                owner = txtOwner.Text.Trim();
-
-            if (this.Controls.Find("cmbOwner", true).Length > 0)
-                owner = txtOwner.Text.Trim();
-
-            // Pet Name
             if (string.IsNullOrWhiteSpace(petName))
             {
                 lblPetNameError.Text = "Pet name is required.";
@@ -137,7 +153,6 @@ namespace ClinicVets.UI
                 }
             }
 
-            // Animal Type
             if (string.IsNullOrWhiteSpace(animalType))
             {
                 lblAnimalTypeError.Text = "Select animal type.";
@@ -145,8 +160,8 @@ namespace ClinicVets.UI
                 isValid = false;
             }
 
-            // Weight
             double weight = 0;
+
             if (string.IsNullOrWhiteSpace(weightText))
             {
                 lblWeightError.Text = "Weight is required.";
@@ -166,7 +181,6 @@ namespace ClinicVets.UI
                 isValid = false;
             }
 
-            // Birth Date
             if (dtpBirthDate.Value.Date > DateTime.Now.Date)
             {
                 lblBirthDateError.Text = "Birth date cannot be future.";
@@ -178,21 +192,13 @@ namespace ClinicVets.UI
                 isValid = false;
             }
 
-            // Owner
             if (string.IsNullOrWhiteSpace(owner))
             {
                 lblOwnerError.Text = "Owner is required.";
-
-                if (this.Controls.Find("txtOwner", true).Length > 0)
-                    txtOwner.BackColor = Color.MistyRose;
-
-                if (this.Controls.Find("cmbOwner", true).Length > 0)
-                    txtOwner.BackColor = Color.MistyRose;
-
+                txtOwner.BackColor = Color.MistyRose;
                 isValid = false;
             }
 
-            // Chip Number
             if (string.IsNullOrWhiteSpace(chipNumber))
             {
                 lblChipNumberError.Text = "Chip number is required.";
@@ -200,7 +206,6 @@ namespace ClinicVets.UI
                 isValid = false;
             }
 
-            // Last Vaccine Date
             if (dtpLastVaccineDate.Value.Date > DateTime.Now.Date)
             {
                 lblLastVaccineError.Text = "Vaccine date cannot be future.";
@@ -235,6 +240,14 @@ namespace ClinicVets.UI
             PetManagementForm form = new PetManagementForm();
             form.ShowDialog();
             this.Hide();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
         }
     }
 }
