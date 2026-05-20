@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.IO;
+using ClosedXML.Excel;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -64,26 +66,74 @@ namespace ClinicVets.UI
 
             dgvPets.Rows.Clear();
 
-            PetRepository repo = new PetRepository();
-            List<Pet> results = repo.SearchPets(petName, chipNumber);
+            string filePath = ExcelFileManager.FilePath;
 
-            if (results.Count == 0)
+            if (!File.Exists(filePath))
             {
-                MessageBox.Show("No pets found.");
+                MessageBox.Show("Excel file not found");
                 return;
             }
 
-            foreach (Pet pet in results)
+            using (var workbook = new XLWorkbook(filePath))
             {
-                dgvPets.Rows.Add(
-                    pet.PetName,
-                    pet.AnimalType,
-                    pet.Weight,
-                    pet.BirthDate.ToString("yyyy-MM-dd"),
-                    pet.Owner,
-                    pet.ChipNumber,
-                    pet.LastVaccineDate.ToString("yyyy-MM-dd")
-                );
+                if (!workbook.Worksheets.Contains("Pets"))
+                {
+                    MessageBox.Show("Pets sheet not found.");
+                    return;
+                }
+
+                var sheet = workbook.Worksheet("Pets");
+                var range = sheet.RangeUsed();
+
+                if (range == null)
+                {
+                    MessageBox.Show("No pets found.");
+                    return;
+                }
+
+                bool found = false;
+
+                foreach (var row in range.RowsUsed())
+                {
+                    if (row.RowNumber() == 1)
+                        continue;
+
+                    string excelPetName = row.Cell(2).GetValue<string>().Trim();
+                    string excelAnimalType = row.Cell(3).GetValue<string>().Trim();
+                    string excelWeight = row.Cell(4).GetValue<string>().Trim();
+                    string excelBirthDate = row.Cell(5).GetValue<string>().Trim();
+                    string excelOwner = row.Cell(6).GetValue<string>().Trim();
+                    string excelChipNumber = row.Cell(7).GetValue<string>().Trim();
+                    string excelLastVaccineDate = row.Cell(8).GetValue<string>().Trim();
+
+                    bool matchByName =
+                        !string.IsNullOrWhiteSpace(petName) &&
+                        excelPetName.ToLower().Contains(petName.ToLower());
+
+                    bool matchByChip =
+                        !string.IsNullOrWhiteSpace(chipNumber) &&
+                        excelChipNumber.ToLower().Contains(chipNumber.ToLower());
+
+                    if (matchByName || matchByChip)
+                    {
+                        dgvPets.Rows.Add(
+                            excelPetName,
+                            excelAnimalType,
+                            excelWeight,
+                            excelBirthDate,
+                            excelOwner,
+                            excelChipNumber,
+                            excelLastVaccineDate
+                        );
+
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    MessageBox.Show("No pets found.");
+                }
             }
         }
 
@@ -94,9 +144,5 @@ namespace ClinicVets.UI
             this.Hide();
         }
 
-        private void dgvPets_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
     }
 }

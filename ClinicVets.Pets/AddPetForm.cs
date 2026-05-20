@@ -230,9 +230,60 @@ namespace ClinicVets.UI
             };
 
             repo.AddPet(pet);
+            SavePetToExcel(pet);
 
             MessageBox.Show("Pet saved successfully.");
             btnClear_Click(sender, e);
+        }
+
+        private void SavePetToExcel(Pet pet)
+        {
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("Excel file not found");
+                return;
+            }
+
+            using (var workbook = new XLWorkbook(filePath))
+            {
+                IXLWorksheet sheet;
+
+                if (workbook.Worksheets.Contains("Pets"))
+                {
+                    sheet = workbook.Worksheet("Pets");
+                }
+                else
+                {
+                    sheet = workbook.Worksheets.Add("Pets");
+
+                    sheet.Cell(1, 1).Value = "PetID";
+                    sheet.Cell(1, 2).Value = "PetName";
+                    sheet.Cell(1, 3).Value = "AnimalType";
+                    sheet.Cell(1, 4).Value = "Weight";
+                    sheet.Cell(1, 5).Value = "BirthDate";
+                    sheet.Cell(1, 6).Value = "Owner";
+                    sheet.Cell(1, 7).Value = "ChipNumber";
+                    sheet.Cell(1, 8).Value = "LastVaccineDate";
+                }
+
+                int lastRow;
+
+                if (sheet.LastRowUsed() == null)
+                    lastRow = 2;
+                else
+                    lastRow = sheet.LastRowUsed().RowNumber() + 1;
+
+                sheet.Cell(lastRow, 1).Value = pet.PetID;
+                sheet.Cell(lastRow, 2).Value = pet.PetName;
+                sheet.Cell(lastRow, 3).Value = pet.AnimalType;
+                sheet.Cell(lastRow, 4).Value = pet.Weight;
+                sheet.Cell(lastRow, 5).Value = pet.BirthDate;
+                sheet.Cell(lastRow, 6).Value = pet.Owner;
+                sheet.Cell(lastRow, 7).Value = pet.ChipNumber;
+                sheet.Cell(lastRow, 8).Value = pet.LastVaccineDate;
+
+                workbook.Save();
+            }
         }
 
         private void btnBack_Click(object sender, EventArgs e)
@@ -242,12 +293,6 @@ namespace ClinicVets.UI
             this.Hide();
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-        }
+        
     }
 }

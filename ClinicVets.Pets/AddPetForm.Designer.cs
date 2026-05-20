@@ -97,7 +97,6 @@ namespace ClinicVets.UI
             this.label2.Size = new System.Drawing.Size(114, 30);
             this.label2.TabIndex = 0;
             this.label2.Text = "Pet Name";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // cmbAnimalType
             // 
