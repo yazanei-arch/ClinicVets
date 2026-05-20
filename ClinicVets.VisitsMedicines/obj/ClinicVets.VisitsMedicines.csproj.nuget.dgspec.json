@@ -1,33 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj": {}
+    "C:\\Users\\asus\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj": {}
   },
   "projects": {
-    "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj": {
+    "C:\\Users\\asus\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
+        "projectUniqueName": "C:\\Users\\asus\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
         "projectName": "ClinicVets.VisitsMedicines",
-        "projectPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
-        "packagesPath": "C:\\Users\\abdal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\obj\\",
+        "projectPath": "C:\\Users\\asus\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
+        "packagesPath": "C:\\Users\\asus\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\asus\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\abdal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net5.0"
+          "net5.0-windows"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net5.0": {
-            "framework": "net5.0",
-            "targetAlias": "net5.0",
+          "net5.0-windows7.0": {
+            "targetAlias": "net5.0-windows",
             "projectReferences": {}
           }
         },
@@ -40,13 +39,17 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "10.0.300"
+        }
       },
       "frameworks": {
-        "net5.0": {
-          "framework": "net5.0",
-          "targetAlias": "net5.0",
+        "net5.0-windows7.0": {
+          "targetAlias": "net5.0-windows",
+          "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -61,9 +64,12 @@
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }
