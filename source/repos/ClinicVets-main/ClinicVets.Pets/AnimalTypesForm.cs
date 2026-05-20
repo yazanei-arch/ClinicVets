@@ -186,5 +186,15 @@ namespace ClinicVets.UI
 
             MessageBox.Show("Animal type added");
         }
+
+        private void txtType_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

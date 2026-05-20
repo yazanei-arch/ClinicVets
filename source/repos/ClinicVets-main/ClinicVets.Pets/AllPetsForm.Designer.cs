@@ -53,7 +53,7 @@
             this.dgvPets.AllowUserToAddRows = false;
             this.dgvPets.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvPets.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dgvPets.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dgvPets.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
             this.dgvPets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPets.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCode,
@@ -64,12 +64,13 @@
             this.colOwner,
             this.colChip,
             this.colVaccine});
-            this.dgvPets.Location = new System.Drawing.Point(92, 140);
+            this.dgvPets.Location = new System.Drawing.Point(197, 275);
             this.dgvPets.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dgvPets.Name = "dgvPets";
+            this.dgvPets.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.dgvPets.RowHeadersWidth = 62;
             this.dgvPets.RowTemplate.Height = 28;
-            this.dgvPets.Size = new System.Drawing.Size(906, 311);
+            this.dgvPets.Size = new System.Drawing.Size(851, 369);
             this.dgvPets.TabIndex = 1;
             // 
             // colCode
@@ -126,32 +127,33 @@
             this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
             this.label2.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.label2.Location = new System.Drawing.Point(390, 96);
+            this.label2.Location = new System.Drawing.Point(451, 227);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(376, 25);
+            this.label2.Size = new System.Drawing.Size(425, 30);
             this.label2.TabIndex = 23;
-            this.label2.Text = "View all registered pets in the clinic system.";
+            this.label2.Text = "View all registered pets in the clinic system";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.label1.Location = new System.Drawing.Point(346, 32);
+            this.label1.Location = new System.Drawing.Point(523, 197);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(443, 45);
+            this.label1.Size = new System.Drawing.Size(295, 30);
             this.label1.TabIndex = 24;
             this.label1.Text = "Animal Types Management";
             // 
             // btnBack
             // 
-            this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(152)))), ((int)(((byte)(184)))), ((int)(((byte)(213)))));
+            this.btnBack.BackColor = System.Drawing.Color.Transparent;
             this.btnBack.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.btnBack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.btnBack.Location = new System.Drawing.Point(45, 31);
+            this.btnBack.Location = new System.Drawing.Point(51, 39);
+            this.btnBack.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(50, 50);
+            this.btnBack.Size = new System.Drawing.Size(56, 62);
             this.btnBack.TabIndex = 25;
             this.btnBack.Text = "→";
             this.btnBack.UseVisualStyleBackColor = false;
@@ -161,20 +163,22 @@
             // 
             this.pictureBox1.Image = global::ClinicVets.Pets.Properties.Resources.background;
             this.pictureBox1.Location = new System.Drawing.Point(0, 1);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1185, 652);
+            this.pictureBox1.Size = new System.Drawing.Size(1333, 815);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 26;
             this.pictureBox1.TabStop = false;
             // 
             // btnDeletePet
             // 
-            this.btnDeletePet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(152)))), ((int)(((byte)(184)))), ((int)(((byte)(213)))));
+            this.btnDeletePet.BackColor = System.Drawing.Color.Transparent;
             this.btnDeletePet.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.btnDeletePet.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.btnDeletePet.Location = new System.Drawing.Point(629, 475);
+            this.btnDeletePet.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.btnDeletePet.Location = new System.Drawing.Point(670, 650);
+            this.btnDeletePet.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDeletePet.Name = "btnDeletePet";
-            this.btnDeletePet.Size = new System.Drawing.Size(160, 45);
+            this.btnDeletePet.Size = new System.Drawing.Size(180, 56);
             this.btnDeletePet.TabIndex = 27;
             this.btnDeletePet.Text = "Delete Pet";
             this.btnDeletePet.UseVisualStyleBackColor = false;
@@ -182,12 +186,13 @@
             // 
             // btnUpdatePet
             // 
-            this.btnUpdatePet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(152)))), ((int)(((byte)(184)))), ((int)(((byte)(213)))));
+            this.btnUpdatePet.BackColor = System.Drawing.Color.Transparent;
             this.btnUpdatePet.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.btnUpdatePet.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.btnUpdatePet.Location = new System.Drawing.Point(354, 475);
+            this.btnUpdatePet.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.btnUpdatePet.Location = new System.Drawing.Point(377, 650);
+            this.btnUpdatePet.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnUpdatePet.Name = "btnUpdatePet";
-            this.btnUpdatePet.Size = new System.Drawing.Size(160, 45);
+            this.btnUpdatePet.Size = new System.Drawing.Size(180, 56);
             this.btnUpdatePet.TabIndex = 28;
             this.btnUpdatePet.Text = "Update Pet";
             this.btnUpdatePet.UseVisualStyleBackColor = false;
@@ -195,11 +200,11 @@
             // 
             // AllPetsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ClinicVets.Pets.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1182, 653);
+            this.ClientSize = new System.Drawing.Size(1330, 816);
             this.Controls.Add(this.btnUpdatePet);
             this.Controls.Add(this.btnDeletePet);
             this.Controls.Add(this.btnBack);

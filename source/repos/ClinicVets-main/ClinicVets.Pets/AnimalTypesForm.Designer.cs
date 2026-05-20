@@ -49,31 +49,32 @@
             this.lstTypes.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.lstTypes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
             this.lstTypes.FormattingEnabled = true;
-            this.lstTypes.ItemHeight = 28;
-            this.lstTypes.Location = new System.Drawing.Point(296, 275);
+            this.lstTypes.ItemHeight = 32;
+            this.lstTypes.Location = new System.Drawing.Point(376, 420);
             this.lstTypes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lstTypes.Name = "lstTypes";
-            this.lstTypes.Size = new System.Drawing.Size(588, 254);
+            this.lstTypes.Size = new System.Drawing.Size(548, 290);
             this.lstTypes.TabIndex = 1;
             // 
             // txtType
             // 
             this.txtType.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.txtType.Location = new System.Drawing.Point(396, 130);
+            this.txtType.Location = new System.Drawing.Point(512, 288);
             this.txtType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtType.Name = "txtType";
-            this.txtType.Size = new System.Drawing.Size(220, 31);
+            this.txtType.Size = new System.Drawing.Size(247, 36);
             this.txtType.TabIndex = 2;
+            this.txtType.TextChanged += new System.EventHandler(this.txtType_TextChanged);
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
             this.button1.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.button1.Location = new System.Drawing.Point(664, 129);
+            this.button1.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.button1.Location = new System.Drawing.Point(784, 283);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(124, 33);
+            this.button1.Size = new System.Drawing.Size(140, 41);
             this.button1.TabIndex = 3;
             this.button1.Text = "Animal Type";
             this.button1.UseVisualStyleBackColor = false;
@@ -82,22 +83,23 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.label1.Location = new System.Drawing.Point(366, 25);
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            this.label1.Location = new System.Drawing.Point(521, 186);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(443, 45);
+            this.label1.Size = new System.Drawing.Size(295, 30);
             this.label1.TabIndex = 8;
             this.label1.Text = "Animal Types Management";
             // 
             // btnAdd
             // 
-            this.btnAdd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(152)))), ((int)(((byte)(184)))), ((int)(((byte)(213)))));
+            this.btnAdd.BackColor = System.Drawing.Color.Transparent;
             this.btnAdd.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.btnAdd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.btnAdd.Location = new System.Drawing.Point(724, 188);
+            this.btnAdd.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.btnAdd.Location = new System.Drawing.Point(809, 345);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(160, 45);
+            this.btnAdd.Size = new System.Drawing.Size(180, 56);
             this.btnAdd.TabIndex = 17;
             this.btnAdd.Text = "Add Type";
             this.btnAdd.UseVisualStyleBackColor = false;
@@ -105,12 +107,13 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(152)))), ((int)(((byte)(184)))), ((int)(((byte)(213)))));
+            this.btnUpdate.BackColor = System.Drawing.Color.Transparent;
             this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.btnUpdate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.btnUpdate.Location = new System.Drawing.Point(522, 188);
+            this.btnUpdate.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.btnUpdate.Location = new System.Drawing.Point(594, 345);
+            this.btnUpdate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(160, 45);
+            this.btnUpdate.Size = new System.Drawing.Size(180, 56);
             this.btnUpdate.TabIndex = 18;
             this.btnUpdate.Text = "Update Type";
             this.btnUpdate.UseVisualStyleBackColor = false;
@@ -118,12 +121,13 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(152)))), ((int)(((byte)(184)))), ((int)(((byte)(213)))));
+            this.btnDelete.BackColor = System.Drawing.Color.Transparent;
             this.btnDelete.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.btnDelete.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.btnDelete.Location = new System.Drawing.Point(296, 188);
+            this.btnDelete.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.btnDelete.Location = new System.Drawing.Point(386, 345);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(160, 45);
+            this.btnDelete.Size = new System.Drawing.Size(180, 56);
             this.btnDelete.TabIndex = 19;
             this.btnDelete.Text = "Delete Type";
             this.btnDelete.UseVisualStyleBackColor = false;
@@ -131,12 +135,13 @@
             // 
             // btnBack
             // 
-            this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(152)))), ((int)(((byte)(184)))), ((int)(((byte)(213)))));
+            this.btnBack.BackColor = System.Drawing.Color.Transparent;
             this.btnBack.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.btnBack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.btnBack.Location = new System.Drawing.Point(39, 25);
+            this.btnBack.Location = new System.Drawing.Point(44, 31);
+            this.btnBack.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(50, 50);
+            this.btnBack.Size = new System.Drawing.Size(56, 62);
             this.btnBack.TabIndex = 20;
             this.btnBack.Text = "→";
             this.btnBack.UseVisualStyleBackColor = false;
@@ -146,8 +151,9 @@
             // 
             this.pictureBox1.Image = global::ClinicVets.Pets.Properties.Resources.background;
             this.pictureBox1.Location = new System.Drawing.Point(1, 0);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1179, 648);
+            this.pictureBox1.Size = new System.Drawing.Size(1326, 810);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 21;
             this.pictureBox1.TabStop = false;
@@ -157,20 +163,21 @@
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(245)))), ((int)(((byte)(249)))));
             this.label2.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(93)))), ((int)(((byte)(136)))));
-            this.label2.Location = new System.Drawing.Point(271, 86);
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            this.label2.Location = new System.Drawing.Point(305, 229);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(592, 25);
+            this.label2.Size = new System.Drawing.Size(679, 30);
             this.label2.TabIndex = 22;
-            this.label2.Text = "Add, update, or delete animal types used when registering a new pet.";
+            this.label2.Text = "Add, update, or delete animal types used when registering a new pet";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // AnimalTypesForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::ClinicVets.Pets.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1178, 649);
+            this.ClientSize = new System.Drawing.Size(1325, 811);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnDelete);
