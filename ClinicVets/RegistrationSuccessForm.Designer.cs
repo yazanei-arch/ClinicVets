@@ -19,7 +19,7 @@ namespace ClinicVets
         private void InitializeComponent()
         {
             this.pnlCard = new ClinicVets.CardPanel();
-            this.chkSuccess = new ClinicVets.SuccessCheckmarkControl();
+            this.lblSuccessIcon = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblSubtitle = new System.Windows.Forms.Label();
             this.btnBackToLogin = new ClinicVets.RoundedActionButton();
@@ -30,7 +30,7 @@ namespace ClinicVets
             // pnlCard
             // 
             this.pnlCard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
-            this.pnlCard.Controls.Add(this.chkSuccess);
+            this.pnlCard.Controls.Add(this.lblSuccessIcon);
             this.pnlCard.Controls.Add(this.lblTitle);
             this.pnlCard.Controls.Add(this.lblSubtitle);
             this.pnlCard.Controls.Add(this.btnBackToLogin);
@@ -41,13 +41,18 @@ namespace ClinicVets
             this.pnlCard.Size = new System.Drawing.Size(560, 760);
             this.pnlCard.TabIndex = 0;
             // 
-            // chkSuccess
+            // lblSuccessIcon
             // 
-            this.chkSuccess.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
-            this.chkSuccess.Location = new System.Drawing.Point(220, 150);
-            this.chkSuccess.Name = "chkSuccess";
-            this.chkSuccess.Size = new System.Drawing.Size(120, 120);
-            this.chkSuccess.TabIndex = 0;
+            this.lblSuccessIcon.AutoSize = false;
+            this.lblSuccessIcon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblSuccessIcon.Font = new System.Drawing.Font("Segoe UI", 64F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSuccessIcon.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(175)))), ((int)(((byte)(80)))));
+            this.lblSuccessIcon.Location = new System.Drawing.Point(220, 150);
+            this.lblSuccessIcon.Name = "lblSuccessIcon";
+            this.lblSuccessIcon.Size = new System.Drawing.Size(120, 120);
+            this.lblSuccessIcon.TabIndex = 0;
+            this.lblSuccessIcon.Text = "\u2713";
+            this.lblSuccessIcon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblTitle
             // 
@@ -72,7 +77,7 @@ namespace ClinicVets
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Size = new System.Drawing.Size(470, 56);
             this.lblSubtitle.TabIndex = 2;
-            this.lblSubtitle.Text = "The employee account has been created successfully.";
+            this.lblSubtitle.Text = "Your account has been created successfully.";
             this.lblSubtitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // btnBackToLogin
@@ -133,7 +138,7 @@ namespace ClinicVets
         #endregion
 
         private CardPanel pnlCard;
-        private SuccessCheckmarkControl chkSuccess;
+        private System.Windows.Forms.Label lblSuccessIcon;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblSubtitle;
         private RoundedActionButton btnBackToLogin;

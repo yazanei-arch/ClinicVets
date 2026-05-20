@@ -33,7 +33,7 @@ namespace ClinicVets
 
             lblTitle.BackColor = CardSurface;
             lblSubtitle.BackColor = CardSurface;
-            chkSuccess.BackColor = CardSurface;
+            lblSuccessIcon.BackColor = CardSurface;
 
             btnBackToLogin.UseLoginLightStyle = true;
             btnBackToLogin.IsOutlineStyle = false;
@@ -42,8 +42,6 @@ namespace ClinicVets
             btnRegisterAnother.UseLoginLightStyle = true;
             btnRegisterAnother.IsOutlineStyle = true;
             btnRegisterAnother.CornerRadius = 8;
-
-            chkSuccess.PlayPopAnimation();
         }
 
         private void btnBackToLogin_Click(object sender, EventArgs e)
@@ -55,13 +53,10 @@ namespace ClinicVets
         private void btnRegisterAnother_Click(object sender, EventArgs e)
         {
             Form1 login = _loginForm ?? Owner as Form1;
-            Hide();
             using (var registerForm = new RegisterEmployeeForm(login))
             {
                 registerForm.ShowDialog(login);
             }
-
-            Close();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)

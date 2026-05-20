@@ -43,15 +43,8 @@ namespace ClinicVets
                 return;
             }
 
+            Excel.AppendEmployee(employee);
             EmployeeCredentialStore.Add(employee);
-
-            try
-            {
-                Excel.AppendEmployee(employee);
-            }
-            catch
-            {
-            }
         }
     }
 }

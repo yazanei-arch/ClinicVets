@@ -32,10 +32,11 @@ namespace ClinicVets
                 TabStop = false
             };
 
-            bool isVisible = false;
+            toggle.Tag = false;
             toggle.LinkClicked += (sender, args) =>
             {
-                isVisible = !isVisible;
+                bool isVisible = !(toggle.Tag is bool visible && visible);
+                toggle.Tag = isVisible;
                 passwordBox.UseSystemPasswordChar = !isVisible;
                 toggle.Text = isVisible ? "Hide" : "Show";
             };
@@ -60,6 +61,23 @@ namespace ClinicVets
             }
 
             return toggle;
+        }
+
+        internal static void ResetToHidden(TextBox passwordBox, LinkLabel toggle)
+        {
+            if (passwordBox == null)
+            {
+                return;
+            }
+
+            passwordBox.UseSystemPasswordChar = true;
+            if (toggle == null)
+            {
+                return;
+            }
+
+            toggle.Tag = false;
+            toggle.Text = "Show";
         }
 
         private static void LayoutToggle(ChromeTextPlate plate, TextBox passwordBox, LinkLabel toggle)

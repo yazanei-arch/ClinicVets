@@ -249,7 +249,35 @@ namespace ClinicVets
                 Role = cmbRole.SelectedItem?.ToString() ?? string.Empty
             };
 
-            LoginAuthService.RegisterEmployee(employee);
+            try
+            {
+                LoginAuthService.RegisterEmployee(employee);
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(
+                    this,
+                    ex.Message,
+                    "Registration — save",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+            catch (Exception ex)
+            {
+                string message = ExcelHelper.IsWorkbookLockedException(ex)
+                    ? ExcelFileManager.WorkbookLockedMessage
+                    : "Could not save the employee to Excel."
+                      + Environment.NewLine + Environment.NewLine + ex.Message;
+
+                MessageBox.Show(
+                    this,
+                    message,
+                    "Registration — save",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
 
             Form1 loginForm = Owner as Form1;
             Hide();

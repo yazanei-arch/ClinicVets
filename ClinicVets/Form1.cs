@@ -239,15 +239,10 @@ namespace ClinicVets
                 return;
             }
 
-            SessionManager.CurrentUser = employee;
-
             Hide();
             try
             {
-                using (var customerForm = new CustomerManagementForm(this))
-                {
-                    customerForm.ShowDialog(this);
-                }
+                RoleNavigationHelper.TryNavigateAfterLogin(employee, this);
             }
             finally
             {
@@ -279,6 +274,15 @@ namespace ClinicVets
             {
                 txtPassword.Focus();
             }
+        }
+
+        public void ClearLoginFields()
+        {
+            txtUsername.Clear();
+            txtPassword.Clear();
+            PasswordVisibilityHelper.ResetToHidden(txtPassword, _passwordToggle);
+            _validation?.ClearAll();
+            txtUsername.Focus();
         }
     }
 }

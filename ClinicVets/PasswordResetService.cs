@@ -11,9 +11,8 @@ namespace ClinicVets
         private static readonly Dictionary<string, string> PendingCodes =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        internal static bool TrySendVerificationCode(string email, out string codeForTesting, out string errorMessage)
+        internal static bool TrySendVerificationCode(string email, out string errorMessage)
         {
-            codeForTesting = null;
             email = (email ?? string.Empty).Trim();
 
             errorMessage = ValidationHelper.ValidateEmail(email);
@@ -29,12 +28,17 @@ namespace ClinicVets
             }
 
             string code = GenerateSixDigitCode();
+
+            if (!EmailService.TrySendVerificationCodeEmail(email, code, out errorMessage))
+            {
+                return false;
+            }
+
             lock (Sync)
             {
                 PendingCodes[email] = code;
             }
 
-            codeForTesting = code;
             errorMessage = null;
             return true;
         }
@@ -54,6 +58,12 @@ namespace ClinicVets
             errorMessage = ValidationHelper.ValidateEmail(email);
             if (errorMessage != null)
             {
+                return false;
+            }
+
+            if (!EmployeeExistsByEmail(email))
+            {
+                errorMessage = "Email not found. Please enter the registered email.";
                 return false;
             }
 

@@ -21,6 +21,7 @@ namespace ClinicVets
             this.pnlCard = new ClinicVets.CardPanel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblSubtitle = new System.Windows.Forms.Label();
+            this.pnlDivider = new System.Windows.Forms.Panel();
             this.lblEmail = new System.Windows.Forms.Label();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.lblVerificationCode = new System.Windows.Forms.Label();
@@ -37,10 +38,10 @@ namespace ClinicVets
             // 
             // pnlCard
             // 
-            this.pnlCard.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pnlCard.BackColor = System.Drawing.Color.Transparent;
+            this.pnlCard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
             this.pnlCard.Controls.Add(this.lblTitle);
             this.pnlCard.Controls.Add(this.lblSubtitle);
+            this.pnlCard.Controls.Add(this.pnlDivider);
             this.pnlCard.Controls.Add(this.lblEmail);
             this.pnlCard.Controls.Add(this.txtEmail);
             this.pnlCard.Controls.Add(this.lblVerificationCode);
@@ -52,136 +53,179 @@ namespace ClinicVets
             this.pnlCard.Controls.Add(this.btnSendCode);
             this.pnlCard.Controls.Add(this.btnResetPassword);
             this.pnlCard.Controls.Add(this.btnBack);
-            this.pnlCard.Location = new System.Drawing.Point(230, 24);
+            this.pnlCard.Location = new System.Drawing.Point(560, 95);
             this.pnlCard.Name = "pnlCard";
-            this.pnlCard.Padding = new System.Windows.Forms.Padding(44, 32, 44, 36);
-            this.pnlCard.Size = new System.Drawing.Size(540, 620);
+            this.pnlCard.Size = new System.Drawing.Size(520, 620);
             this.pnlCard.TabIndex = 0;
             // 
             // lblTitle
             // 
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 19F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(101)))), ((int)(((byte)(192)))));
-            this.lblTitle.Location = new System.Drawing.Point(44, 32);
+            this.lblTitle.Location = new System.Drawing.Point(40, 32);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(452, 38);
+            this.lblTitle.Size = new System.Drawing.Size(440, 40);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Forgot Password";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblSubtitle
             // 
-            this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(78)))), ((int)(((byte)(96)))));
-            this.lblSubtitle.Location = new System.Drawing.Point(44, 74);
+            this.lblSubtitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(95)))), ((int)(((byte)(120)))));
+            this.lblSubtitle.Location = new System.Drawing.Point(40, 76);
             this.lblSubtitle.Name = "lblSubtitle";
-            this.lblSubtitle.Size = new System.Drawing.Size(452, 40);
+            this.lblSubtitle.Size = new System.Drawing.Size(440, 44);
             this.lblSubtitle.TabIndex = 1;
-            this.lblSubtitle.Text = "Enter your registered email, verify the code, then set a new password.";
-            this.lblSubtitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblSubtitle.Text = "Enter your email, receive a verification code, then set a new password.";
+            this.lblSubtitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // pnlDivider
+            // 
+            this.pnlDivider.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.pnlDivider.Location = new System.Drawing.Point(40, 128);
+            this.pnlDivider.Name = "pnlDivider";
+            this.pnlDivider.Size = new System.Drawing.Size(440, 1);
+            this.pnlDivider.TabIndex = 2;
             // 
             // lblEmail
             // 
-            this.lblEmail.AutoSize = true;
-            this.lblEmail.Location = new System.Drawing.Point(44, 124);
+            this.lblEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblEmail.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblEmail.Location = new System.Drawing.Point(40, 140);
             this.lblEmail.Name = "lblEmail";
-            this.lblEmail.Size = new System.Drawing.Size(46, 23);
-            this.lblEmail.TabIndex = 2;
-            this.lblEmail.Text = "Email";
+            this.lblEmail.Size = new System.Drawing.Size(440, 22);
+            this.lblEmail.TabIndex = 3;
+            this.lblEmail.Text = "✉ Email";
             // 
             // txtEmail
             // 
             this.txtEmail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtEmail.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtEmail.Location = new System.Drawing.Point(44, 148);
+            this.txtEmail.Location = new System.Drawing.Point(40, 164);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(452, 30);
-            this.txtEmail.TabIndex = 3;
+            this.txtEmail.Size = new System.Drawing.Size(440, 30);
+            this.txtEmail.TabIndex = 4;
             // 
             // lblVerificationCode
             // 
-            this.lblVerificationCode.AutoSize = true;
-            this.lblVerificationCode.Location = new System.Drawing.Point(44, 190);
+            this.lblVerificationCode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblVerificationCode.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVerificationCode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblVerificationCode.Location = new System.Drawing.Point(40, 208);
             this.lblVerificationCode.Name = "lblVerificationCode";
-            this.lblVerificationCode.Size = new System.Drawing.Size(134, 23);
-            this.lblVerificationCode.TabIndex = 4;
-            this.lblVerificationCode.Text = "Verification Code";
+            this.lblVerificationCode.Size = new System.Drawing.Size(440, 22);
+            this.lblVerificationCode.TabIndex = 5;
+            this.lblVerificationCode.Text = "🔐 Verification Code";
             // 
             // txtVerificationCode
             // 
             this.txtVerificationCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtVerificationCode.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtVerificationCode.Location = new System.Drawing.Point(44, 214);
+            this.txtVerificationCode.Location = new System.Drawing.Point(40, 232);
             this.txtVerificationCode.Name = "txtVerificationCode";
-            this.txtVerificationCode.Size = new System.Drawing.Size(452, 30);
-            this.txtVerificationCode.TabIndex = 4;
+            this.txtVerificationCode.Size = new System.Drawing.Size(440, 30);
+            this.txtVerificationCode.TabIndex = 6;
+            this.txtVerificationCode.UseSystemPasswordChar = true;
             // 
             // lblNewPassword
             // 
-            this.lblNewPassword.AutoSize = true;
-            this.lblNewPassword.Location = new System.Drawing.Point(44, 256);
+            this.lblNewPassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblNewPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNewPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblNewPassword.Location = new System.Drawing.Point(40, 276);
             this.lblNewPassword.Name = "lblNewPassword";
-            this.lblNewPassword.Size = new System.Drawing.Size(106, 23);
-            this.lblNewPassword.TabIndex = 5;
-            this.lblNewPassword.Text = "New Password";
+            this.lblNewPassword.Size = new System.Drawing.Size(440, 22);
+            this.lblNewPassword.TabIndex = 7;
+            this.lblNewPassword.Text = "🔒 New Password";
             // 
             // txtNewPassword
             // 
             this.txtNewPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtNewPassword.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtNewPassword.Location = new System.Drawing.Point(44, 280);
+            this.txtNewPassword.Location = new System.Drawing.Point(40, 300);
             this.txtNewPassword.Name = "txtNewPassword";
-            this.txtNewPassword.Size = new System.Drawing.Size(452, 30);
-            this.txtNewPassword.TabIndex = 5;
+            this.txtNewPassword.Size = new System.Drawing.Size(440, 30);
+            this.txtNewPassword.TabIndex = 8;
             this.txtNewPassword.UseSystemPasswordChar = true;
             // 
             // lblConfirmPassword
             // 
-            this.lblConfirmPassword.AutoSize = true;
-            this.lblConfirmPassword.Location = new System.Drawing.Point(44, 322);
+            this.lblConfirmPassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblConfirmPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblConfirmPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblConfirmPassword.Location = new System.Drawing.Point(40, 344);
             this.lblConfirmPassword.Name = "lblConfirmPassword";
-            this.lblConfirmPassword.Size = new System.Drawing.Size(133, 23);
-            this.lblConfirmPassword.TabIndex = 6;
-            this.lblConfirmPassword.Text = "Confirm Password";
+            this.lblConfirmPassword.Size = new System.Drawing.Size(440, 22);
+            this.lblConfirmPassword.TabIndex = 9;
+            this.lblConfirmPassword.Text = "🔒 Confirm Password";
             // 
             // txtConfirmPassword
             // 
             this.txtConfirmPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtConfirmPassword.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtConfirmPassword.Location = new System.Drawing.Point(44, 346);
+            this.txtConfirmPassword.Location = new System.Drawing.Point(40, 368);
             this.txtConfirmPassword.Name = "txtConfirmPassword";
-            this.txtConfirmPassword.Size = new System.Drawing.Size(452, 30);
-            this.txtConfirmPassword.TabIndex = 6;
+            this.txtConfirmPassword.Size = new System.Drawing.Size(440, 30);
+            this.txtConfirmPassword.TabIndex = 10;
             this.txtConfirmPassword.UseSystemPasswordChar = true;
             // 
             // btnSendCode
             // 
+            this.btnSendCode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(250)))), ((int)(((byte)(255)))));
+            this.btnSendCode.CornerRadius = 8;
+            this.btnSendCode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSendCode.FlatAppearance.BorderSize = 0;
+            this.btnSendCode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSendCode.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSendCode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.btnSendCode.IsOutlineStyle = true;
-            this.btnSendCode.Location = new System.Drawing.Point(44, 400);
+            this.btnSendCode.Location = new System.Drawing.Point(40, 418);
             this.btnSendCode.Name = "btnSendCode";
-            this.btnSendCode.Size = new System.Drawing.Size(452, 44);
-            this.btnSendCode.TabIndex = 7;
+            this.btnSendCode.Size = new System.Drawing.Size(440, 44);
+            this.btnSendCode.TabIndex = 11;
             this.btnSendCode.Text = "Send Code";
+            this.btnSendCode.UseVisualStyleBackColor = false;
             this.btnSendCode.Click += new System.EventHandler(this.btnSendCode_Click);
             // 
             // btnResetPassword
             // 
-            this.btnResetPassword.Location = new System.Drawing.Point(44, 454);
+            this.btnResetPassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(250)))), ((int)(((byte)(255)))));
+            this.btnResetPassword.CornerRadius = 8;
+            this.btnResetPassword.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnResetPassword.FlatAppearance.BorderSize = 0;
+            this.btnResetPassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnResetPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnResetPassword.ForeColor = System.Drawing.Color.White;
+            this.btnResetPassword.IsOutlineStyle = false;
+            this.btnResetPassword.Location = new System.Drawing.Point(40, 472);
             this.btnResetPassword.Name = "btnResetPassword";
-            this.btnResetPassword.Size = new System.Drawing.Size(452, 44);
-            this.btnResetPassword.TabIndex = 8;
+            this.btnResetPassword.Size = new System.Drawing.Size(440, 44);
+            this.btnResetPassword.TabIndex = 12;
             this.btnResetPassword.Text = "Reset Password";
+            this.btnResetPassword.UseVisualStyleBackColor = false;
             this.btnResetPassword.Click += new System.EventHandler(this.btnResetPassword_Click);
             // 
             // btnBack
             // 
+            this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(250)))), ((int)(((byte)(255)))));
+            this.btnBack.CornerRadius = 8;
+            this.btnBack.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBack.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnBack.FlatAppearance.BorderSize = 0;
+            this.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBack.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.btnBack.IsOutlineStyle = true;
-            this.btnBack.Location = new System.Drawing.Point(44, 508);
+            this.btnBack.Location = new System.Drawing.Point(40, 526);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(452, 44);
-            this.btnBack.TabIndex = 9;
+            this.btnBack.Size = new System.Drawing.Size(440, 44);
+            this.btnBack.TabIndex = 13;
             this.btnBack.Text = "Back";
+            this.btnBack.UseVisualStyleBackColor = false;
             // 
             // ForgotPasswordForm
             // 
@@ -189,14 +233,17 @@ namespace ClinicVets
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnBack;
-            this.ClientSize = new System.Drawing.Size(1000, 680);
+            this.ClientSize = new System.Drawing.Size(1280, 720);
             this.Controls.Add(this.pnlCard);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
+            this.ControlBox = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            this.MaximizeBox = true;
+            this.MinimizeBox = true;
             this.Name = "ForgotPasswordForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "ClinicVets — Forgot Password";
+            this.Text = "ClinicVets - Forgot Password";
             this.Load += new System.EventHandler(this.ForgotPasswordForm_Load);
             this.pnlCard.ResumeLayout(false);
             this.pnlCard.PerformLayout();
@@ -209,6 +256,7 @@ namespace ClinicVets
         private CardPanel pnlCard;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblSubtitle;
+        private System.Windows.Forms.Panel pnlDivider;
         private System.Windows.Forms.Label lblEmail;
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Label lblVerificationCode;

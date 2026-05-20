@@ -14,6 +14,8 @@ using System.Windows.Forms;
 /// </summary>
 public class ExcelHelper
 {
+    public static event EventHandler CustomersChanged;
+
     private readonly string _workbookPath;
 
     public ExcelHelper()
@@ -166,7 +168,6 @@ public class ExcelHelper
 
     public IReadOnlyList<Customer> ReadCustomers()
     {
-        EnsureWorkbookAndCustomerLayout();
         var list = new List<Customer>();
         if (!File.Exists(_workbookPath))
         {
@@ -194,31 +195,61 @@ public class ExcelHelper
             throw new ArgumentNullException(nameof(customer));
         }
 
-        EnsureWorkbookAndCustomerLayout();
-        using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, true))
+        try
         {
-            WorksheetPart wsp = GetWorksheetPartByName(doc.WorkbookPart, ExcelFileManager.CustomerSheetName);
-            if (wsp == null)
+            RequireWorkbookForWrite();
+            using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, true))
             {
-                throw new InvalidOperationException("Customer worksheet is missing.");
+                WorksheetPart wsp = GetWorksheetPartByName(doc.WorkbookPart, ExcelFileManager.CustomerSheetName);
+                if (wsp == null)
+                {
+                    throw new InvalidOperationException(
+                        "The Customer worksheet was not found in " + ExcelFileManager.WorkbookFileName + ".");
+                }
+
+                SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
+                Dictionary<string, int> headerMap = BuildHeaderMap(wsp, sstp);
+                if (headerMap.Count == 0)
+                {
+                    throw new InvalidOperationException("The Customer worksheet has no header row.");
+                }
+
+                uint nextRow = GetLastUsedRowIndex(wsp, sstp, headerMap) + 1u;
+                if (nextRow < 2u)
+                {
+                    nextRow = 2u;
+                }
+
+                SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>() ?? wsp.Worksheet.AppendChild(new SheetData());
+                var row = new Row { RowIndex = nextRow };
+                AppendCustomerCells(row, nextRow, headerMap, customer);
+                sheetData.AppendChild(row);
+
+                wsp.Worksheet.Save();
+                doc.WorkbookPart.Workbook.Save();
             }
 
-            SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
-            Dictionary<string, int> headerMap = BuildHeaderMap(wsp, sstp);
-            uint nextRow = GetLastUsedRowIndex(wsp, sstp, headerMap) + 1u;
-            if (nextRow < 2u)
-            {
-                nextRow = 2u;
-            }
-
-            SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>() ?? wsp.Worksheet.AppendChild(new SheetData());
-            var row = new Row { RowIndex = nextRow };
-            AppendCustomerCells(row, nextRow, headerMap, customer);
-            sheetData.AppendChild(row);
-
-            wsp.Worksheet.Save();
-            doc.WorkbookPart.Workbook.Save();
+            NotifyCustomersChanged();
         }
+        catch (Exception ex) when (IsWorkbookLockedException(ex))
+        {
+            throw new InvalidOperationException(ExcelFileManager.WorkbookLockedMessage, ex);
+        }
+    }
+
+    public static bool IsWorkbookLockedException(Exception ex)
+    {
+        while (ex != null)
+        {
+            if (ex is IOException || ex is UnauthorizedAccessException)
+            {
+                return true;
+            }
+
+            ex = ex.InnerException;
+        }
+
+        return false;
     }
 
     public void UpdateCustomer(Customer customer)
@@ -233,7 +264,7 @@ public class ExcelHelper
             throw new ArgumentException("Customer ID is required.", nameof(customer));
         }
 
-        EnsureWorkbookAndCustomerLayout();
+        RequireWorkbookForWrite();
         using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, true))
         {
             WorksheetPart wsp = GetWorksheetPartByName(doc.WorkbookPart, ExcelFileManager.CustomerSheetName);
@@ -263,7 +294,7 @@ public class ExcelHelper
             throw new ArgumentException("Customer ID is required.", nameof(customerId));
         }
 
-        EnsureWorkbookAndCustomerLayout();
+        RequireWorkbookForWrite();
         using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, true))
         {
             WorksheetPart wsp = GetWorksheetPartByName(doc.WorkbookPart, ExcelFileManager.CustomerSheetName);
@@ -288,7 +319,6 @@ public class ExcelHelper
 
     public IReadOnlyList<Employee> ReadEmployees()
     {
-        EnsureWorkbookAndEmployeeLayout();
         var list = new List<Employee>();
         if (!File.Exists(_workbookPath))
         {
@@ -313,11 +343,11 @@ public class ExcelHelper
             uint lastRow = GetLastUsedRowIndex(wsp, sstp, headerMap);
             for (uint r = 2u; r <= lastRow; r++)
             {
-                string employeeId = GetCellAtRow(wsp, sstp, headerMap, r, "EmployeeID");
+                string employeeId = GetCellAtRowAny(wsp, sstp, headerMap, r, "EmployeeNumber", "EmployeeID");
                 string username = GetCellAtRow(wsp, sstp, headerMap, r, "Username");
                 string password = GetCellAtRow(wsp, sstp, headerMap, r, "Password");
                 string email = GetCellAtRow(wsp, sstp, headerMap, r, "Email");
-                string nationalId = GetCellAtRow(wsp, sstp, headerMap, r, "NationalID");
+                string nationalId = GetCellAtRowAny(wsp, sstp, headerMap, r, "ID", "NationalID");
                 string role = GetCellAtRow(wsp, sstp, headerMap, r, "Role");
 
                 if (string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(password))
@@ -347,30 +377,43 @@ public class ExcelHelper
             throw new ArgumentNullException(nameof(employee));
         }
 
-        EnsureWorkbookAndEmployeeLayout();
-        using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, true))
+        try
         {
-            WorksheetPart wsp = GetWorksheetPartByName(doc.WorkbookPart, ExcelFileManager.EmployeeSheetName);
-            if (wsp == null)
+            RequireWorkbookForWrite();
+            using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, true))
             {
-                throw new InvalidOperationException("Employees worksheet is missing.");
+                WorksheetPart wsp = GetWorksheetPartByName(doc.WorkbookPart, ExcelFileManager.EmployeeSheetName);
+                if (wsp == null)
+                {
+                    throw new InvalidOperationException(
+                        "The Employees worksheet was not found in " + ExcelFileManager.WorkbookFileName + ".");
+                }
+
+                SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
+                Dictionary<string, int> headerMap = BuildHeaderMap(wsp, sstp);
+                if (headerMap.Count == 0)
+                {
+                    throw new InvalidOperationException("The Employees worksheet has no header row.");
+                }
+
+                uint nextRow = GetLastUsedRowIndex(wsp, sstp, headerMap) + 1u;
+                if (nextRow < 2u)
+                {
+                    nextRow = 2u;
+                }
+
+                SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>() ?? wsp.Worksheet.AppendChild(new SheetData());
+                var row = new Row { RowIndex = nextRow };
+                AppendEmployeeCells(row, nextRow, headerMap, employee);
+                sheetData.AppendChild(row);
+
+                wsp.Worksheet.Save();
+                doc.WorkbookPart.Workbook.Save();
             }
-
-            SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
-            Dictionary<string, int> headerMap = BuildHeaderMap(wsp, sstp);
-            uint nextRow = GetLastUsedRowIndex(wsp, sstp, headerMap) + 1u;
-            if (nextRow < 2u)
-            {
-                nextRow = 2u;
-            }
-
-            SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>() ?? wsp.Worksheet.AppendChild(new SheetData());
-            var row = new Row { RowIndex = nextRow };
-            AppendEmployeeCells(row, nextRow, headerMap, employee);
-            sheetData.AppendChild(row);
-
-            wsp.Worksheet.Save();
-            doc.WorkbookPart.Workbook.Save();
+        }
+        catch (Exception ex) when (IsWorkbookLockedException(ex))
+        {
+            throw new InvalidOperationException(ExcelFileManager.WorkbookLockedMessage, ex);
         }
     }
 
@@ -423,7 +466,6 @@ public class ExcelHelper
             return false;
         }
 
-        EnsureWorkbookAndEmployeeLayout();
         if (!File.Exists(_workbookPath))
         {
             return false;
@@ -459,32 +501,11 @@ public class ExcelHelper
         }
     }
 
-    private void EnsureWorkbookAndEmployeeLayout()
+    private void RequireWorkbookForWrite()
     {
-        string directory = Path.GetDirectoryName(_workbookPath);
-        if (!string.IsNullOrEmpty(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-
         if (!File.Exists(_workbookPath))
         {
-            CreateWorkbookWithEmptySheet(ExcelFileManager.EmployeeSheetName);
-            WriteEmployeeHeaderRowOnly();
-            return;
-        }
-
-        using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, true))
-        {
-            WorksheetPart wsp = GetOrCreateWorksheetPart(doc.WorkbookPart, ExcelFileManager.EmployeeSheetName);
-            Dictionary<string, int> map = BuildHeaderMap(wsp, doc.WorkbookPart.SharedStringTablePart);
-            if (map.Count == 0)
-            {
-                ReplaceEmployeeHeaderRow(wsp);
-            }
-
-            doc.WorkbookPart.Workbook.Save();
-            wsp.Worksheet.Save();
+            throw new InvalidOperationException(ExcelFileManager.WorkbookNotFoundMessage);
         }
     }
 
@@ -519,47 +540,12 @@ public class ExcelHelper
 
     private static void AppendEmployeeCells(Row row, uint rowIndex, IReadOnlyDictionary<string, int> headerMap, Employee employee)
     {
-        SetCellOnRow(row, rowIndex, headerMap, "EmployeeID", employee.EmployeeID);
-        SetCellOnRow(row, rowIndex, headerMap, "Username", employee.Username);
-        SetCellOnRow(row, rowIndex, headerMap, "Password", employee.Password);
-        SetCellOnRow(row, rowIndex, headerMap, "Email", employee.Email);
-        SetCellOnRow(row, rowIndex, headerMap, "NationalID", employee.NationalID);
-        SetCellOnRow(row, rowIndex, headerMap, "Role", employee.Role);
-    }
-
-    private void EnsureWorkbookAndCustomerLayout()
-    {
-        string directory = Path.GetDirectoryName(_workbookPath);
-        if (!string.IsNullOrEmpty(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-
-        if (!File.Exists(_workbookPath))
-        {
-            CreateWorkbookWithEmptySheet(ExcelFileManager.CustomerSheetName);
-            WriteCustomerHeaderRowOnly();
-            return;
-        }
-
-        using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, true))
-        {
-            WorksheetPart wsp = GetOrCreateWorksheetPart(doc.WorkbookPart, ExcelFileManager.CustomerSheetName);
-            SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
-            Dictionary<string, int> map = BuildHeaderMap(wsp, sstp);
-            if (map.Count == 0)
-            {
-                ReplaceFirstRowWithHeaders(wsp);
-            }
-            else if (!map.ContainsKey("FirstName") || !map.ContainsKey("Address"))
-            {
-                IReadOnlyList<Customer> existing = ReadCustomersCore(wsp, sstp, map);
-                RewriteCustomerSheet(wsp, existing);
-            }
-
-            doc.WorkbookPart.Workbook.Save();
-            wsp.Worksheet.Save();
-        }
+        SetCellPrefer(row, rowIndex, headerMap, "Username", employee.Username);
+        SetCellPrefer(row, rowIndex, headerMap, "Password", employee.Password);
+        SetCellPrefer(row, rowIndex, headerMap, "EmployeeNumber", "EmployeeID", employee.EmployeeID);
+        SetCellPrefer(row, rowIndex, headerMap, "Email", employee.Email);
+        SetCellPrefer(row, rowIndex, headerMap, "ID", "NationalID", employee.NationalID);
+        SetCellPrefer(row, rowIndex, headerMap, "Role", employee.Role);
     }
 
     private IReadOnlyList<Customer> ReadCustomersCore(
@@ -597,7 +583,8 @@ public class ExcelHelper
 
             if (string.IsNullOrWhiteSpace(email) && string.IsNullOrWhiteSpace(phone) &&
                 string.IsNullOrWhiteSpace(address) && string.IsNullOrWhiteSpace(lastName) &&
-                string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(customerId))
+                string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(customerId) &&
+                string.IsNullOrWhiteSpace(idNumber) && string.IsNullOrWhiteSpace(fullName))
             {
                 continue;
             }
@@ -838,6 +825,63 @@ public class ExcelHelper
         return cell != null ? GetCellRawText(cell, sstp).Trim() : string.Empty;
     }
 
+    private static string GetCellAtRowAny(
+        WorksheetPart wsp,
+        SharedStringTablePart sstp,
+        IReadOnlyDictionary<string, int> headerMap,
+        uint rowIndex,
+        params string[] columnNames)
+    {
+        if (columnNames == null)
+        {
+            return string.Empty;
+        }
+
+        foreach (string columnName in columnNames)
+        {
+            string value = GetCellAtRow(wsp, sstp, headerMap, rowIndex, columnName);
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+        }
+
+        return string.Empty;
+    }
+
+    private static void SetCellPrefer(
+        Row row,
+        uint rowIndex,
+        IReadOnlyDictionary<string, int> headerMap,
+        string columnName,
+        string value)
+    {
+        if (headerMap.ContainsKey(columnName))
+        {
+            SetCellOnRow(row, rowIndex, headerMap, columnName, value);
+        }
+    }
+
+    private static void SetCellPrefer(
+        Row row,
+        uint rowIndex,
+        IReadOnlyDictionary<string, int> headerMap,
+        string primaryColumn,
+        string alternateColumn,
+        string value)
+    {
+        if (headerMap.ContainsKey(primaryColumn))
+        {
+            SetCellOnRow(row, rowIndex, headerMap, primaryColumn, value);
+            return;
+        }
+
+        if (headerMap.ContainsKey(alternateColumn))
+        {
+            SetCellOnRow(row, rowIndex, headerMap, alternateColumn, value);
+        }
+    }
+
     private static uint GetLastUsedRowIndex(WorksheetPart wsp, SharedStringTablePart sstp, IReadOnlyDictionary<string, int> headerMap)
     {
         if (headerMap.Count == 0)
@@ -1011,12 +1055,28 @@ public class ExcelHelper
 
     private static void AppendCustomerCells(Row row, uint rowIndex, IReadOnlyDictionary<string, int> headerMap, Customer customer)
     {
-        SetCellOnRow(row, rowIndex, headerMap, "Email", customer.Email);
-        SetCellOnRow(row, rowIndex, headerMap, "Phone", customer.Phone);
-        SetCellOnRow(row, rowIndex, headerMap, "Address", customer.Address);
-        SetCellOnRow(row, rowIndex, headerMap, "LastName", customer.LastName);
-        SetCellOnRow(row, rowIndex, headerMap, "FirstName", customer.FirstName);
+        string fullName = (customer.FullName ?? string.Empty).Trim();
+        if (fullName.Length == 0)
+        {
+            fullName = customer.DisplayName;
+        }
+
+        string idNumber = (customer.IDNumber ?? string.Empty).Trim();
+        if (idNumber.Length == 0)
+        {
+            idNumber = customer.CustomerID;
+        }
+
         SetCellOnRow(row, rowIndex, headerMap, "CustomerID", customer.CustomerID);
+        SetCellOnRow(row, rowIndex, headerMap, "FullName", fullName);
+        SetCellOnRow(row, rowIndex, headerMap, "IDNumber", idNumber);
+        SetCellOnRow(row, rowIndex, headerMap, "Phone", customer.Phone);
+        SetCellOnRow(row, rowIndex, headerMap, "Email", customer.Email);
+    }
+
+    private static void NotifyCustomersChanged()
+    {
+        CustomersChanged?.Invoke(null, EventArgs.Empty);
     }
 
     private static void ReplaceCustomerRow(
@@ -1043,10 +1103,7 @@ public class ExcelHelper
 
     private static void SetCellOnRow(Row row, uint rowIndex, IReadOnlyDictionary<string, int> headerMap, string columnName, string value)
     {
-        int col = headerMap.TryGetValue(columnName, out int mapped)
-            ? mapped
-            : Array.IndexOf(ExcelFileManager.CustomerColumnHeaders, columnName) + 1;
-        if (col <= 0)
+        if (!headerMap.TryGetValue(columnName, out int col) || col <= 0)
         {
             return;
         }
