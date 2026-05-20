@@ -7,73 +7,189 @@ using System.Windows.Forms;
 
 namespace ClinicVets
 {
-    /// <summary>
-    /// Subtle raised chrome behind a text field (soft shadow + rounded plate). TextBox is docked inside.
-    /// </summary>
+    /// <summary>Rounded input host with focus glow and soft error state.</summary>
     public class ChromeTextPlate : Panel
     {
+        private bool _isInvalid;
+        private bool _isFocused;
+
+        public bool IsInvalid
+        {
+            get => _isInvalid;
+            set
+            {
+                if (_isInvalid == value)
+                {
+                    return;
+                }
+
+                _isInvalid = value;
+                Invalidate();
+            }
+        }
+
+        public bool IsFocused
+        {
+            get => _isFocused;
+            set
+            {
+                if (_isFocused == value)
+                {
+                    return;
+                }
+
+                _isFocused = value;
+                Invalidate();
+            }
+        }
+
+        /// <summary>Light borders/fill for Form1 login fields only.</summary>
+        public bool UseLoginLightStyle { get; set; }
+
+        private static readonly Color LoginFieldBorder = Color.FromArgb(190, 220, 240);
+        private static readonly Color LoginFieldBorderFocus = Color.FromArgb(0, 172, 193);
+        private static readonly Color LightInputSurface = Color.FromArgb(248, 252, 255);
+        private static readonly Color LightInputText = Color.FromArgb(33, 52, 72);
+        private static readonly Color DarkInputSurface = Color.FromArgb(255, 18, 30, 50);
+        private static readonly Color LoginFieldBackdrop = LightInputSurface;
+        private static readonly Color LoginFieldFill = Color.White;
+        private static readonly Color LoginFieldInvalidBorder = Color.FromArgb(229, 115, 115);
+        private static readonly Color LoginFieldInvalidFill = Color.FromArgb(255, 251, 250);
+        private const int LoginFieldCornerRadius = 8;
+
         public ChromeTextPlate()
         {
             SetStyle(
                 ControlStyles.AllPaintingInWmPaint |
                 ControlStyles.UserPaint |
                 ControlStyles.ResizeRedraw |
-                ControlStyles.OptimizedDoubleBuffer |
-                ControlStyles.SupportsTransparentBackColor,
+                ControlStyles.OptimizedDoubleBuffer,
                 true);
             DoubleBuffered = true;
-            BackColor = Color.Transparent;
-            Padding = new Padding(2, 2, 2, 3);
+            BackColor = LoginFieldBackdrop;
+            Padding = new Padding(2, 2, 2, 2);
+        }
+
+        protected override void OnParentChanged(EventArgs e)
+        {
+            base.OnParentChanged(e);
+            SyncSurfaceBackColor();
+            UpdateRoundedRegion();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            UpdateRoundedRegion();
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs pevent)
+        {
+            Color backdrop = ResolveBackdropColor();
+            using (var brush = new SolidBrush(backdrop))
+            {
+                pevent.Graphics.FillRectangle(brush, ClientRectangle);
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            RoundedControlPaint.Configure(g);
 
-            Rectangle outer = new Rectangle(1, 1, Width - 3, Height - 3);
-            int r = Math.Max(4, Math.Min(10, Math.Min(outer.Width, outer.Height) / 3));
+            int radius = UseLoginLightStyle ? LoginFieldCornerRadius : ClinicUiTheme.FieldRadius;
+            RectangleF fillRect = RoundedControlPaint.FillBounds(Width, Height);
 
-            var shadow = new Rectangle(outer.X + 2, outer.Y + 2, outer.Width - 2, outer.Height - 2);
-            using (GraphicsPath sp = UiPaths.RoundedRectangle(shadow, r))
-            using (var sb = new SolidBrush(Color.FromArgb(28, 18, 55, 100)))
+            Color fill;
+            Color borderColor;
+            Color backdrop = ResolveBackdropColor();
+            if (UseLoginLightStyle)
             {
-                g.FillPath(sb, sp);
+                fill = _isInvalid ? LoginFieldInvalidFill : LoginFieldFill;
+                borderColor = _isInvalid
+                    ? LoginFieldInvalidBorder
+                    : (_isFocused ? LoginFieldBorderFocus : LoginFieldBorder);
+            }
+            else
+            {
+                fill = RoundedControlPaint.OpaqueFill(
+                    _isInvalid ? ClinicUiTheme.FieldInvalidFill : ClinicUiTheme.FieldFill);
+                borderColor = _isInvalid
+                    ? ClinicUiTheme.FieldBorderError
+                    : (_isFocused ? ClinicUiTheme.FieldBorderFocus : ClinicUiTheme.FieldBorder);
             }
 
-            using (GraphicsPath path = UiPaths.RoundedRectangle(outer, r))
+            var client = new RectangleF(0, 0, Width, Height);
+            using (var backdropBrush = new SolidBrush(backdrop))
             {
-                using (var fill = new LinearGradientBrush(
-                    outer,
-                    Color.FromArgb(255, 254, 255, 255),
-                    Color.FromArgb(255, 244, 249, 255),
-                    LinearGradientMode.Vertical))
-                {
-                    g.FillPath(fill, path);
-                }
+                g.FillRectangle(backdropBrush, client);
+            }
 
-                using (var pen = new Pen(Color.FromArgb(110, 144, 202, 230), 1f))
+            if (_isFocused && !_isInvalid && !UseLoginLightStyle)
+            {
+                RectangleF glowRect = RectangleF.Inflate(fillRect, 1.5f, 1.5f);
+                using (GraphicsPath glowPath = UiPaths.RoundedRectangle(glowRect, radius + 2))
+                using (var glowBrush = new SolidBrush(ClinicUiTheme.FieldFocusGlow))
+                {
+                    g.FillPath(glowBrush, glowPath);
+                }
+            }
+
+            using (GraphicsPath path = UiPaths.RoundedRectangle(fillRect, radius))
+            using (var brush = new SolidBrush(fill))
+            {
+                g.FillPath(brush, path);
+            }
+
+            RectangleF borderRect = RoundedControlPaint.BorderBounds(Width, Height);
+            using (GraphicsPath borderPath = UiPaths.RoundedRectangle(borderRect, radius))
+            {
+                float borderWidth = UseLoginLightStyle ? 1f : (_isFocused && !_isInvalid ? 1.5f : 1f);
+                using (var pen = new Pen(borderColor, borderWidth))
                 {
                     pen.Alignment = PenAlignment.Inset;
-                    g.DrawPath(pen, path);
-                }
-
-                using (var hi = new Pen(Color.FromArgb(70, 255, 255, 255), 1f))
-                {
-                    hi.Alignment = PenAlignment.Inset;
-                    var inner = new Rectangle(outer.X + 1, outer.Y + 1, outer.Width - 3, outer.Height - 3);
-                    using (GraphicsPath ip = UiPaths.RoundedRectangle(inner, Math.Max(2, r - 2)))
-                    {
-                        g.DrawPath(hi, ip);
-                    }
+                    pen.LineJoin = LineJoin.Round;
+                    g.DrawPath(pen, borderPath);
                 }
             }
         }
 
-        /// <summary>
-        /// Wraps each direct child <see cref="TextBox"/> of <paramref name="host"/> in a chrome plate (once).
-        /// </summary>
+        private void SyncSurfaceBackColor()
+        {
+            Color backdrop = ResolveBackdropColor();
+            if (BackColor != backdrop)
+            {
+                BackColor = backdrop;
+            }
+        }
+
+        private Color ResolveBackdropColor()
+        {
+            if (UseLoginLightStyle)
+            {
+                return LoginFieldBackdrop;
+            }
+
+            return CardPanel.ResolveParentSurfaceColor(this, ClinicUiTheme.BgTop);
+        }
+
+        private void UpdateRoundedRegion()
+        {
+            if (Width <= 0 || Height <= 0)
+            {
+                return;
+            }
+
+            int radius = UseLoginLightStyle ? LoginFieldCornerRadius : ClinicUiTheme.FieldRadius;
+            RectangleF fillRect = RoundedControlPaint.FillBounds(Width, Height);
+            using (GraphicsPath path = UiPaths.RoundedRectangle(fillRect, radius))
+            {
+                Region old = Region;
+                Region = new Region(path);
+                old?.Dispose();
+            }
+        }
+
         public static void WrapDirectTextBoxes(Panel host)
         {
             if (host == null)
@@ -81,41 +197,149 @@ namespace ClinicVets
                 return;
             }
 
-            List<TextBox> boxes = host.Controls.OfType<TextBox>().ToList();
-            foreach (TextBox tb in boxes)
+            foreach (Control child in host.Controls.Cast<Control>().ToList())
             {
-                if (tb.Parent is ChromeTextPlate)
-                {
-                    continue;
-                }
-
-                AnchorStyles anchor = tb.Anchor;
-                int tab = tb.TabIndex;
-                Point loc = tb.Location;
-                Size sz = tb.Size;
-                int z = host.Controls.GetChildIndex(tb);
-
-                var plate = new ChromeTextPlate
-                {
-                    Location = new Point(loc.X - 2, loc.Y - 2),
-                    Size = new Size(sz.Width + 4, sz.Height + 5),
-                    TabIndex = tab,
-                    TabStop = false,
-                };
-
-                host.Controls.Remove(tb);
-                host.Controls.Add(plate);
-                host.Controls.SetChildIndex(plate, z);
-
-                tb.BorderStyle = BorderStyle.None;
-                tb.BackColor = Color.FromArgb(255, 252, 253, 255);
-                tb.TabIndex = tab;
-                plate.Controls.Add(tb);
-                tb.Location = new Point(plate.Padding.Left, plate.Padding.Top);
-                tb.Width = plate.ClientSize.Width - plate.Padding.Horizontal;
-                tb.Height = plate.ClientSize.Height - plate.Padding.Vertical;
-                tb.Anchor = anchor;
+                CardPanel.ApplyChildChrome(child);
             }
+
+            foreach (TextBox tb in host.Controls.OfType<TextBox>().ToList())
+            {
+                WrapTextBox(host, tb);
+            }
+
+            foreach (ComboBox combo in host.Controls.OfType<ComboBox>().ToList())
+            {
+                WrapComboBox(host, combo);
+            }
+        }
+
+        private static void WrapTextBox(Panel host, TextBox tb)
+        {
+            if (tb.Parent is ChromeTextPlate)
+            {
+                return;
+            }
+
+            AnchorStyles anchor = tb.Anchor;
+            int tab = tb.TabIndex;
+            Point loc = tb.Location;
+            Size sz = tb.Size;
+            int z = host.Controls.GetChildIndex(tb);
+
+            var plate = new ChromeTextPlate
+            {
+                Location = loc,
+                Size = sz,
+                TabIndex = tab,
+                TabStop = true,
+            };
+
+            if (host is CardPanel card && (card.UseLoginLightStyle || card.UseRegisterLightStyle))
+            {
+                plate.UseLoginLightStyle = true;
+            }
+
+            host.Controls.Remove(tb);
+            host.Controls.Add(plate);
+            host.Controls.SetChildIndex(plate, z);
+
+            ApplyTextBoxChrome(tb, plate.UseLoginLightStyle);
+            tb.TabIndex = 0;
+            plate.Controls.Add(tb);
+            plate.SyncSurfaceBackColor();
+            plate.UpdateRoundedRegion();
+            FitInnerControl(tb, plate);
+            tb.Anchor = anchor;
+            WireFocusHandlers(plate, tb);
+        }
+
+        private static void WrapComboBox(Panel host, ComboBox combo)
+        {
+            if (combo.Parent is ChromeTextPlate)
+            {
+                return;
+            }
+
+            AnchorStyles anchor = combo.Anchor;
+            int tab = combo.TabIndex;
+            Point loc = combo.Location;
+            Size sz = combo.Size;
+            int z = host.Controls.GetChildIndex(combo);
+
+            var plate = new ChromeTextPlate
+            {
+                Location = loc,
+                Size = sz,
+                TabIndex = tab,
+                TabStop = true,
+            };
+
+            if (host is CardPanel card && (card.UseLoginLightStyle || card.UseRegisterLightStyle))
+            {
+                plate.UseLoginLightStyle = true;
+            }
+
+            host.Controls.Remove(combo);
+            host.Controls.Add(plate);
+            host.Controls.SetChildIndex(plate, z);
+
+            ApplyComboBoxChrome(combo, plate.UseLoginLightStyle);
+            combo.TabIndex = 0;
+            plate.Controls.Add(combo);
+            plate.SyncSurfaceBackColor();
+            plate.UpdateRoundedRegion();
+            FitInnerControl(combo, plate);
+            combo.Anchor = anchor;
+            WireFocusHandlers(plate, combo);
+        }
+
+        private static void ApplyTextBoxChrome(TextBox textBox, bool lightStyle)
+        {
+            textBox.BorderStyle = BorderStyle.None;
+            if (lightStyle)
+            {
+                textBox.BackColor = LightInputSurface;
+                textBox.ForeColor = LightInputText;
+            }
+            else
+            {
+                textBox.BackColor = DarkInputSurface;
+                textBox.ForeColor = ClinicUiTheme.TitleText;
+            }
+        }
+
+        private static void ApplyComboBoxChrome(ComboBox combo, bool lightStyle)
+        {
+            combo.FlatStyle = FlatStyle.Flat;
+            if (lightStyle)
+            {
+                combo.BackColor = LightInputSurface;
+                combo.ForeColor = LightInputText;
+            }
+            else
+            {
+                combo.BackColor = DarkInputSurface;
+                combo.ForeColor = ClinicUiTheme.TitleText;
+            }
+        }
+
+        private static void WireFocusHandlers(ChromeTextPlate plate, Control inner)
+        {
+            inner.GotFocus += (sender, args) => plate.IsFocused = true;
+            inner.LostFocus += (sender, args) =>
+            {
+                if (!plate.ContainsFocus)
+                {
+                    plate.IsFocused = false;
+                }
+            };
+        }
+
+        private static void FitInnerControl(Control inner, ChromeTextPlate plate)
+        {
+            inner.Location = new Point(plate.Padding.Left + 4, plate.Padding.Top + 3);
+            inner.Width = Math.Max(10, plate.ClientSize.Width - plate.Padding.Horizontal - 8);
+            inner.Height = Math.Max(10, plate.ClientSize.Height - plate.Padding.Vertical - 6);
         }
     }
 }

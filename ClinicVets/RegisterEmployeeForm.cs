@@ -1,12 +1,26 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ClinicVets
 {
     public partial class RegisterEmployeeForm : Form
     {
+        private static readonly Color TitleColor = Color.FromArgb(21, 101, 192);
+        private static readonly Color SubtitleColor = Color.FromArgb(71, 95, 120);
+        private static readonly Color LabelColor = Color.FromArgb(25, 118, 210);
+        private static readonly Color LinkColor = Color.FromArgb(25, 118, 210);
+        private static readonly Color LinkHoverColor = Color.FromArgb(0, 151, 167);
+        private static readonly Color CardSurface = CardPanel.RegisterCardFill;
+
+        private const int InnerX = 45;
+        private const int FieldWidth = 470;
+        private const int FieldHeight = 32;
+        private const int ErrorHeight = 16;
+
+        private ValidationFieldBinder _validation;
+
         public RegisterEmployeeForm()
             : this(null)
         {
@@ -24,216 +38,255 @@ namespace ClinicVets
         private void RegisterEmployeeForm_Load(object sender, EventArgs e)
         {
             WinFormsUi.SetDoubleBuffered(this);
-            VetBackgroundHelper.ApplyVetBackground(this);
+            VetBackgroundHelper.ApplyRegisterBackground(this);
+
+            pnlCard.UseRegisterLightStyle = true;
+            pnlCard.ShowCornerDecorations = false;
+            pnlCard.CornerRadius = CardPanel.RegisterCornerRadius;
+            pnlCard.Location = new Point(630, 55);
+            pnlCard.Size = new Size(560, 760);
+            pnlCard.Padding = new Padding(0);
+            pnlCard.BackColor = CardSurface;
+
+            ApplyRegisterTypography();
+
+            btnRegister.UseLoginLightStyle = true;
+            btnRegister.IsOutlineStyle = false;
+            btnRegister.CornerRadius = 8;
+            btnBack.UseLoginLightStyle = true;
+            btnBack.IsOutlineStyle = true;
+            btnBack.CornerRadius = 8;
+
             ChromeTextPlate.WrapDirectTextBoxes(pnlCard);
-            CenterCard();
+            ApplyRegisterFieldChrome();
+
+            LinkLabel passwordToggle = PasswordVisibilityHelper.Attach(txtPassword);
+            if (passwordToggle != null)
+            {
+                passwordToggle.LinkColor = LinkColor;
+                passwordToggle.ActiveLinkColor = LinkHoverColor;
+                passwordToggle.VisitedLinkColor = LinkColor;
+                passwordToggle.BackColor = CardSurface;
+            }
+
+            SetupValidation();
+            ApplyRegisterLabelSurfaces();
+            LayoutRegisterControls();
             txtUsername.Focus();
         }
 
-        private void CenterCard()
+        private void ApplyRegisterTypography()
         {
-            pnlCard.Left = (ClientSize.Width - pnlCard.Width) / 2;
-            pnlCard.Top = (ClientSize.Height - pnlCard.Height) / 2;
+            lblTitle.Font = new Font("Segoe UI", 19F, FontStyle.Bold, GraphicsUnit.Point);
+            lblTitle.ForeColor = TitleColor;
+
+            lblSubtitle.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular, GraphicsUnit.Point);
+            lblSubtitle.ForeColor = SubtitleColor;
+
+            foreach (Label label in new[]
+            {
+                lblUsername,
+                lblPassword,
+                lblEmployeeNumber,
+                lblEmail,
+                lblId,
+                lblRole
+            })
+            {
+                label.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+                label.ForeColor = LabelColor;
+            }
+
+            btnRegister.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            btnBack.Font = btnRegister.Font;
+        }
+
+        private void ApplyRegisterLabelSurfaces()
+        {
+            foreach (Control control in pnlCard.Controls)
+            {
+                if (control is Label label)
+                {
+                    label.BackColor = CardSurface;
+                }
+            }
+        }
+
+        private void ApplyRegisterFieldChrome()
+        {
+            foreach (ChromeTextPlate plate in pnlCard.Controls.OfType<ChromeTextPlate>())
+            {
+                plate.UseLoginLightStyle = true;
+                plate.BackColor = CardSurface;
+                foreach (TextBox box in plate.Controls.OfType<TextBox>())
+                {
+                    box.ForeColor = Color.FromArgb(33, 52, 72);
+                    box.BackColor = Color.White;
+                }
+
+                foreach (ComboBox combo in plate.Controls.OfType<ComboBox>())
+                {
+                    combo.ForeColor = Color.FromArgb(33, 52, 72);
+                    combo.BackColor = Color.White;
+                }
+            }
+        }
+
+        private void LayoutRegisterControls()
+        {
+            lblTitle.SetBounds(InnerX, 35, FieldWidth, 45);
+            lblTitle.TextAlign = ContentAlignment.MiddleCenter;
+
+            lblSubtitle.SetBounds(InnerX, 85, FieldWidth, 35);
+            lblSubtitle.TextAlign = ContentAlignment.TopCenter;
+
+            LayoutCaption(lblUsername, 135);
+            LayoutFieldHost(GetFieldHost(txtUsername), 160);
+
+            LayoutCaption(lblPassword, 215);
+            LayoutFieldHost(GetFieldHost(txtPassword), 240);
+
+            LayoutCaption(lblEmployeeNumber, 295);
+            LayoutFieldHost(GetFieldHost(txtEmployeeNumber), 320);
+
+            LayoutCaption(lblEmail, 375);
+            LayoutFieldHost(GetFieldHost(txtEmail), 400);
+
+            LayoutCaption(lblId, 455);
+            LayoutFieldHost(GetFieldHost(txtId), 480);
+
+            LayoutCaption(lblRole, 535);
+            LayoutFieldHost(GetFieldHost(cmbRole), 560);
+
+            if (_validation != null)
+            {
+                PositionErrorLabel(_validation.Entries.First(e => e.InputControl == txtUsername), 160);
+                PositionErrorLabel(_validation.Entries.First(e => e.InputControl == txtPassword), 240);
+                PositionErrorLabel(_validation.Entries.First(e => e.InputControl == txtEmployeeNumber), 320);
+                PositionErrorLabel(_validation.Entries.First(e => e.InputControl == txtEmail), 400);
+                PositionErrorLabel(_validation.Entries.First(e => e.InputControl == txtId), 480);
+                PositionErrorLabel(_validation.Entries.First(e => e.InputControl == cmbRole), 560);
+            }
+
+            btnRegister.SetBounds(InnerX, 625, FieldWidth, 48);
+            btnBack.SetBounds(InnerX, 690, FieldWidth, 48);
+        }
+
+        private void LayoutCaption(Label label, int y)
+        {
+            label.AutoSize = false;
+            label.SetBounds(InnerX, y, FieldWidth, 22);
+        }
+
+        private void LayoutFieldHost(Control host, int y)
+        {
+            host.SetBounds(InnerX, y, FieldWidth, FieldHeight);
+            AlignChromePlateInner(host);
+        }
+
+        private static void PositionErrorLabel(ValidationFieldBinder.FieldEntry entry, int fieldY)
+        {
+            entry.ErrorLabel.SetBounds(InnerX, fieldY + FieldHeight + 2, FieldWidth, ErrorHeight);
+        }
+
+        private static Control GetFieldHost(Control input)
+        {
+            if (input?.Parent is ChromeTextPlate plate)
+            {
+                return plate;
+            }
+
+            return input;
+        }
+
+        private static void AlignChromePlateInner(Control host)
+        {
+            if (!(host is ChromeTextPlate plate))
+            {
+                return;
+            }
+
+            foreach (Control inner in plate.Controls)
+            {
+                inner.Location = new Point(plate.Padding.Left + 2, plate.Padding.Top + 2);
+                inner.Width = Math.Max(10, plate.ClientSize.Width - plate.Padding.Horizontal - 4);
+                inner.Height = Math.Max(10, plate.ClientSize.Height - plate.Padding.Vertical - 4);
+            }
+        }
+
+        private void SetupValidation()
+        {
+            _validation = new ValidationFieldBinder(pnlCard);
+            _validation.BindTextBox(txtUsername, ValidationHelper.ValidateUsername, lblUsername);
+            _validation.BindTextBox(txtPassword, ValidationHelper.ValidatePassword, lblPassword);
+            _validation.BindTextBox(txtEmployeeNumber, ValidationHelper.ValidateEmployeeNumber, lblEmployeeNumber);
+            _validation.BindTextBox(txtEmail, ValidationHelper.ValidateEmail, lblEmail);
+            _validation.BindTextBox(txtId, ValidationHelper.ValidateIdNumber, lblId);
+            _validation.BindComboBox(cmbRole, ValidationHelper.ValidateRole, lblRole);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            Image img = BackgroundImage;
-            BackgroundImage = null;
-            img?.Dispose();
+            VetBackgroundHelper.ClearBackgroundImage(this);
             base.OnFormClosed(e);
         }
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            var errors = new List<string>();
-            AddIfInvalid(errors, ValidateUsername(txtUsername.Text));
-            AddIfInvalid(errors, ValidatePassword(txtPassword.Text));
-            AddIfInvalid(errors, ValidateEmployeeNumber(txtEmployeeNumber.Text));
-            AddIfInvalid(errors, ValidateEmail(txtEmail.Text));
-            AddIfInvalid(errors, ValidateId(txtId.Text));
-            AddIfInvalid(errors, ValidateRole(cmbRole));
+            if (!_validation.ValidateAll())
+            {
+                LayoutRegisterControls();
+                return;
+            }
 
-            if (errors.Count > 0)
+            var employee = new Employee
+            {
+                EmployeeID = txtEmployeeNumber.Text.Trim(),
+                Username = txtUsername.Text.Trim(),
+                Password = txtPassword.Text,
+                Email = txtEmail.Text.Trim(),
+                NationalID = txtId.Text.Trim(),
+                Role = cmbRole.SelectedItem?.ToString() ?? string.Empty
+            };
+
+            try
+            {
+                LoginAuthService.RegisterEmployee(employee);
+            }
+            catch (InvalidOperationException ex)
             {
                 MessageBox.Show(
                     this,
-                    string.Join(Environment.NewLine, errors),
-                    "Register — validation",
+                    ex.Message,
+                    "Registration — save",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+            catch (Exception ex)
+            {
+                string message = ExcelHelper.IsWorkbookLockedException(ex)
+                    ? ExcelFileManager.WorkbookLockedMessage
+                    : "Could not save the employee to Excel."
+                      + Environment.NewLine + Environment.NewLine + ex.Message;
+
+                MessageBox.Show(
+                    this,
+                    message,
+                    "Registration — save",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
 
-            MessageBox.Show(
-                this,
-                "Employee registered successfully.",
-                "Register",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-        }
-
-        private static void AddIfInvalid(List<string> errors, string errorMessage)
-        {
-            if (errorMessage != null)
+            Form1 loginForm = Owner as Form1;
+            Hide();
+            using (var successForm = new RegistrationSuccessForm(loginForm))
             {
-                errors.Add(errorMessage);
-            }
-        }
-
-        private static string ValidateUsername(string username)
-        {
-            username = (username ?? string.Empty).Trim();
-            if (username.Length < 6 || username.Length > 8)
-            {
-                return "Username must be between 6 and 8 characters.";
+                successForm.ShowDialog(loginForm);
             }
 
-            int digitCount = 0;
-            foreach (char c in username)
-            {
-                if (char.IsDigit(c))
-                {
-                    digitCount++;
-                }
-                else if (!IsEnglishLetter(c))
-                {
-                    return "Username may only contain English letters (A–Z, a–z) and digits. Up to 2 digits are allowed; all other characters must be English letters.";
-                }
-            }
-
-            if (digitCount > 2)
-            {
-                return "Username may contain at most 2 digits. All other characters must be English letters.";
-            }
-
-            return null;
-        }
-
-        private static bool IsEnglishLetter(char c)
-        {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-        }
-
-        private static string ValidatePassword(string password)
-        {
-            if (password == null)
-            {
-                password = string.Empty;
-            }
-
-            if (password.Length < 8 || password.Length > 10)
-            {
-                return "Password must be between 8 and 10 characters.";
-            }
-
-            bool hasLetter = false;
-            bool hasDigit = false;
-            bool hasSpecial = false;
-            const string allowedSpecials = "!$#,";
-
-            foreach (char c in password)
-            {
-                if (IsEnglishLetter(c))
-                {
-                    hasLetter = true;
-                }
-                else if (char.IsDigit(c))
-                {
-                    hasDigit = true;
-                }
-                else if (allowedSpecials.IndexOf(c) >= 0)
-                {
-                    hasSpecial = true;
-                }
-            }
-
-            if (!hasLetter)
-            {
-                return "Password must contain at least one English letter (A–Z, a–z).";
-            }
-
-            if (!hasDigit)
-            {
-                return "Password must contain at least one digit.";
-            }
-
-            if (!hasSpecial)
-            {
-                return "Password must contain at least one special character from: ! $ # ,";
-            }
-
-            return null;
-        }
-
-        private static string ValidateEmployeeNumber(string value)
-        {
-            value = (value ?? string.Empty).Trim();
-            if (value.Length != 4)
-            {
-                return "Employee Number must be exactly 4 digits.";
-            }
-
-            foreach (char c in value)
-            {
-                if (!char.IsDigit(c))
-                {
-                    return "Employee Number must contain only digits (exactly 4).";
-                }
-            }
-
-            return null;
-        }
-
-        private static string ValidateId(string value)
-        {
-            value = (value ?? string.Empty).Trim();
-            if (value.Length != 9)
-            {
-                return "ID must be exactly 9 digits.";
-            }
-
-            foreach (char c in value)
-            {
-                if (!char.IsDigit(c))
-                {
-                    return "ID must contain only digits (exactly 9).";
-                }
-            }
-
-            return null;
-        }
-
-        private static string ValidateEmail(string email)
-        {
-            email = email ?? string.Empty;
-            if (!email.Contains("@"))
-            {
-                return "Email must contain an '@' character.";
-            }
-
-            return null;
-        }
-
-        private static string ValidateRole(ComboBox combo)
-        {
-            if (combo == null)
-            {
-                return "Role must be Vet or Secretary.";
-            }
-
-            if (combo.SelectedIndex < 0)
-            {
-                return "Please select a role: Vet or Secretary.";
-            }
-
-            string role = combo.SelectedItem?.ToString() ?? string.Empty;
-            if (role != "Vet" && role != "Secretary")
-            {
-                return "Role must be Vet or Secretary.";
-            }
-
-            return null;
+            Close();
         }
     }
 }

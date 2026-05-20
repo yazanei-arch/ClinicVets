@@ -1,13 +1,34 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace ClinicVets
 {
     public partial class CustomerManagementForm : Form
     {
+        private static readonly Color TitleColor = Color.FromArgb(21, 101, 192);
+        private static readonly Color SubtitleColor = Color.FromArgb(71, 95, 120);
+        private static readonly Color LabelColor = Color.FromArgb(25, 118, 210);
+        private static readonly Color SuccessColor = Color.FromArgb(46, 125, 50);
+        private static readonly Color CardSurface = CardPanel.RegisterCardFill;
+        private static readonly Color FormFallbackBack = Color.FromArgb(232, 244, 252);
+
+        private const int InnerPad = 32;
+        private const int FieldWidth = 616;
+        private const int CaptionHeight = 22;
+        private const int FieldHeight = 32;
+        private const int ErrorHeight = 16;
+        private const int RowStride = 72;
+
         private readonly ExcelHelper _excelHelper = new ExcelHelper();
+        private readonly List<Customer> _allCustomers = new List<Customer>();
+        private ValidationFieldBinder _validation;
+        private Image _ownedBackgroundImage;
 
         public CustomerManagementForm()
             : this(null)
@@ -25,45 +46,225 @@ namespace ClinicVets
 
         private void CustomerManagementForm_Load(object sender, EventArgs e)
         {
+            if (!EnsureSecretaryAccess())
+            {
+                return;
+            }
+
             WinFormsUi.SetDoubleBuffered(this);
-            VetBackgroundHelper.ApplyVetBackground(this);
+            ApplyAddCustomerBackground();
+
+            pnlCard.UseRegisterLightStyle = true;
+            pnlCard.ShowCornerDecorations = false;
+            pnlCard.CornerRadius = CardPanel.RegisterCornerRadius;
+            pnlCard.Location = new Point(480, 110);
+            pnlCard.Size = new Size(680, 560);
+            pnlCard.Padding = new Padding(0);
+            pnlCard.BackColor = CardSurface;
+            pnlCard.AutoScroll = false;
+
+            ApplyCustomerTypography();
+            ApplyHeaderChrome();
+
+            btnAddCustomer.UseLoginLightStyle = true;
+            btnAddCustomer.IsOutlineStyle = false;
+            btnAddCustomer.CornerRadius = 8;
+
+            btnBack.UseLoginLightStyle = true;
+            btnBack.IsOutlineStyle = true;
+            btnBack.CornerRadius = 8;
+
             ChromeTextPlate.WrapDirectTextBoxes(pnlCard);
-            CenterCard();
-            SetupGrid();
+            SetupValidation();
+            ApplyFieldChrome();
+            ApplyLabelSurfaces();
+            LayoutCustomerControls();
             ReloadCustomersFromExcel();
             txtFullName.Focus();
         }
 
-        private void SetupGrid()
+        private bool EnsureSecretaryAccess()
         {
-            dgvCustomers.AutoGenerateColumns = false;
-            dgvCustomers.Columns.Clear();
-            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "FullName", HeaderText = "Full Name", FillWeight = 30 });
-            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "CustomerId", HeaderText = "ID", FillWeight = 15 });
-            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "Phone", HeaderText = "Phone", FillWeight = 20 });
-            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn { Name = "Email", HeaderText = "Email", FillWeight = 35 });
-            dgvCustomers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvCustomers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCustomers.MultiSelect = false;
-            dgvCustomers.RowHeadersVisible = false;
-            dgvCustomers.AllowUserToAddRows = false;
-            dgvCustomers.BackgroundColor = Color.FromArgb(252, 253, 255);
-            dgvCustomers.BorderStyle = BorderStyle.None;
-            dgvCustomers.EnableHeadersVisualStyles = true;
+            Employee user = SessionManager.CurrentUser;
+            if (user != null &&
+                user.Role != null &&
+                user.Role.Equals("Secretary", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            MessageBox.Show(
+                this,
+                "Customer management is available to Secretary users only.",
+                "Access denied",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            Close();
+            return false;
+        }
+
+        private void ApplyCustomerTypography()
+        {
+            lblTitle.Font = new Font("Segoe UI", 17F, FontStyle.Bold, GraphicsUnit.Point);
+            lblTitle.ForeColor = TitleColor;
+
+            lblSubtitle.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            lblSubtitle.ForeColor = SubtitleColor;
+
+            foreach (Label label in new[] { lblFullName, lblCustomerId, lblPhone, lblEmail })
+            {
+                label.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+                label.ForeColor = LabelColor;
+            }
+
+            lblSuccess.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            lblSuccess.ForeColor = SuccessColor;
+
+            Font buttonFont = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            btnAddCustomer.Font = buttonFont;
+            btnBack.Font = buttonFont;
+        }
+
+        private void ApplyHeaderChrome()
+        {
+            lblTitle.BackColor = CardSurface;
+            lblSubtitle.BackColor = CardSurface;
+            lblSuccess.BackColor = CardSurface;
+            pnlDivider.BackColor = Color.FromArgb(210, 225, 240);
+        }
+
+        private void ApplyLabelSurfaces()
+        {
+            foreach (Control control in pnlCard.Controls)
+            {
+                if (control is Label label)
+                {
+                    label.BackColor = CardSurface;
+                }
+            }
+        }
+
+        private void ApplyFieldChrome()
+        {
+            foreach (ChromeTextPlate plate in pnlCard.Controls.OfType<ChromeTextPlate>())
+            {
+                plate.UseLoginLightStyle = true;
+                plate.BackColor = CardSurface;
+                foreach (TextBox box in plate.Controls.OfType<TextBox>())
+                {
+                    box.ForeColor = Color.FromArgb(33, 52, 72);
+                    box.BackColor = Color.White;
+                }
+            }
+        }
+
+        private void LayoutCustomerControls()
+        {
+            const int titleLeft = 92;
+            const int headerTextWidth = 556;
+
+            pnlHeaderIcon.SetBounds(InnerPad, 28, 48, 48);
+            lblTitle.SetBounds(titleLeft, 28, headerTextWidth, 34);
+            lblTitle.TextAlign = ContentAlignment.MiddleLeft;
+
+            lblSubtitle.SetBounds(titleLeft, 66, headerTextWidth, 24);
+            lblSubtitle.TextAlign = ContentAlignment.TopLeft;
+
+            pnlDivider.SetBounds(InnerPad, 104, FieldWidth, 1);
+
+            int y = 122;
+            LayoutFieldRow(lblFullName, txtFullName, y);
+            PositionFieldError(txtFullName, y, FieldHeight);
+
+            y += RowStride;
+            LayoutFieldRow(lblCustomerId, txtCustomerId, y);
+            PositionFieldError(txtCustomerId, y, FieldHeight);
+
+            y += RowStride;
+            LayoutFieldRow(lblPhone, txtPhone, y);
+            PositionFieldError(txtPhone, y, FieldHeight);
+
+            y += RowStride;
+            LayoutFieldRow(lblEmail, txtEmail, y);
+            PositionFieldError(txtEmail, y, FieldHeight);
+
+            lblSuccess.SetBounds(InnerPad, 410, FieldWidth, 22);
+            btnAddCustomer.SetBounds(InnerPad, 440, FieldWidth, 44);
+            btnBack.SetBounds(InnerPad, 496, 140, 40);
+
+            btnClear.Visible = false;
+            btnOpenSearch.Visible = false;
+        }
+
+        private void LayoutFieldRow(Label caption, TextBox input, int captionY)
+        {
+            caption.AutoSize = false;
+            caption.SetBounds(InnerPad, captionY, FieldWidth, CaptionHeight);
+            Control host = GetFieldHost(input);
+            host.SetBounds(InnerPad, captionY + CaptionHeight + 2, FieldWidth, FieldHeight);
+            AlignChromePlateInner(host);
+        }
+
+        private void PositionFieldError(TextBox input, int captionY, int fieldHeight)
+        {
+            if (_validation == null)
+            {
+                return;
+            }
+
+            ValidationFieldBinder.FieldEntry entry = _validation.Entries.FirstOrDefault(e => e.InputControl == input);
+            if (entry == null)
+            {
+                return;
+            }
+
+            int y = captionY + CaptionHeight + 2 + fieldHeight + 2;
+            entry.ErrorLabel.SetBounds(InnerPad, y, FieldWidth, ErrorHeight);
+        }
+
+        private static Control GetFieldHost(Control input)
+        {
+            if (input?.Parent is ChromeTextPlate plate)
+            {
+                return plate;
+            }
+
+            return input;
+        }
+
+        private static void AlignChromePlateInner(Control host)
+        {
+            if (!(host is ChromeTextPlate plate))
+            {
+                return;
+            }
+
+            foreach (Control inner in plate.Controls)
+            {
+                inner.Location = new Point(plate.Padding.Left + 2, plate.Padding.Top + 2);
+                inner.Width = Math.Max(10, plate.ClientSize.Width - plate.Padding.Horizontal - 4);
+                inner.Height = Math.Max(10, plate.ClientSize.Height - plate.Padding.Vertical - 4);
+            }
+        }
+
+        private void SetupValidation()
+        {
+            _validation = new ValidationFieldBinder(pnlCard);
+
+            _validation.BindTextBox(txtFullName, ValidationHelper.ValidateName, lblFullName);
+            _validation.BindTextBox(txtCustomerId, ValidationHelper.ValidateIdNumber, lblCustomerId);
+            _validation.BindTextBox(txtPhone, ValidationHelper.ValidatePhone, lblPhone);
+            _validation.BindTextBox(txtEmail, ValidationHelper.ValidateEmail, lblEmail);
         }
 
         private void ReloadCustomersFromExcel()
         {
-            dgvCustomers.Rows.Clear();
+            _allCustomers.Clear();
             try
             {
                 foreach (Customer customer in _excelHelper.ReadCustomers())
                 {
-                    dgvCustomers.Rows.Add(
-                        customer.FullName ?? string.Empty,
-                        GridIdDisplay(customer),
-                        customer.Phone ?? string.Empty,
-                        customer.Email ?? string.Empty);
+                    _allCustomers.Add(customer);
                 }
             }
             catch (Exception ex)
@@ -77,187 +278,290 @@ namespace ClinicVets
             }
         }
 
-        private static string GridIdDisplay(Customer customer)
-        {
-            if (!string.IsNullOrWhiteSpace(customer.IDNumber))
-            {
-                return customer.IDNumber.Trim();
-            }
-
-            return customer.CustomerID ?? string.Empty;
-        }
-
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            Image img = BackgroundImage;
-            BackgroundImage = null;
-            img?.Dispose();
+            ClearAddCustomerBackground();
             base.OnFormClosed(e);
         }
 
-        private void CenterCard()
+        private void ApplyAddCustomerBackground()
         {
-            pnlCard.Left = (ClientSize.Width - pnlCard.Width) / 2;
-            pnlCard.Top = (ClientSize.Height - pnlCard.Height) / 2;
+            ClearAddCustomerBackground();
+            BackgroundImageLayout = ImageLayout.Stretch;
+
+            string path = FindAddCustomerBackgroundPath();
+            if (path == null)
+            {
+                BackColor = FormFallbackBack;
+                Invalidate(true);
+                return;
+            }
+
+            try
+            {
+                _ownedBackgroundImage = Image.FromFile(path);
+                BackgroundImage = (Image)_ownedBackgroundImage.Clone();
+                BackColor = FormFallbackBack;
+                Invalidate(true);
+            }
+            catch
+            {
+                ClearAddCustomerBackground();
+                BackColor = FormFallbackBack;
+            }
+        }
+
+        private void ClearAddCustomerBackground()
+        {
+            Image previous = BackgroundImage;
+            BackgroundImage = null;
+            if (!ReferenceEquals(previous, _ownedBackgroundImage))
+            {
+                previous?.Dispose();
+            }
+
+            _ownedBackgroundImage?.Dispose();
+            _ownedBackgroundImage = null;
+        }
+
+        private static string FindAddCustomerBackgroundPath()
+        {
+            string relative = Path.Combine("images", "add_customer_bg.png");
+            var tried = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string root in GetBackgroundSearchRoots())
+            {
+                if (string.IsNullOrWhiteSpace(root))
+                {
+                    continue;
+                }
+
+                string candidate = Path.GetFullPath(Path.Combine(root, relative));
+                if (tried.Add(candidate) && File.Exists(candidate))
+                {
+                    return candidate;
+                }
+            }
+
+            return null;
+        }
+
+        private static IEnumerable<string> GetBackgroundSearchRoots()
+        {
+            yield return Application.StartupPath;
+            yield return AppDomain.CurrentDomain.BaseDirectory;
+
+            string location = Assembly.GetExecutingAssembly().Location;
+            if (!string.IsNullOrEmpty(location))
+            {
+                string dir = Path.GetDirectoryName(location);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    yield return dir;
+                }
+            }
+
+            foreach (string start in new[] { Application.StartupPath, AppDomain.CurrentDomain.BaseDirectory })
+            {
+                if (string.IsNullOrEmpty(start))
+                {
+                    continue;
+                }
+
+                yield return Path.GetFullPath(Path.Combine(start, "..", ".."));
+                yield return Path.GetFullPath(Path.Combine(start, "..", "..", ".."));
+            }
+
+            yield return Environment.CurrentDirectory;
+        }
+
+        private bool TryGetValidCustomer(out Customer customer)
+        {
+            customer = null;
+            if (!_validation.ValidateAll())
+            {
+                return false;
+            }
+
+            string fullName = txtFullName.Text.Trim();
+            string idNumber = txtCustomerId.Text.Trim();
+            SplitFullName(fullName, out string firstName, out string lastName);
+
+            customer = new Customer
+            {
+                CustomerID = idNumber,
+                IDNumber = idNumber,
+                FullName = fullName,
+                FirstName = firstName,
+                LastName = lastName,
+                Phone = txtPhone.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                Address = string.Empty
+            };
+            return true;
+        }
+
+        private static void SplitFullName(string fullName, out string firstName, out string lastName)
+        {
+            firstName = fullName ?? string.Empty;
+            lastName = string.Empty;
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                return;
+            }
+
+            int space = fullName.IndexOf(' ');
+            if (space <= 0)
+            {
+                firstName = fullName.Trim();
+                return;
+            }
+
+            firstName = fullName.Substring(0, space).Trim();
+            lastName = fullName.Substring(space + 1).Trim();
+        }
+
+        private static bool CustomerIdExists(IEnumerable<Customer> customers, string idNumber)
+        {
+            return customers.Any(c =>
+                string.Equals(c.CustomerID, idNumber, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(c.IDNumber, idNumber, StringComparison.OrdinalIgnoreCase));
         }
 
         private void btnAddCustomer_Click(object sender, EventArgs e)
         {
-            var errors = new List<string>();
-            AddIfInvalid(errors, ValidateFullName(txtFullName.Text));
-            AddIfInvalid(errors, ValidateCustomerId(txtCustomerId.Text));
-            AddIfInvalid(errors, ValidatePhone(txtPhone.Text));
-            AddIfInvalid(errors, ValidateEmail(txtEmail.Text));
+            HideSuccessMessage();
 
-            if (errors.Count > 0)
+            if (!TryGetValidCustomer(out Customer customer))
             {
-                MessageBox.Show(
-                    this,
-                    string.Join(Environment.NewLine, errors),
-                    "Customer — validation",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
                 return;
             }
 
-            var customer = new Customer
+            if (CustomerIdExists(_allCustomers, customer.CustomerID))
             {
-                CustomerID = Guid.NewGuid().ToString("N"),
-                FullName = txtFullName.Text.Trim(),
-                IDNumber = txtCustomerId.Text.Trim(),
-                Phone = txtPhone.Text.Trim(),
-                Email = txtEmail.Text.Trim()
-            };
+                var idEntry = _validation.Entries.First(entry => entry.InputControl == txtCustomerId);
+                idEntry.ErrorLabel.Text = "A customer with this ID already exists.";
+                idEntry.ErrorLabel.Visible = true;
+                if (idEntry.HostControl is ChromeTextPlate plate)
+                {
+                    plate.IsInvalid = true;
+                }
+
+                txtCustomerId.Focus();
+                return;
+            }
+
+            DialogResult confirm = MessageBox.Show(
+                this,
+                "Are you sure you want to add this customer?",
+                "Confirm add customer",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes)
+            {
+                return;
+            }
 
             try
             {
                 _excelHelper.AppendCustomer(customer);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 MessageBox.Show(
                     this,
-                    "Could not save the customer to Excel. Close the workbook if it is open in Excel, then try again."
-                    + Environment.NewLine + Environment.NewLine + ex.Message,
+                    ex.Message,
+                    "Customer — save",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+            catch (Exception ex)
+            {
+                string message = ExcelHelper.IsWorkbookLockedException(ex)
+                    ? ExcelFileManager.WorkbookLockedMessage
+                    : "Could not save the customer to Excel."
+                      + Environment.NewLine + Environment.NewLine + ex.Message;
+
+                MessageBox.Show(
+                    this,
+                    message,
                     "Customer — save",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
 
-            dgvCustomers.Rows.Add(
-                customer.FullName,
-                customer.IDNumber,
-                customer.Phone,
-                customer.Email);
-
-            MessageBox.Show(this, "Customer added to the list.", "Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ReloadCustomersFromExcel();
+            ShowSuccessMessage("Customer added successfully.");
+            ClearFields();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void btnClear_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(this, "Search will be connected to your data source later.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            HideSuccessMessage();
+            ClearFields();
         }
 
-        private void btnShowPets_Click(object sender, EventArgs e)
+        private void btnOpenSearch_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(this, "Pet list for the selected customer will open here later.", "Customer pets", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private static void AddIfInvalid(List<string> errors, string message)
-        {
-            if (message != null)
+            using (var searchForm = new CustomerSearchForm(this))
             {
-                errors.Add(message);
+                searchForm.ShowDialog(this);
             }
         }
 
-        private static string ValidateFullName(string value)
+        private void ShowSuccessMessage(string message)
         {
-            value = (value ?? string.Empty).Trim();
-            if (value.Length == 0)
+            lblSuccess.Text = message;
+            lblSuccess.Visible = true;
+        }
+
+        private void HideSuccessMessage()
+        {
+            lblSuccess.Text = string.Empty;
+            lblSuccess.Visible = false;
+        }
+
+        private void ClearFields()
+        {
+            _validation.ClearAll();
+            txtFullName.Clear();
+            txtCustomerId.Clear();
+            txtPhone.Clear();
+            txtEmail.Clear();
+        }
+
+        private sealed class CustomerHeaderIconPanel : Panel
+        {
+            public CustomerHeaderIconPanel()
             {
-                return "Full name is required.";
+                SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
+                BackColor = CardPanel.RegisterCardFill;
+                Size = new Size(44, 44);
             }
 
-            bool hasLetter = false;
-            foreach (char c in value)
+            protected override void OnPaint(PaintEventArgs e)
             {
-                if (c == ' ')
+                Graphics g = e.Graphics;
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+
+                var circle = new Rectangle(1, 1, Width - 3, Height - 3);
+                using (var fill = new SolidBrush(Color.FromArgb(227, 242, 253)))
+                using (var border = new Pen(Color.FromArgb(144, 202, 249), 1.5f))
                 {
-                    continue;
+                    g.FillEllipse(fill, circle);
+                    g.DrawEllipse(border, circle);
                 }
 
-                if (IsEnglishLetter(c))
+                using (var iconPen = new Pen(Color.FromArgb(25, 118, 210), 2f))
                 {
-                    hasLetter = true;
-                }
-                else
-                {
-                    return "Full name may only contain English letters and spaces.";
-                }
-            }
-
-            if (!hasLetter)
-            {
-                return "Full name must include at least one letter.";
-            }
-
-            return null;
-        }
-
-        private static bool IsEnglishLetter(char c)
-        {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-        }
-
-        private static string ValidateCustomerId(string value)
-        {
-            value = (value ?? string.Empty).Trim();
-            if (value.Length != 9)
-            {
-                return "Customer ID must be exactly 9 digits.";
-            }
-
-            foreach (char c in value)
-            {
-                if (!char.IsDigit(c))
-                {
-                    return "Customer ID must contain only digits (exactly 9).";
+                    int cx = Width / 2;
+                    int cy = Height / 2 - 2;
+                    g.DrawEllipse(iconPen, cx - 7, cy - 9, 14, 14);
+                    g.DrawArc(iconPen, cx - 10, cy + 3, 20, 14, 0, 180);
                 }
             }
-
-            return null;
-        }
-
-        private static string ValidatePhone(string value)
-        {
-            value = (value ?? string.Empty).Trim();
-            if (value.Length < 7 || value.Length > 15)
-            {
-                return "Phone must be between 7 and 15 digits.";
-            }
-
-            foreach (char c in value)
-            {
-                if (!char.IsDigit(c))
-                {
-                    return "Phone may only contain digits.";
-                }
-            }
-
-            return null;
-        }
-
-        private static string ValidateEmail(string email)
-        {
-            email = email ?? string.Empty;
-            if (!email.Contains("@"))
-            {
-                return "Email must contain an '@' character.";
-            }
-
-            return null;
         }
     }
 }

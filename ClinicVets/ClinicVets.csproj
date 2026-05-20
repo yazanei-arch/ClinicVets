@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -59,6 +60,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClinicDecorations.cs" />
+    <Compile Include="FormBackgroundStyle.cs" />
+    <Compile Include="ClinicHeaderBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ClinicUiTheme.cs" />
+    <Compile Include="FormTransitionHelper.cs" />
+    <Compile Include="GridContainerPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MenuNavCard.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ThemeHelper.cs" />
     <Compile Include="CardPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -66,16 +81,39 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Customer.cs" />
+    <Compile Include="CustomerSearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomerSearchForm.Designer.cs">
+      <DependentUpon>CustomerSearchForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomerManagementForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CustomerManagementForm.Designer.cs">
       <DependentUpon>CustomerManagementForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewCustomersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ViewCustomersForm.Designer.cs">
+      <DependentUpon>ViewCustomersForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Employee.cs" />
+    <Compile Include="EmailService.cs" />
+    <Compile Include="EmployeeCredentialStore.cs" />
+    <Compile Include="LoginAuthService.cs" />
     <Compile Include="ExcelFileManager.cs" />
     <Compile Include="ExcelHelper.cs" />
     <Compile Include="VetBackgroundHelper.cs" />
+    <Compile Include="ForgotPasswordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ForgotPasswordForm.Designer.cs">
+      <DependentUpon>ForgotPasswordForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordResetService.cs" />
+    <Compile Include="PasswordVisibilityHelper.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,21 +129,51 @@
     <Compile Include="RegisterEmployeeForm.Designer.cs">
       <DependentUpon>RegisterEmployeeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="RegistrationSuccessForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegistrationSuccessForm.Designer.cs">
+      <DependentUpon>RegistrationSuccessForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RoleNavigationHelper.cs" />
+    <Compile Include="SecretaryMenuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SecretaryMenuForm.Designer.cs">
+      <DependentUpon>SecretaryMenuForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="RoundedActionButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionManager.cs" />
     <Compile Include="UiPaths.cs" />
+    <Compile Include="ValidationFieldBinder.cs" />
+    <Compile Include="ValidationHelper.cs" />
     <Compile Include="Visit.cs" />
+    <EmbeddedResource Include="CustomerSearchForm.resx">
+      <DependentUpon>CustomerSearchForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CustomerManagementForm.resx">
       <DependentUpon>CustomerManagementForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewCustomersForm.resx">
+      <DependentUpon>ViewCustomersForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ForgotPasswordForm.resx">
+      <DependentUpon>ForgotPasswordForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RegisterEmployeeForm.resx">
       <DependentUpon>RegisterEmployeeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegistrationSuccessForm.resx">
+      <DependentUpon>RegistrationSuccessForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SecretaryMenuForm.resx">
+      <DependentUpon>SecretaryMenuForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -128,16 +196,85 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="images\vet_background.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="images\login_background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="images\register-bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="images\secretary_menu_bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="images\add_customer_bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="images\search_customer_bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="images\view_customers_bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="images\forgot_password_bg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <Target Name="CopyVetBackgroundImage" AfterTargets="AfterBuild">
+  <Target Name="CopyLoginBackgroundImage" AfterTargets="AfterBuild">
     <PropertyGroup>
-      <_VetBgSource>$(ProjectDir)images\vet_background.png</_VetBgSource>
-      <_VetBgDest>$(OutputPath)images\vet_background.png</_VetBgDest>
+      <_LoginBgSource>$(ProjectDir)images\login_background.png</_LoginBgSource>
+      <_LoginBgDest>$(OutputPath)images\login_background.png</_LoginBgDest>
     </PropertyGroup>
-    <Copy SourceFiles="$(_VetBgSource)" DestinationFiles="$(_VetBgDest)" SkipUnchangedFiles="false" Condition="Exists('$(_VetBgSource)')" />
+    <MakeDir Directories="$(OutputPath)images" Condition="Exists('$(_LoginBgSource)')" />
+    <Copy SourceFiles="$(_LoginBgSource)" DestinationFiles="$(_LoginBgDest)" SkipUnchangedFiles="true" Condition="Exists('$(_LoginBgSource)')" />
+  </Target>
+  <Target Name="CopyRegisterBackgroundImage" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <_RegisterBgSource>$(ProjectDir)images\register-bg.png</_RegisterBgSource>
+      <_RegisterBgDest>$(OutputPath)images\register-bg.png</_RegisterBgDest>
+    </PropertyGroup>
+    <MakeDir Directories="$(OutputPath)images" Condition="Exists('$(_RegisterBgSource)')" />
+    <Copy SourceFiles="$(_RegisterBgSource)" DestinationFiles="$(_RegisterBgDest)" SkipUnchangedFiles="true" Condition="Exists('$(_RegisterBgSource)')" />
+  </Target>
+  <Target Name="CopySecretaryMenuBackgroundImage" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <_SecretaryBgSource>$(ProjectDir)images\secretary_menu_bg.png</_SecretaryBgSource>
+      <_SecretaryBgDest>$(OutputPath)images\secretary_menu_bg.png</_SecretaryBgDest>
+    </PropertyGroup>
+    <MakeDir Directories="$(OutputPath)images" Condition="Exists('$(_SecretaryBgSource)')" />
+    <Copy SourceFiles="$(_SecretaryBgSource)" DestinationFiles="$(_SecretaryBgDest)" SkipUnchangedFiles="true" Condition="Exists('$(_SecretaryBgSource)')" />
+  </Target>
+  <Target Name="CopyAddCustomerBackgroundImage" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <_AddCustomerBgSource>$(ProjectDir)images\add_customer_bg.png</_AddCustomerBgSource>
+      <_AddCustomerBgDest>$(OutputPath)images\add_customer_bg.png</_AddCustomerBgDest>
+    </PropertyGroup>
+    <MakeDir Directories="$(OutputPath)images" Condition="Exists('$(_AddCustomerBgSource)')" />
+    <Copy SourceFiles="$(_AddCustomerBgSource)" DestinationFiles="$(_AddCustomerBgDest)" SkipUnchangedFiles="true" Condition="Exists('$(_AddCustomerBgSource)')" />
+  </Target>
+  <Target Name="CopySearchCustomerBackgroundImage" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <_SearchCustomerBgSource>$(ProjectDir)images\search_customer_bg.png</_SearchCustomerBgSource>
+      <_SearchCustomerBgDest>$(OutputPath)images\search_customer_bg.png</_SearchCustomerBgDest>
+    </PropertyGroup>
+    <MakeDir Directories="$(OutputPath)images" Condition="Exists('$(_SearchCustomerBgSource)')" />
+    <Copy SourceFiles="$(_SearchCustomerBgSource)" DestinationFiles="$(_SearchCustomerBgDest)" SkipUnchangedFiles="true" Condition="Exists('$(_SearchCustomerBgSource)')" />
+  </Target>
+  <Target Name="CopyViewCustomersBackgroundImage" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <_ViewCustomersBgSource>$(ProjectDir)images\view_customers_bg.png</_ViewCustomersBgSource>
+      <_ViewCustomersBgDest>$(OutputPath)images\view_customers_bg.png</_ViewCustomersBgDest>
+    </PropertyGroup>
+    <MakeDir Directories="$(OutputPath)images" Condition="Exists('$(_ViewCustomersBgSource)')" />
+    <Copy SourceFiles="$(_ViewCustomersBgSource)" DestinationFiles="$(_ViewCustomersBgDest)" SkipUnchangedFiles="true" Condition="Exists('$(_ViewCustomersBgSource)')" />
+  </Target>
+  <Target Name="CopyForgotPasswordBackgroundImage" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <_ForgotPasswordBgSource>$(ProjectDir)images\forgot_password_bg.png</_ForgotPasswordBgSource>
+      <_ForgotPasswordBgDest>$(OutputPath)images\forgot_password_bg.png</_ForgotPasswordBgDest>
+    </PropertyGroup>
+    <MakeDir Directories="$(OutputPath)images" Condition="Exists('$(_ForgotPasswordBgSource)')" />
+    <Copy SourceFiles="$(_ForgotPasswordBgSource)" DestinationFiles="$(_ForgotPasswordBgDest)" SkipUnchangedFiles="true" Condition="Exists('$(_ForgotPasswordBgSource)')" />
   </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

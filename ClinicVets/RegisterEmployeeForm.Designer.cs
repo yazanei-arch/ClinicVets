@@ -21,7 +21,6 @@ namespace ClinicVets
             this.pnlCard = new ClinicVets.CardPanel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblSubtitle = new System.Windows.Forms.Label();
-            this.pnlAccentLine = new System.Windows.Forms.Panel();
             this.lblUsername = new System.Windows.Forms.Label();
             this.txtUsername = new System.Windows.Forms.TextBox();
             this.lblPassword = new System.Windows.Forms.Label();
@@ -41,11 +40,9 @@ namespace ClinicVets
             // 
             // pnlCard
             // 
-            this.pnlCard.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pnlCard.BackColor = System.Drawing.Color.Transparent;
+            this.pnlCard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
             this.pnlCard.Controls.Add(this.lblTitle);
             this.pnlCard.Controls.Add(this.lblSubtitle);
-            this.pnlCard.Controls.Add(this.pnlAccentLine);
             this.pnlCard.Controls.Add(this.lblUsername);
             this.pnlCard.Controls.Add(this.txtUsername);
             this.pnlCard.Controls.Add(this.lblPassword);
@@ -60,20 +57,21 @@ namespace ClinicVets
             this.pnlCard.Controls.Add(this.cmbRole);
             this.pnlCard.Controls.Add(this.btnRegister);
             this.pnlCard.Controls.Add(this.btnBack);
-            this.pnlCard.Location = new System.Drawing.Point(230, 14);
+            this.pnlCard.Location = new System.Drawing.Point(630, 55);
             this.pnlCard.Name = "pnlCard";
-            this.pnlCard.Padding = new System.Windows.Forms.Padding(44, 32, 44, 36);
-            this.pnlCard.Size = new System.Drawing.Size(540, 652);
+            this.pnlCard.Padding = new System.Windows.Forms.Padding(0);
+            this.pnlCard.Size = new System.Drawing.Size(560, 760);
             this.pnlCard.TabIndex = 0;
             // 
             // lblTitle
             // 
             this.lblTitle.AutoSize = false;
+            this.lblTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(101)))), ((int)(((byte)(192)))));
-            this.lblTitle.Location = new System.Drawing.Point(44, 32);
+            this.lblTitle.Location = new System.Drawing.Point(45, 35);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(452, 38);
+            this.lblTitle.Size = new System.Drawing.Size(470, 45);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Register New Employee";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -81,32 +79,25 @@ namespace ClinicVets
             // lblSubtitle
             // 
             this.lblSubtitle.AutoSize = false;
+            this.lblSubtitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
             this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(78)))), ((int)(((byte)(96)))));
-            this.lblSubtitle.Location = new System.Drawing.Point(44, 74);
+            this.lblSubtitle.Location = new System.Drawing.Point(45, 85);
             this.lblSubtitle.Name = "lblSubtitle";
-            this.lblSubtitle.Size = new System.Drawing.Size(452, 40);
+            this.lblSubtitle.Size = new System.Drawing.Size(470, 35);
             this.lblSubtitle.TabIndex = 1;
             this.lblSubtitle.Text = "Create your staff profile. Fields are validated when you click Register.";
-            this.lblSubtitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // pnlAccentLine
-            // 
-            this.pnlAccentLine.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.pnlAccentLine.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.pnlAccentLine.Location = new System.Drawing.Point(234, 122);
-            this.pnlAccentLine.Name = "pnlAccentLine";
-            this.pnlAccentLine.Size = new System.Drawing.Size(72, 3);
-            this.pnlAccentLine.TabIndex = 2;
+            this.lblSubtitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblUsername
             // 
-            this.lblUsername.AutoSize = true;
-            this.lblUsername.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
-            this.lblUsername.Location = new System.Drawing.Point(44, 140);
+            this.lblUsername.AutoSize = false;
+            this.lblUsername.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblUsername.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblUsername.Location = new System.Drawing.Point(45, 135);
             this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(89, 23);
+            this.lblUsername.Size = new System.Drawing.Size(470, 22);
             this.lblUsername.TabIndex = 3;
             this.lblUsername.Text = "Username";
             // 
@@ -114,19 +105,20 @@ namespace ClinicVets
             // 
             this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtUsername.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtUsername.Location = new System.Drawing.Point(44, 164);
+            this.txtUsername.Location = new System.Drawing.Point(45, 160);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(452, 30);
+            this.txtUsername.Size = new System.Drawing.Size(470, 32);
             this.txtUsername.TabIndex = 4;
             // 
             // lblPassword
             // 
-            this.lblPassword.AutoSize = true;
-            this.lblPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
-            this.lblPassword.Location = new System.Drawing.Point(44, 206);
+            this.lblPassword.AutoSize = false;
+            this.lblPassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblPassword.Location = new System.Drawing.Point(45, 215);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(84, 23);
+            this.lblPassword.Size = new System.Drawing.Size(470, 22);
             this.lblPassword.TabIndex = 5;
             this.lblPassword.Text = "Password";
             // 
@@ -134,20 +126,21 @@ namespace ClinicVets
             // 
             this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPassword.Location = new System.Drawing.Point(44, 230);
+            this.txtPassword.Location = new System.Drawing.Point(45, 240);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(452, 30);
+            this.txtPassword.Size = new System.Drawing.Size(470, 32);
             this.txtPassword.TabIndex = 6;
             this.txtPassword.UseSystemPasswordChar = true;
             // 
             // lblEmployeeNumber
             // 
-            this.lblEmployeeNumber.AutoSize = true;
-            this.lblEmployeeNumber.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEmployeeNumber.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
-            this.lblEmployeeNumber.Location = new System.Drawing.Point(44, 272);
+            this.lblEmployeeNumber.AutoSize = false;
+            this.lblEmployeeNumber.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblEmployeeNumber.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEmployeeNumber.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblEmployeeNumber.Location = new System.Drawing.Point(45, 295);
             this.lblEmployeeNumber.Name = "lblEmployeeNumber";
-            this.lblEmployeeNumber.Size = new System.Drawing.Size(152, 23);
+            this.lblEmployeeNumber.Size = new System.Drawing.Size(470, 22);
             this.lblEmployeeNumber.TabIndex = 7;
             this.lblEmployeeNumber.Text = "Employee Number";
             // 
@@ -155,19 +148,20 @@ namespace ClinicVets
             // 
             this.txtEmployeeNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtEmployeeNumber.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEmployeeNumber.Location = new System.Drawing.Point(44, 296);
+            this.txtEmployeeNumber.Location = new System.Drawing.Point(45, 320);
             this.txtEmployeeNumber.Name = "txtEmployeeNumber";
-            this.txtEmployeeNumber.Size = new System.Drawing.Size(452, 30);
+            this.txtEmployeeNumber.Size = new System.Drawing.Size(470, 32);
             this.txtEmployeeNumber.TabIndex = 8;
             // 
             // lblEmail
             // 
-            this.lblEmail.AutoSize = true;
-            this.lblEmail.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
-            this.lblEmail.Location = new System.Drawing.Point(44, 338);
+            this.lblEmail.AutoSize = false;
+            this.lblEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblEmail.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblEmail.Location = new System.Drawing.Point(45, 375);
             this.lblEmail.Name = "lblEmail";
-            this.lblEmail.Size = new System.Drawing.Size(50, 23);
+            this.lblEmail.Size = new System.Drawing.Size(470, 22);
             this.lblEmail.TabIndex = 9;
             this.lblEmail.Text = "Email";
             // 
@@ -175,19 +169,20 @@ namespace ClinicVets
             // 
             this.txtEmail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtEmail.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEmail.Location = new System.Drawing.Point(44, 362);
+            this.txtEmail.Location = new System.Drawing.Point(45, 400);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(452, 30);
+            this.txtEmail.Size = new System.Drawing.Size(470, 32);
             this.txtEmail.TabIndex = 10;
             // 
             // lblId
             // 
-            this.lblId.AutoSize = true;
-            this.lblId.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblId.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
-            this.lblId.Location = new System.Drawing.Point(44, 404);
+            this.lblId.AutoSize = false;
+            this.lblId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblId.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblId.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblId.Location = new System.Drawing.Point(45, 455);
             this.lblId.Name = "lblId";
-            this.lblId.Size = new System.Drawing.Size(28, 23);
+            this.lblId.Size = new System.Drawing.Size(470, 22);
             this.lblId.TabIndex = 11;
             this.lblId.Text = "ID";
             // 
@@ -195,19 +190,20 @@ namespace ClinicVets
             // 
             this.txtId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtId.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtId.Location = new System.Drawing.Point(44, 428);
+            this.txtId.Location = new System.Drawing.Point(45, 480);
             this.txtId.Name = "txtId";
-            this.txtId.Size = new System.Drawing.Size(452, 30);
+            this.txtId.Size = new System.Drawing.Size(470, 32);
             this.txtId.TabIndex = 12;
             // 
             // lblRole
             // 
-            this.lblRole.AutoSize = true;
-            this.lblRole.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRole.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
-            this.lblRole.Location = new System.Drawing.Point(44, 470);
+            this.lblRole.AutoSize = false;
+            this.lblRole.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblRole.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRole.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblRole.Location = new System.Drawing.Point(45, 535);
             this.lblRole.Name = "lblRole";
-            this.lblRole.Size = new System.Drawing.Size(45, 23);
+            this.lblRole.Size = new System.Drawing.Size(470, 22);
             this.lblRole.TabIndex = 13;
             this.lblRole.Text = "Role";
             // 
@@ -220,24 +216,25 @@ namespace ClinicVets
             this.cmbRole.Items.AddRange(new object[] {
             "Vet",
             "Secretary"});
-            this.cmbRole.Location = new System.Drawing.Point(44, 494);
+            this.cmbRole.Location = new System.Drawing.Point(45, 560);
             this.cmbRole.Name = "cmbRole";
-            this.cmbRole.Size = new System.Drawing.Size(452, 31);
+            this.cmbRole.Size = new System.Drawing.Size(470, 32);
             this.cmbRole.TabIndex = 14;
             this.cmbRole.SelectedIndex = 0;
             // 
             // btnRegister
             // 
-            this.btnRegister.CornerRadius = 12;
+            this.btnRegister.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.btnRegister.CornerRadius = 8;
             this.btnRegister.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegister.FlatAppearance.BorderSize = 0;
             this.btnRegister.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRegister.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegister.ForeColor = System.Drawing.Color.White;
             this.btnRegister.IsOutlineStyle = false;
-            this.btnRegister.Location = new System.Drawing.Point(44, 534);
+            this.btnRegister.Location = new System.Drawing.Point(45, 625);
             this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(452, 46);
+            this.btnRegister.Size = new System.Drawing.Size(470, 48);
             this.btnRegister.TabIndex = 15;
             this.btnRegister.Text = "Register";
             this.btnRegister.UseVisualStyleBackColor = false;
@@ -245,7 +242,8 @@ namespace ClinicVets
             // 
             // btnBack
             // 
-            this.btnBack.CornerRadius = 12;
+            this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.btnBack.CornerRadius = 8;
             this.btnBack.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBack.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnBack.FlatAppearance.BorderSize = 0;
@@ -253,9 +251,9 @@ namespace ClinicVets
             this.btnBack.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.btnBack.IsOutlineStyle = true;
-            this.btnBack.Location = new System.Drawing.Point(44, 588);
+            this.btnBack.Location = new System.Drawing.Point(45, 690);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(452, 46);
+            this.btnBack.Size = new System.Drawing.Size(470, 48);
             this.btnBack.TabIndex = 16;
             this.btnBack.Text = "Back";
             this.btnBack.UseVisualStyleBackColor = false;
@@ -266,7 +264,7 @@ namespace ClinicVets
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnBack;
-            this.ClientSize = new System.Drawing.Size(1000, 680);
+            this.ClientSize = new System.Drawing.Size(1240, 880);
             this.Controls.Add(this.pnlCard);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -286,7 +284,6 @@ namespace ClinicVets
         private CardPanel pnlCard;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblSubtitle;
-        private System.Windows.Forms.Panel pnlAccentLine;
         private System.Windows.Forms.Label lblUsername;
         private System.Windows.Forms.TextBox txtUsername;
         private System.Windows.Forms.Label lblPassword;

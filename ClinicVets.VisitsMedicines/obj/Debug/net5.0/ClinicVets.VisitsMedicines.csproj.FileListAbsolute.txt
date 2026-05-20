@@ -4,7 +4,6 @@ C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\bin\Debug\net5
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\bin\Debug\net5.0\ClinicVets.VisitsMedicines.runtimeconfig.dev.json
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\bin\Debug\net5.0\ClinicVets.VisitsMedicines.dll
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\bin\Debug\net5.0\ClinicVets.VisitsMedicines.pdb
-C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.csproj.AssemblyReference.cache
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.AssemblyInfoInputs.cache
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.AssemblyInfo.cs
@@ -15,3 +14,19 @@ C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.pdb
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.genruntimeconfig.cache
 C:\Users\abdal\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ref\ClinicVets.VisitsMedicines.dll
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\bin\Debug\net5.0\ClinicVets.VisitsMedicines.exe
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\bin\Debug\net5.0\ClinicVets.VisitsMedicines.deps.json
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\bin\Debug\net5.0\ClinicVets.VisitsMedicines.runtimeconfig.json
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\bin\Debug\net5.0\ClinicVets.VisitsMedicines.runtimeconfig.dev.json
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\bin\Debug\net5.0\ClinicVets.VisitsMedicines.dll
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\bin\Debug\net5.0\ClinicVets.VisitsMedicines.pdb
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.AssemblyInfoInputs.cache
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.AssemblyInfo.cs
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.csproj.CoreCompileInputs.cache
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.sourcelink.json
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.dll
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\refint\ClinicVets.VisitsMedicines.dll
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.pdb
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ClinicVets.VisitsMedicines.genruntimeconfig.cache
+c:\Users\asus\source\repos\ClinicVets\ClinicVets.VisitsMedicines\obj\Debug\net5.0\ref\ClinicVets.VisitsMedicines.dll

@@ -9,29 +9,182 @@ namespace ClinicVets
 {
     internal static class VetBackgroundHelper
     {
+        private static Image _cachedHeroImage;
+        private static Image _cachedLoginBackground;
+        private static Image _cachedRegisterBackground;
+
         internal static void ApplyVetBackground(Form form)
+        {
+            ApplyPremiumBackground(form);
+        }
+
+        internal static void ApplySoftFallbackBackground(Form form)
+        {
+            ApplyPremiumBackground(form);
+        }
+
+        internal static void ApplyPremiumBackground(Form form)
         {
             if (form == null)
             {
                 return;
             }
 
-            string path = FindVetBackgroundImagePath();
-            if (path == null)
+            ClearBackgroundImage(form);
+            form.BackColor = ClinicUiTheme.BgTop;
+            form.Invalidate(true);
+        }
+
+        internal static void ClearBackgroundImage(Form form)
+        {
+            if (form == null)
             {
                 return;
             }
 
             Image previous = form.BackgroundImage;
-            form.BackgroundImage = Image.FromFile(path);
+            form.BackgroundImage = null;
+            form.BackgroundImageLayout = ImageLayout.None;
             previous?.Dispose();
-            form.BackgroundImageLayout = ImageLayout.Stretch;
+        }
+
+        internal static void ApplyLoginBackground(Form form)
+        {
+            if (form == null)
+            {
+                return;
+            }
+
+            ClearBackgroundImage(form);
+            Image source = GetLoginBackgroundImage();
+            if (source == null)
+            {
+                form.BackColor = Color.FromArgb(232, 244, 252);
+                form.Invalidate(true);
+                return;
+            }
+
+            form.BackgroundImageLayout = ImageLayout.Zoom;
+            form.BackgroundImage = (Image)source.Clone();
+            form.BackColor = Color.FromArgb(232, 244, 252);
             form.Invalidate(true);
+        }
+
+        internal static void ApplyRegisterBackground(Form form)
+        {
+            if (form == null)
+            {
+                return;
+            }
+
+            ClearBackgroundImage(form);
+            Image source = GetRegisterBackgroundImage();
+            if (source == null)
+            {
+                form.BackColor = Color.FromArgb(232, 244, 252);
+                form.Invalidate(true);
+                return;
+            }
+
+            form.BackgroundImageLayout = ImageLayout.Stretch;
+            form.BackgroundImage = (Image)source.Clone();
+            form.BackColor = Color.FromArgb(232, 244, 252);
+            form.Invalidate(true);
+        }
+
+        internal static Image GetRegisterBackgroundImage()
+        {
+            if (_cachedRegisterBackground != null)
+            {
+                return _cachedRegisterBackground;
+            }
+
+            string path = FindRegisterBackgroundImagePath();
+            if (path == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                _cachedRegisterBackground = Image.FromFile(path);
+            }
+            catch
+            {
+                _cachedRegisterBackground = null;
+            }
+
+            return _cachedRegisterBackground;
+        }
+
+        internal static Image GetLoginBackgroundImage()
+        {
+            if (_cachedLoginBackground != null)
+            {
+                return _cachedLoginBackground;
+            }
+
+            string path = FindLoginBackgroundImagePath();
+            if (path == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                _cachedLoginBackground = Image.FromFile(path);
+            }
+            catch
+            {
+                _cachedLoginBackground = null;
+            }
+
+            return _cachedLoginBackground;
+        }
+
+        internal static Image GetLoginHeroImage()
+        {
+            if (_cachedHeroImage != null)
+            {
+                return _cachedHeroImage;
+            }
+
+            string path = FindVetBackgroundImagePath();
+            if (path == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                _cachedHeroImage = Image.FromFile(path);
+            }
+            catch
+            {
+                _cachedHeroImage = null;
+            }
+
+            return _cachedHeroImage;
+        }
+
+        private static string FindRegisterBackgroundImagePath()
+        {
+            return FindImagePath("register-bg.png");
+        }
+
+        private static string FindLoginBackgroundImagePath()
+        {
+            return FindImagePath("login_background.png");
         }
 
         private static string FindVetBackgroundImagePath()
         {
-            string relative = Path.Combine("images", "vet_background.png");
+            return FindImagePath("vet_background.png");
+        }
+
+        private static string FindImagePath(string fileName)
+        {
+            string relative = Path.Combine("images", fileName);
             var tried = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (string root in GetBackgroundImageSearchRoots())
