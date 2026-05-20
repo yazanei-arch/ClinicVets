@@ -24,3 +24,29 @@ C:\Users\royal\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Numerics
 C:\Users\royal\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\royal\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Security.Cryptography.Xml.xml
 C:\Users\royal\source\repos\ClinicVets-main\ClinicVets\obj\Debug\ClinicVets.csproj.CopyComplete
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\ClinicVets.exe.config
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\ClinicVets.exe
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\ClinicVets.pdb
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\EPPlus.dll
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\EPPlus.Interfaces.dll
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Buffers.dll
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.ComponentModel.Annotations.dll
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Memory.dll
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Security.Cryptography.Xml.dll
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\EPPlus.xml
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Buffers.xml
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Memory.xml
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\bin\Debug\System.Security.Cryptography.Xml.xml
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\obj\Debug\ClinicVets.csproj.AssemblyReference.cache
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\obj\Debug\ClinicVets.Properties.Resources.resources
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\obj\Debug\ClinicVets.csproj.GenerateResource.cache
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\obj\Debug\ClinicVets.csproj.CoreCompileInputs.cache
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\obj\Debug\ClinicVets.csproj.Up2Date
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\obj\Debug\ClinicVets.exe
+C:\Users\ENTER\OneDrive - ac.sce.ac.il\מסמכים\145\source\repos\ClinicVets-main\ClinicVets\obj\Debug\ClinicVets.pdb

@@ -93,5 +93,10 @@ namespace ClinicVets.UI
             form.ShowDialog();
             this.Hide();
         }
+
+        private void dgvPets_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
