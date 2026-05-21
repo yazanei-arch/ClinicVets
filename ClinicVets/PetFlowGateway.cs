@@ -8,6 +8,7 @@ namespace ClinicVets
     {
         public static Action<IWin32Window, string> OpenViewPets { get; set; }
         public static Action<IWin32Window, string> OpenPetManagementForOwner { get; set; }
+        public static Action<IWin32Window> OpenVetPetManagement { get; set; }
         public static Action<IWin32Window, Customer> PromptAddPetAfterCustomer { get; set; }
 
         public static string GetOwnerKey(Customer customer)
@@ -54,6 +55,17 @@ namespace ClinicVets
             }
 
             NavigationHelper.OpenSecretaryPetManagement(owner, ownerKey);
+        }
+
+        public static void TryOpenVetPetManagement(IWin32Window owner)
+        {
+            if (OpenVetPetManagement != null)
+            {
+                OpenVetPetManagement(owner);
+                return;
+            }
+
+            NavigationHelper.OpenVetPetManagement(owner);
         }
 
         public static void TryPromptAddPetAfterCustomer(IWin32Window owner, Customer customer)

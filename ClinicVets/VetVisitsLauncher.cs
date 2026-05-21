@@ -1,108 +1,73 @@
 using System;
-using System.Diagnostics;
-using System.IO;
 using System.Windows.Forms;
+using ClinicVets.VisitsMedicines;
 
 namespace ClinicVets
 {
-    /// <summary>Launches ClinicVets.VisitsMedicines as a separate process.</summary>
+    /// <summary>Opens visit and medicine screens inside the running ClinicVets application.</summary>
     public static class VetVisitsLauncher
     {
-        public const string BuildFirstMessage = "Please build ClinicVets.VisitsMedicines first.";
-
         public static bool TryLaunchVisitsApplication(IWin32Window owner, string petId = null)
         {
-            string exePath = FindVisitsMedicinesExecutable();
-            if (string.IsNullOrEmpty(exePath))
+            if (!RolePermissions.CanAccessVisits())
             {
-                MessageBox.Show(
-                    owner,
-                    BuildFirstMessage,
-                    "ClinicVets",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
                 return false;
             }
 
             try
             {
-                string arguments = string.IsNullOrWhiteSpace(petId) ? string.Empty : petId.Trim();
-                var startInfo = new ProcessStartInfo
-                {
-                    FileName = exePath,
-                    Arguments = arguments,
-                    UseShellExecute = false,
-                    WorkingDirectory = Path.GetDirectoryName(exePath) ?? string.Empty
-                };
-                Process.Start(startInfo);
+                VisitManagementForm form = string.IsNullOrWhiteSpace(petId)
+                    ? new VisitManagementForm()
+                    : new VisitManagementForm(petId.Trim());
+                ShowForm(owner, form);
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    owner,
-                    BuildFirstMessage + Environment.NewLine + Environment.NewLine + ex.Message,
-                    "ClinicVets",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                ShowOpenError(owner, ex, "Visit Management could not open.");
                 return false;
             }
         }
 
-        internal static string FindVisitsMedicinesExecutable()
+        public static bool TryLaunchMedicinesApplication(IWin32Window owner)
         {
-            const string exeName = "ClinicVets.VisitsMedicines.exe";
-            var tried = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (string root in GetSearchRoots())
+            if (!RolePermissions.CanAccessMedicines())
             {
-                if (string.IsNullOrWhiteSpace(root))
-                {
-                    continue;
-                }
-
-                string[] relativeFolders =
-                {
-                    Path.Combine("ClinicVets.VisitsMedicines", "bin", "Debug", "net5.0-windows", exeName),
-                    Path.Combine("ClinicVets.VisitsMedicines", "bin", "Debug", "net472", exeName),
-                    Path.Combine("ClinicVets.VisitsMedicines", "bin", "Release", "net5.0-windows", exeName),
-                    Path.Combine("ClinicVets.VisitsMedicines", "bin", "Release", "net472", exeName)
-                };
-
-                foreach (string relative in relativeFolders)
-                {
-                    string candidate = Path.GetFullPath(Path.Combine(root, relative));
-                    if (tried.Add(candidate) && File.Exists(candidate))
-                    {
-                        return candidate;
-                    }
-                }
+                return false;
             }
 
-            return null;
+            try
+            {
+                var form = new MedicinesForm();
+                ShowForm(owner, form);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ShowOpenError(owner, ex, "Medicine Inventory could not open.");
+                return false;
+            }
         }
 
-        private static System.Collections.Generic.IEnumerable<string> GetSearchRoots()
+        private static void ShowForm(IWin32Window owner, Form form)
         {
-            string baseDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(
-                Path.DirectorySeparatorChar,
-                Path.AltDirectorySeparatorChar);
-
-            yield return baseDir;
-            yield return Path.GetFullPath(Path.Combine(baseDir, ".."));
-            yield return Path.GetFullPath(Path.Combine(baseDir, "..", ".."));
-            yield return Path.GetFullPath(Path.Combine(baseDir, "..", "..", ".."));
-            yield return Environment.CurrentDirectory;
-
-            string location = typeof(VetVisitsLauncher).Assembly.Location;
-            if (!string.IsNullOrEmpty(location))
+            if (owner is Form ownerForm)
             {
-                string dir = Path.GetDirectoryName(location);
-                if (!string.IsNullOrEmpty(dir))
-                {
-                    yield return dir;
-                }
+                form.Owner = ownerForm;
             }
+
+            form.StartPosition = FormStartPosition.CenterScreen;
+            form.Show();
+        }
+
+        private static void ShowOpenError(IWin32Window owner, Exception ex, string title)
+        {
+            MessageBox.Show(
+                owner,
+                title + Environment.NewLine + Environment.NewLine + (ex?.Message ?? "Unknown error."),
+                "ClinicVets",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using ClosedXML.Excel;
-
+using ClinicVets;
 
 namespace ClinicVets.UI
 {
@@ -20,26 +20,169 @@ namespace ClinicVets.UI
         public AnimalTypesForm()
         {
             InitializeComponent();
-            LoadTypesFromExcel();
+            StartPosition = FormStartPosition.CenterScreen;
+            WindowState = FormWindowState.Normal;
+            Shown += AnimalTypesForm_Shown;
         }
 
-        private void LoadTypesFromExcel()
+        private void AnimalTypesForm_Shown(object sender, EventArgs e)
         {
-            lstTypes.Items.Clear();
+            StartPosition = FormStartPosition.CenterScreen;
+            CenterToScreen();
+        }
 
-            if (!File.Exists(filePath))
+        private void AnimalTypesForm_Load(object sender, EventArgs e)
+        {
+            ClinicFormLayout.ApplyStandard(this);
+            StartPosition = FormStartPosition.CenterScreen;
+            WindowState = FormWindowState.Normal;
+            PetBackgroundHelper.ApplyToPictureBox(pictureBox1);
+            if (pictureBox1 != null)
             {
-                MessageBox.Show("Excel file not found");
+                pictureBox1.SendToBack();
+            }
+
+            ApplyAnimalTypesContentLayout();
+            SafeLoadTypesFromExcel();
+            Resize += AnimalTypesForm_Resize;
+        }
+
+        private void AnimalTypesForm_Resize(object sender, EventArgs e)
+        {
+            ApplyAnimalTypesContentLayout();
+        }
+
+        private void ApplyAnimalTypesContentLayout()
+        {
+            const int listWidth = 548;
+            const int fieldWidth = 247;
+            const int fieldHeight = 36;
+            const int fieldLabelWidth = 140;
+            const int fieldLabelHeight = 41;
+            const int actionButtonWidth = 180;
+            const int actionButtonHeight = 56;
+            const int actionButtonGap = 16;
+            const int contentShiftLeft = 48;
+            const int bottomMargin = 52;
+
+            int centerX = (ClientSize.Width / 2) - contentShiftLeft;
+
+            const int logoClearanceBottom = 168;
+            const int titleTop = logoClearanceBottom;
+            const int gapTitleToSubtitle = 10;
+            const int gapSubtitleToInput = 26;
+            const int gapInputToActions = 14;
+            const int gapActionsToList = 22;
+
+            const int captionPadH = 10;
+            const int captionPadV = 4;
+
+            LayoutFittedCaptionLabel(label1, centerX, titleTop, captionPadH, captionPadV);
+            int subtitleTop = label1.Bottom + gapTitleToSubtitle;
+            LayoutFittedCaptionLabel(label2, centerX, subtitleTop, captionPadH, captionPadV);
+
+            int inputTop = label2.Bottom + gapSubtitleToInput;
+            int inputRowHeight = Math.Max(fieldHeight, fieldLabelHeight);
+            int actionsTop = inputTop + inputRowHeight + gapInputToActions;
+            int listTop = actionsTop + actionButtonHeight + gapActionsToList;
+
+            int inputRowWidth = fieldWidth + 8 + fieldLabelWidth;
+            int inputLeft = centerX - (inputRowWidth / 2);
+            int fieldTop = inputTop + ((inputRowHeight - fieldHeight) / 2);
+            int fieldLabelTop = inputTop + ((inputRowHeight - fieldLabelHeight) / 2);
+
+            txtType.Size = new Size(fieldWidth, fieldHeight);
+            txtType.Location = new Point(inputLeft, fieldTop);
+
+            button1.Size = new Size(fieldLabelWidth, fieldLabelHeight);
+            button1.Location = new Point(inputLeft + fieldWidth + 8, fieldLabelTop);
+
+            int actionsRowWidth = (actionButtonWidth * 3) + (actionButtonGap * 2);
+            int actionsLeft = centerX - (actionsRowWidth / 2);
+            btnDelete.Size = new Size(actionButtonWidth, actionButtonHeight);
+            btnDelete.Location = new Point(actionsLeft, actionsTop);
+            btnUpdate.Size = new Size(actionButtonWidth, actionButtonHeight);
+            btnUpdate.Location = new Point(actionsLeft + actionButtonWidth + actionButtonGap, actionsTop);
+            btnAdd.Size = new Size(actionButtonWidth, actionButtonHeight);
+            btnAdd.Location = new Point(actionsLeft + (actionButtonWidth + actionButtonGap) * 2, actionsTop);
+
+            int listHeight = Math.Min(228, ClientSize.Height - listTop - bottomMargin);
+            listHeight = Math.Max(180, listHeight);
+
+            lstTypes.Size = new Size(listWidth, listHeight);
+            lstTypes.Location = new Point(centerX - (listWidth / 2), listTop);
+
+            PlaceBackButtonTopLeft();
+            lstTypes.BringToFront();
+            txtType.BringToFront();
+            button1.BringToFront();
+            btnAdd.BringToFront();
+            btnUpdate.BringToFront();
+            btnDelete.BringToFront();
+            label1.BringToFront();
+            label2.BringToFront();
+        }
+
+        private void PlaceBackButtonTopLeft()
+        {
+            const int margin = 16;
+            const int top = 12;
+            int x = RightToLeftLayout && RightToLeft == RightToLeft.Yes
+                ? ClientSize.Width - btnBack.Width - margin
+                : margin;
+            btnBack.Location = new Point(x, top);
+            btnBack.BringToFront();
+        }
+
+        private static void LayoutFittedCaptionLabel(Label label, int centerX, int top, int padH, int padV)
+        {
+            if (label == null)
+            {
                 return;
             }
 
-            using (var workbook = new XLWorkbook(filePath))
+            Size textSize = TextRenderer.MeasureText(
+                label.Text,
+                label.Font,
+                new Size(int.MaxValue, int.MaxValue),
+                TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+
+            int width = textSize.Width + (padH * 2);
+            int height = textSize.Height + (padV * 2);
+            label.AutoSize = false;
+            label.TextAlign = ContentAlignment.MiddleCenter;
+            label.SetBounds(centerX - (width / 2), top, width, height);
+        }
+
+        private void SafeLoadTypesFromExcel()
+        {
+            lstTypes.Items.Clear();
+
+            if (!PetExcelSupport.TryEnsureWorkbookReady(this, out string workbookPath))
             {
-                if (!workbook.Worksheets.Contains("AnimalTypes"))
+                return;
+            }
+
+            LoadTypesFromExcel(workbookPath);
+        }
+
+        private void LoadTypesFromExcel(string workbookPath)
+        {
+            if (!File.Exists(workbookPath))
+            {
+                MessageBox.Show("Excel file not found", "ClinicVets", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                using (var workbook = new XLWorkbook(workbookPath))
                 {
-                    MessageBox.Show("AnimalTypes sheet not found");
-                    return;
-                }
+                    if (!workbook.Worksheets.Contains("AnimalTypes"))
+                    {
+                        MessageBox.Show("AnimalTypes sheet not found", "ClinicVets", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
 
                 var sheet = workbook.Worksheet("AnimalTypes");
                 var range = sheet.RangeUsed();
@@ -57,6 +200,15 @@ namespace ClinicVets.UI
                     if (!string.IsNullOrWhiteSpace(type))
                         lstTypes.Items.Add(type);
                 }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Could not read animal types from Excel." + Environment.NewLine + Environment.NewLine + ex.Message,
+                    "ClinicVets",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
             }
         }
 
@@ -131,7 +283,7 @@ namespace ClinicVets.UI
                 UpdatePetsAnimalTypeInExcel(oldType, newType);
 
                 txtType.Clear();
-                LoadTypesFromExcel();
+                SafeLoadTypesFromExcel();
 
                 MessageBox.Show("Animal type updated successfully.");
             }
@@ -163,7 +315,7 @@ namespace ClinicVets.UI
             }
 
             txtType.Clear();
-            LoadTypesFromExcel();
+            SafeLoadTypesFromExcel();
 
             MessageBox.Show("Animal type deleted");
         }
@@ -176,9 +328,7 @@ namespace ClinicVets.UI
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            PetManagementForm form = new PetManagementForm();
-            form.ShowDialog();
-            this.Hide();
+            Close();
         }
 
         private void btnDelete_Click_2(object sender, EventArgs e)
@@ -217,7 +367,7 @@ namespace ClinicVets.UI
             }
 
             txtType.Clear();
-            LoadTypesFromExcel();
+            SafeLoadTypesFromExcel();
 
             MessageBox.Show("Animal type added");
         }

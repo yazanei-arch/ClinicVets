@@ -16,6 +16,7 @@ namespace ClinicVets
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            NavigationHelper.RegisterFlows();
             Application.Run(new Form1());
         }
     }

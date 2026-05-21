@@ -20,6 +20,7 @@ namespace ClinicVets
 
         private const int ContentWidth = 580;
         private const int ContentLeft = 70;
+        private const int ContentShiftRight = 118;
 
         private readonly ExcelHelper _excelHelper = new ExcelHelper();
         private readonly List<Customer> _allCustomers = new List<Customer>();
@@ -39,8 +40,34 @@ namespace ClinicVets
             }
         }
 
+        private bool EnsureSecretaryAccess()
+        {
+            Employee user = SessionManager.CurrentUser;
+            if (user != null &&
+                user.Role != null &&
+                user.Role.Equals("Secretary", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            MessageBox.Show(
+                this,
+                "Customer search is available to Secretary users only.",
+                "Access denied",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            Close();
+            return false;
+        }
+
         private void CustomerSearchForm_Load(object sender, EventArgs e)
         {
+            if (!EnsureSecretaryAccess())
+            {
+                return;
+            }
+
+            ClinicFormLayout.ApplyStandard(this);
             WinFormsUi.SetDoubleBuffered(this);
             ApplySearchCustomerBackground();
 
@@ -84,6 +111,17 @@ namespace ClinicVets
             cmbSearchType.SelectedIndexChanged += SearchInput_Changed;
             txtSearch.TextChanged += SearchInput_Changed;
             txtSearch.Focus();
+            Resize += CustomerSearchForm_Resize;
+        }
+
+        private void CustomerSearchForm_Resize(object sender, EventArgs e)
+        {
+            if (ClientSize.Width < 200 || pnlContent == null)
+            {
+                return;
+            }
+
+            LayoutSearchForm();
         }
 
         private void ApplySearchTypography()
@@ -141,7 +179,14 @@ namespace ClinicVets
 
         private void LayoutSearchForm()
         {
-            pnlContent.SetBounds(480, 48, 720, 620);
+            const int sideMargin = 40;
+            const int top = 48;
+            int panelWidth = Math.Min(720, ClientSize.Width - (sideMargin * 2));
+            int panelHeight = Math.Min(620, ClientSize.Height - top - 56);
+            int centeredLeft = (ClientSize.Width - panelWidth) / 2;
+            int panelLeft = Math.Min(centeredLeft + ContentShiftRight, ClientSize.Width - panelWidth - sideMargin);
+            panelLeft = Math.Max(sideMargin, panelLeft);
+            pnlContent.SetBounds(panelLeft, top, panelWidth, panelHeight);
 
             int centerX = ContentLeft + (ContentWidth / 2);
             pnlHeaderIcon.SetBounds(centerX - 28, 12, 56, 56);
@@ -167,7 +212,7 @@ namespace ClinicVets
             pnlResults.SetBounds(ContentLeft, 344, ContentWidth, 220);
             dgvResults.SetBounds(8, 10, ContentWidth - 16, 200);
 
-            btnBack.SetBounds(36, 668, 130, 40);
+            btnBack.SetBounds(36, ClientSize.Height - 52, 130, 40);
 
             lblSearchType.Visible = false;
             lblSearch.Visible = false;

@@ -1,6 +1,5 @@
 using System;
 using System.Windows.Forms;
-using ClinicVets.UI;
 
 namespace ClinicVets
 {
@@ -10,6 +9,7 @@ namespace ClinicVets
         public static void RegisterFlows()
         {
             PetFlowBootstrap.Register();
+            PetAssemblyBootstrap.TryRegister();
         }
 
         public static bool TryNavigateAfterLogin(Employee employee, Form1 loginForm)
@@ -20,9 +20,10 @@ namespace ClinicVets
             }
 
             string role = (employee.Role ?? string.Empty).Trim();
+            SessionManager.SetUser(employee);
+
             if (role.Equals("Secretary", StringComparison.OrdinalIgnoreCase))
             {
-                SessionManager.CurrentUser = employee;
                 using (var menu = new SecretaryMenuForm(loginForm))
                 {
                     menu.ShowDialog(loginForm);
@@ -33,23 +34,15 @@ namespace ClinicVets
 
             if (IsVetRole(role))
             {
-                SessionManager.CurrentUser = employee;
-                loginForm.Hide();
-                try
+                using (var menu = new VeterinarianMenuForm(loginForm))
                 {
-                    OpenVetPetManagement(loginForm);
-                }
-                finally
-                {
-                    if (!loginForm.IsDisposed)
-                    {
-                        loginForm.Show();
-                    }
+                    menu.ShowDialog(loginForm);
                 }
 
                 return true;
             }
 
+            SessionManager.Clear();
             MessageBox.Show(
                 loginForm,
                 "Unknown employee role. Please contact an administrator.",
@@ -61,24 +54,49 @@ namespace ClinicVets
 
         public static void OpenSecretaryPetManagement(IWin32Window owner, string ownerId)
         {
-            using (var form = new PetManagementForm(ownerId, vetWorkflow: false))
+            if (!RolePermissions.CanAccessPets())
             {
-                form.ShowDialog(owner);
+                return;
             }
+
+            if (PetFlowGateway.OpenPetManagementForOwner != null)
+            {
+                PetFlowGateway.OpenPetManagementForOwner(owner, ownerId);
+                return;
+            }
+
+            ShowPetModuleUnavailable(owner);
         }
 
         public static void OpenVetPetManagement(IWin32Window owner)
         {
-            using (var form = new PetManagementForm(ownerId: null, vetWorkflow: true))
+            if (!RolePermissions.CanAccessPets())
             {
-                form.ShowDialog(owner);
+                return;
             }
+
+            if (PetFlowGateway.OpenVetPetManagement != null)
+            {
+                PetFlowGateway.OpenVetPetManagement(owner);
+                return;
+            }
+
+            ShowPetModuleUnavailable(owner);
+        }
+
+        private static void ShowPetModuleUnavailable(IWin32Window owner)
+        {
+            MessageBox.Show(
+                owner,
+                "Pet module is not available. Rebuild the solution and ensure ClinicVets.Pets is deployed.",
+                "ClinicVets",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
         }
 
         private static bool IsVetRole(string role)
         {
-            return role.Equals("Vet", StringComparison.OrdinalIgnoreCase) ||
-                   role.Equals("Veterinarian", StringComparison.OrdinalIgnoreCase);
+            return RolePermissions.IsVeterinarian(role);
         }
     }
 }

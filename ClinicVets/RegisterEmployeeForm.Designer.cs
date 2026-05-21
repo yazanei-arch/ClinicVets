@@ -57,10 +57,10 @@ namespace ClinicVets
             this.pnlCard.Controls.Add(this.cmbRole);
             this.pnlCard.Controls.Add(this.btnRegister);
             this.pnlCard.Controls.Add(this.btnBack);
-            this.pnlCard.Location = new System.Drawing.Point(630, 55);
+            this.pnlCard.Location = new System.Drawing.Point(578, 52);
             this.pnlCard.Name = "pnlCard";
             this.pnlCard.Padding = new System.Windows.Forms.Padding(0);
-            this.pnlCard.Size = new System.Drawing.Size(560, 760);
+            this.pnlCard.Size = new System.Drawing.Size(450, 596);
             this.pnlCard.TabIndex = 0;
             // 
             // lblTitle
@@ -262,17 +262,18 @@ namespace ClinicVets
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.CancelButton = this.btnBack;
-            this.ClientSize = new System.Drawing.Size(1240, 880);
+            this.ClientSize = new System.Drawing.Size(1100, 700);
             this.Controls.Add(this.pnlCard);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "RegisterEmployeeForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ClinicVets — Register Employee";
             this.Load += new System.EventHandler(this.RegisterEmployeeForm_Load);
+            this.Resize += new System.EventHandler(this.RegisterEmployeeForm_Resize);
             this.pnlCard.ResumeLayout(false);
             this.pnlCard.PerformLayout();
             this.ResumeLayout(false);

@@ -26,6 +26,7 @@ namespace ClinicVets
 
         private ValidationFieldBinder _validation;
         private Image _ownedBackgroundImage;
+        private string _verificationCode;
 
         public ForgotPasswordForm()
             : this(null)
@@ -52,14 +53,14 @@ namespace ClinicVets
 
         private void ForgotPasswordForm_Load(object sender, EventArgs e)
         {
+            ClinicFormLayout.ApplyStandard(this);
             WinFormsUi.SetDoubleBuffered(this);
             ApplyForgotPasswordBackground();
 
             pnlCard.UseRegisterLightStyle = true;
             pnlCard.ShowCornerDecorations = false;
             pnlCard.CornerRadius = CardPanel.RegisterCornerRadius;
-            pnlCard.Location = new Point(560, 95);
-            pnlCard.Size = new Size(520, 620);
+            PositionForgotPasswordCard();
             pnlCard.Padding = new Padding(0);
             pnlCard.BackColor = CardSurface;
 
@@ -85,6 +86,28 @@ namespace ClinicVets
             ApplyLabelSurfaces();
             LayoutForgotPasswordControls();
             txtEmail.Focus();
+            Resize += ForgotPasswordForm_Resize;
+        }
+
+        private void ForgotPasswordForm_Resize(object sender, EventArgs e)
+        {
+            if (ClientSize.Width < 200 || pnlCard == null)
+            {
+                return;
+            }
+
+            PositionForgotPasswordCard();
+        }
+
+        private void PositionForgotPasswordCard()
+        {
+            const int top = 48;
+            const int sideMargin = 40;
+            int cardWidth = Math.Min(520, ClientSize.Width - (sideMargin * 2));
+            int cardHeight = Math.Min(620, ClientSize.Height - top - 40);
+            int cardLeft = (ClientSize.Width - cardWidth) / 2;
+            pnlCard.Location = new Point(cardLeft, top);
+            pnlCard.Size = new Size(cardWidth, cardHeight);
         }
 
         private void ApplyForgotTypography()
@@ -259,7 +282,7 @@ namespace ClinicVets
             _validation = new ValidationFieldBinder(pnlCard);
             _validation.BindTextBox(txtEmail, ValidationHelper.ValidateEmail, lblEmail);
             _validation.BindTextBox(txtVerificationCode, ValidationHelper.ValidateVerificationCode, lblVerificationCode);
-            _validation.BindTextBox(txtNewPassword, ValidationHelper.ValidatePassword, lblNewPassword);
+            _validation.BindTextBox(txtNewPassword, ValidationHelper.ValidateResetPassword, lblNewPassword);
             _validation.BindTextBox(
                 txtConfirmPassword,
                 value => ValidationHelper.ValidateConfirmPassword(txtNewPassword.Text, value),
@@ -375,17 +398,19 @@ namespace ClinicVets
                 return;
             }
 
-            if (!PasswordResetService.TrySendVerificationCode(email, out string errorMessage))
+            if (!PasswordResetService.TrySendVerificationCode(email, out string code, out string errorMessage))
             {
                 ShowFieldError(txtEmail, errorMessage);
                 txtEmail.Focus();
                 return;
             }
 
+            _verificationCode = code;
+
             MessageBox.Show(
                 this,
-                "A verification code has been sent to your email address.",
-                "Verification Code Sent",
+                "Your verification code is: " + code,
+                "Verification Code",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
@@ -411,7 +436,7 @@ namespace ClinicVets
                     return;
                 }
 
-                if (ValidationHelper.ValidatePassword(newPassword) == errorMessage)
+                if (ValidationHelper.ValidateResetPassword(newPassword) == errorMessage)
                 {
                     ShowFieldError(txtNewPassword, errorMessage);
                     txtNewPassword.Focus();

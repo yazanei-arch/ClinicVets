@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -102,12 +103,27 @@
     <Compile Include="AnimalTypesForm.Designer.cs">
       <DependentUpon>AnimalTypesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TransparentLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TransparentWinFormsHelper.cs" />
+    <Compile Include="PetDashboardTheme.cs" />
+    <Compile Include="PetActionCard.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PetBackButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PetModernButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PetManagementForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PetManagementForm.Designer.cs">
       <DependentUpon>PetManagementForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PetRecord.cs" />
     <Compile Include="PetRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -157,6 +173,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PetBackgroundHelper.cs" />
+    <Compile Include="PetExcelSupport.cs" />
+    <Compile Include="PetFlowBootstrap.cs" />
+    <Compile Include="PetFormHost.cs" />
+    <Compile Include="PetNavigationHooks.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ClinicVets\ClinicVets.csproj">
       <Project>{5be245a0-6763-46b5-8337-566abf0f47f8}</Project>
       <Name>ClinicVets</Name>
@@ -168,5 +191,19 @@
   <ItemGroup>
     <Content Include="Resources\background.png" />
   </ItemGroup>
+  <Target Name="CopyToMainAppOutput" AfterTargets="Build">
+    <PropertyGroup>
+      <MainAppOutputPath>$(MSBuildThisFileDirectory)..\ClinicVets\bin\$(Configuration)\</MainAppOutputPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <_PetsRuntimeFiles Include="$(TargetDir)*.dll" />
+      <_PetsRuntimeFiles Include="$(TargetDir)*.exe" />
+      <_PetsRuntimeFiles Include="$(TargetDir)*.config" />
+      <_PetsRuntimeFiles Include="$(TargetDir)*.pdb" Condition="'$(Configuration)'=='Debug'" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_PetsRuntimeFiles)" DestinationFolder="$(MainAppOutputPath)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)Resources\background.png" DestinationFolder="$(MainAppOutputPath)Resources\" SkipUnchangedFiles="true" Condition="Exists('$(MSBuildThisFileDirectory)Resources\background.png')" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)Resources\background.png" DestinationFolder="$(MainAppOutputPath)images\" SkipUnchangedFiles="true" Condition="Exists('$(MSBuildThisFileDirectory)Resources\background.png')" />
+  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

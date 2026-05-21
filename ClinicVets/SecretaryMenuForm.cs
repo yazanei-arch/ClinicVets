@@ -27,7 +27,20 @@ namespace ClinicVets
 
         private void SecretaryMenuForm_Load(object sender, EventArgs e)
         {
+            if (!RolePermissions.IsSecretary())
+            {
+                MessageBox.Show(
+                    this,
+                    "This menu is for Secretary users only.",
+                    "Access denied",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                Close();
+                return;
+            }
+
             WinFormsUi.SetDoubleBuffered(this);
+            ClinicFormLayout.ApplyStandard(this);
             ApplySecretaryMenuBackground();
 
             pnlCard.BackColor = CardSurface;
@@ -46,9 +59,44 @@ namespace ClinicVets
             btnViewCustomers.IsOutlineStyle = true;
             btnViewCustomers.CornerRadius = 8;
 
+            btnManagePets.UseLoginLightStyle = true;
+            btnManagePets.IsOutlineStyle = true;
+            btnManagePets.CornerRadius = 8;
+
             btnLogout.UseLoginLightStyle = true;
             btnLogout.IsOutlineStyle = true;
             btnLogout.CornerRadius = 8;
+
+            LayoutSecretaryMenuPanel();
+            Resize += SecretaryMenuForm_Resize;
+        }
+
+        private void SecretaryMenuForm_Resize(object sender, EventArgs e)
+        {
+            LayoutSecretaryMenuPanel();
+        }
+
+        private void LayoutSecretaryMenuPanel()
+        {
+            const int panelWidth = 560;
+            const int panelHeight = 480;
+            const int panelTop = 155;
+            int panelLeft = Math.Max(24, (ClientSize.Width - panelWidth) / 2);
+            pnlCard.SetBounds(panelLeft, panelTop, panelWidth, panelHeight);
+        }
+
+        private void btnManagePets_Click(object sender, EventArgs e)
+        {
+            Form host = _loginForm ?? (Form)Owner;
+            Hide();
+            try
+            {
+                NavigationHelper.OpenSecretaryPetManagement(host, null);
+            }
+            finally
+            {
+                Show();
+            }
         }
 
         private void ApplySecretaryMenuBackground()
@@ -171,7 +219,7 @@ namespace ClinicVets
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            SessionManager.CurrentUser = null;
+            SessionManager.Clear();
             _loginForm?.ClearLoginFields();
             Close();
         }

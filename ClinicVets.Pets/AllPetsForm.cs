@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using ClosedXML.Excel;
-
+using ClinicVets;
 
 namespace ClinicVets.UI
 {
@@ -23,6 +23,7 @@ namespace ClinicVets.UI
         public AllPetsForm()
         {
             InitializeComponent();
+            ClinicFormLayout.ApplyStandard(this);
             dgvPets.EnableHeadersVisualStyles = false;
 
             dgvPets.ColumnHeadersDefaultCellStyle.BackColor = Color.SteelBlue;
@@ -49,20 +50,120 @@ namespace ClinicVets.UI
 
         private void AllPetsForm_Load(object sender, EventArgs e)
         {
-            LoadPetsFromExcel();
+            PetBackgroundHelper.ApplyToPictureBox(pictureBox1);
+            if (pictureBox1 != null)
+            {
+                pictureBox1.SendToBack();
+            }
+
+            ApplyAllPetsContentLayout();
+            SafeLoadPetsFromExcel();
+            Resize += AllPetsForm_Resize;
         }
 
-        private void LoadPetsFromExcel()
+        private void AllPetsForm_Resize(object sender, EventArgs e)
+        {
+            ApplyAllPetsContentLayout();
+        }
+
+        private void ApplyAllPetsContentLayout()
+        {
+            const int gridWidth = 756;
+            const int gridHeight = 295;
+            const int buttonWidth = 160;
+            const int buttonHeight = 45;
+            const int buttonGap = 28;
+            const int contentShiftLeft = 48;
+
+            int centerX = (ClientSize.Width / 2) - contentShiftLeft;
+            int gridLeft = centerX - (gridWidth / 2);
+
+            const int titleTop = 178;
+            const int titleHeight = 28;
+            const int gapTitleToSubtitle = 12;
+            const int gapSubtitleToTable = 34;
+            const int gapTableToButtons = 24;
+
+            int subtitleTop = titleTop + titleHeight + gapTitleToSubtitle;
+            const int subtitleHeight = 26;
+            int gridTop = subtitleTop + subtitleHeight + gapSubtitleToTable;
+
+            int buttonsRowWidth = (buttonWidth * 2) + buttonGap;
+            int buttonsLeft = centerX - (buttonsRowWidth / 2);
+            int buttonsTop = gridTop + gridHeight + gapTableToButtons;
+
+            const int titleBlockWidth = 380;
+            const int subtitleBlockWidth = 500;
+            label1.AutoSize = false;
+            label1.TextAlign = ContentAlignment.MiddleCenter;
+            label1.BackColor = Color.Transparent;
+            label1.SetBounds(centerX - (titleBlockWidth / 2), titleTop, titleBlockWidth, titleHeight);
+
+            label2.AutoSize = false;
+            label2.TextAlign = ContentAlignment.TopCenter;
+            label2.BackColor = Color.Transparent;
+            label2.SetBounds(centerX - (subtitleBlockWidth / 2), subtitleTop, subtitleBlockWidth, subtitleHeight);
+
+            dgvPets.Size = new Size(gridWidth, gridHeight);
+            dgvPets.Location = new Point(gridLeft, gridTop);
+
+            btnUpdatePet.Size = new Size(buttonWidth, buttonHeight);
+            btnUpdatePet.Location = new Point(buttonsLeft, buttonsTop);
+
+            btnDeletePet.Size = new Size(buttonWidth, buttonHeight);
+            btnDeletePet.Location = new Point(buttonsLeft + buttonWidth + buttonGap, buttonsTop);
+
+            PlaceBackButtonTopLeft();
+            dgvPets.BringToFront();
+            btnUpdatePet.BringToFront();
+            btnDeletePet.BringToFront();
+            label1.BringToFront();
+            label2.BringToFront();
+        }
+
+        private void PlaceBackButtonTopLeft()
+        {
+            const int margin = 16;
+            const int top = 12;
+            int x = RightToLeftLayout && RightToLeft == RightToLeft.Yes
+                ? ClientSize.Width - btnBack.Width - margin
+                : margin;
+            btnBack.Location = new Point(x, top);
+            btnBack.BringToFront();
+        }
+
+        private void SafeLoadPetsFromExcel()
         {
             dgvPets.Rows.Clear();
 
-            if (!File.Exists(filePath))
+            if (!PetExcelSupport.TryEnsureWorkbookReady(this, out string workbookPath))
             {
-                MessageBox.Show("Excel file not found:\n" + filePath);
                 return;
             }
 
-            using (var workbook = new XLWorkbook(filePath))
+            try
+            {
+                LoadPetsFromExcel(workbookPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Could not load pets from Excel." + Environment.NewLine + Environment.NewLine + ex.Message,
+                    "ClinicVets",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        private void LoadPetsFromExcel(string workbookPath)
+        {
+            if (!File.Exists(workbookPath))
+            {
+                MessageBox.Show("Excel file not found:\n" + workbookPath, "ClinicVets", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (var workbook = new XLWorkbook(workbookPath))
             {
                 var sheet = workbook.Worksheet("Pets");
 
@@ -103,9 +204,7 @@ namespace ClinicVets.UI
 
         private void btnBack_Click_1(object sender, EventArgs e)
         {
-            PetManagementForm form = new PetManagementForm();
-            form.ShowDialog();
-            this.Hide();
+            Close();
         }
 
         private void btnDeletePet_Click(object sender, EventArgs e)
@@ -151,7 +250,7 @@ namespace ClinicVets.UI
                 workbook.Save();
             }
 
-            LoadPetsFromExcel();
+            SafeLoadPetsFromExcel();
 
             MessageBox.Show("Pet deleted successfully");
         }
@@ -197,7 +296,7 @@ namespace ClinicVets.UI
 
                 btnUpdatePet.Text = "Update Pet";
 
-                LoadPetsFromExcel();
+                SafeLoadPetsFromExcel();
 
                 MessageBox.Show("Pet updated successfully");
             }

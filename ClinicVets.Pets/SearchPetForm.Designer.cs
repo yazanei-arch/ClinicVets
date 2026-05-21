@@ -46,7 +46,6 @@ namespace ClinicVets.UI
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::ClinicVets.Pets.Properties.Resources.background;
             this.pictureBox1.Location = new System.Drawing.Point(-1, 0);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pictureBox1.Name = "pictureBox1";
@@ -210,6 +209,7 @@ namespace ClinicVets.UI
             this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Search Pet";
+            this.Load += new System.EventHandler(this.SearchPetForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPets)).EndInit();
             this.ResumeLayout(false);

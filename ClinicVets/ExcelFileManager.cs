@@ -20,9 +20,10 @@ public static class ExcelFileManager
         "CustomerID", "FullName", "IDNumber", "Phone", "Email"
     };
 
+    /// <summary>Canonical header row for new/repaired Employees sheets (login order).</summary>
     public static readonly string[] EmployeeColumnHeaders =
     {
-        "Username", "Password", "EmployeeNumber", "Email", "ID", "Role"
+        "EmployeeNumber", "Username", "Password", "Email", "ID", "Role"
     };
 
     public static string GetWorkbookFullPath()

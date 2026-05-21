@@ -16,6 +16,7 @@ namespace ClinicVets
 
         private const int InnerPad = 35;
         private const int ContentWidth = 500;
+        private const int CardShiftRight = 118;
 
         private readonly ExcelHelper _excelHelper = new ExcelHelper();
         private Image _ownedBackgroundImage;
@@ -75,14 +76,39 @@ namespace ClinicVets
             }
         }
 
+        private bool EnsureSecretaryAccess()
+        {
+            Employee user = SessionManager.CurrentUser;
+            if (user != null &&
+                user.Role != null &&
+                user.Role.Equals("Secretary", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            MessageBox.Show(
+                this,
+                "View customers is available to Secretary users only.",
+                "Access denied",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            Close();
+            return false;
+        }
+
         private void ViewCustomersForm_Load(object sender, EventArgs e)
         {
+            if (!EnsureSecretaryAccess())
+            {
+                return;
+            }
+
+            ClinicFormLayout.ApplyStandard(this);
             pnlCard.UseRegisterLightStyle = true;
             pnlCard.ShowCornerDecorations = false;
             pnlCard.CornerRadius = CardPanel.RegisterCornerRadius;
             BackgroundImageLayout = ImageLayout.Stretch;
-            pnlCard.Location = new Point(610, 115);
-            pnlCard.Size = new Size(570, 500);
+            PositionViewCustomersCard();
             pnlCard.Padding = new Padding(0);
             pnlCard.BackColor = PanelSurface;
 
@@ -101,6 +127,30 @@ namespace ClinicVets
             LayoutViewCustomersControls();
             ReloadCustomersFromExcel();
             ExcelHelper.CustomersChanged += OnCustomersDataChanged;
+            Resize += ViewCustomersForm_Resize;
+        }
+
+        private void ViewCustomersForm_Resize(object sender, EventArgs e)
+        {
+            if (ClientSize.Width < 200 || pnlCard == null)
+            {
+                return;
+            }
+
+            PositionViewCustomersCard();
+        }
+
+        private void PositionViewCustomersCard()
+        {
+            const int top = 115;
+            const int sideMargin = 40;
+            int cardWidth = Math.Min(570, ClientSize.Width - (sideMargin * 2));
+            int cardHeight = Math.Min(500, ClientSize.Height - top - 40);
+            int centeredLeft = (ClientSize.Width - cardWidth) / 2;
+            int cardLeft = Math.Min(centeredLeft + CardShiftRight, ClientSize.Width - cardWidth - sideMargin);
+            cardLeft = Math.Max(sideMargin, cardLeft);
+            pnlCard.Location = new Point(cardLeft, top);
+            pnlCard.Size = new Size(cardWidth, cardHeight);
         }
 
         private void ApplyTypography()

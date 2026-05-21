@@ -3,6 +3,7 @@ using System.IO;
 using ClosedXML.Excel;
 using System.Drawing;
 using System.Windows.Forms;
+using ClinicVets;
 
 namespace ClinicVets.UI
 {
@@ -18,11 +19,248 @@ namespace ClinicVets.UI
         private Label lblChipNumberError = new Label();
         private Label lblLastVaccineError = new Label();
 
+        private readonly string _ownerId;
+
         public AddPetForm()
+            : this(null)
         {
+        }
+
+        public AddPetForm(string ownerId)
+        {
+            _ownerId = string.IsNullOrWhiteSpace(ownerId) ? null : ownerId.Trim();
             InitializeComponent();
+            StartPosition = FormStartPosition.CenterScreen;
+            WindowState = FormWindowState.Normal;
+            Shown += AddPetForm_Shown;
+        }
+
+        private void AddPetForm_Shown(object sender, EventArgs e)
+        {
+            StartPosition = FormStartPosition.CenterScreen;
+            CenterToScreen();
+        }
+
+        private void AddPetForm_Load(object sender, EventArgs e)
+        {
+            ClinicFormLayout.ApplyStandard(this);
+            StartPosition = FormStartPosition.CenterScreen;
+            WindowState = FormWindowState.Normal;
+            PetBackgroundHelper.ApplyToPictureBox(pictureBox1);
+            if (pictureBox1 != null)
+            {
+                pictureBox1.SendToBack();
+            }
+
             EnsureErrorLabels();
-            LoadAnimalTypes();
+            ApplyAddPetContentLayout();
+            ApplyTransparentLabels();
+            SafeLoadAnimalTypes();
+            if (!string.IsNullOrEmpty(_ownerId))
+            {
+                txtOwner.Text = _ownerId;
+            }
+
+            Resize += AddPetForm_Resize;
+        }
+
+        private void AddPetForm_Resize(object sender, EventArgs e)
+        {
+            ApplyAddPetContentLayout();
+        }
+
+        private void ApplyAddPetContentLayout()
+        {
+            const int logoClearanceBottom = 182;
+            const int columnWidth = 268;
+            const int columnGap = 44;
+            const int rowStride = 78;
+            const int captionHeight = 24;
+            const int captionToInputGap = 4;
+            const int inputHeight = 36;
+            const int subtitleWidth = 560;
+            const int buttonGap = 28;
+            const int bottomMargin = 48;
+
+            int centerX = ClientSize.Width / 2;
+            int blockWidth = (columnWidth * 2) + columnGap;
+            int colStartX = centerX - (blockWidth / 2);
+            int colEndX = colStartX + columnWidth + columnGap;
+            int petColX = colStartX;
+            int dateColX = colEndX;
+
+            label1.AutoSize = true;
+            label1.BackColor = Color.Transparent;
+            int titleWidth = TextRenderer.MeasureText(label1.Text, label1.Font).Width + 8;
+            label1.Location = new Point(centerX - (titleWidth / 2), logoClearanceBottom);
+
+            label9.AutoSize = false;
+            label9.BackColor = Color.Transparent;
+            label9.TextAlign = ContentAlignment.TopCenter;
+            label9.SetBounds(centerX - (subtitleWidth / 2), label1.Bottom + 10, subtitleWidth, 28);
+
+            int rowTop = label9.Bottom + 22;
+            int petY = rowTop;
+            LayoutStackedField(label2, txtPetName, petColX, petY, columnWidth, captionHeight, captionToInputGap, inputHeight);
+            petY += rowStride;
+            LayoutStackedField(label3, cmbAnimalType, petColX, petY, columnWidth, captionHeight, captionToInputGap, inputHeight);
+            petY += rowStride;
+            LayoutStackedField(label4, txtWeight, petColX, petY, columnWidth, captionHeight, captionToInputGap, inputHeight);
+            petY += rowStride;
+            LayoutStackedField(label7, txtChipNumber, petColX, petY, columnWidth, captionHeight, captionToInputGap, inputHeight);
+            int petColBottom = petY + captionHeight + captionToInputGap + inputHeight;
+
+            int dateY = rowTop;
+            LayoutStackedField(label5, dtpBirthDate, dateColX, dateY, columnWidth, captionHeight, captionToInputGap, inputHeight);
+            dateY += rowStride;
+            LayoutStackedField(label8, dtpLastVaccineDate, dateColX, dateY, columnWidth, captionHeight, captionToInputGap, inputHeight);
+            dateY += rowStride;
+            LayoutStackedField(label6, txtOwner, dateColX, dateY, columnWidth, captionHeight, captionToInputGap, inputHeight);
+            int dateColBottom = dateY + captionHeight + captionToInputGap + inputHeight;
+
+            RepositionAllErrorLabels();
+
+            int fieldsBottom = Math.Max(petColBottom, dateColBottom);
+            int buttonsY = Math.Min(fieldsBottom + 32, ClientSize.Height - bottomMargin - btnSave.Height);
+            int buttonsWidth = btnSave.Width + buttonGap + btnClear.Width;
+            int buttonsLeft = centerX - (buttonsWidth / 2);
+            btnSave.Location = new Point(buttonsLeft, buttonsY);
+            btnClear.Location = new Point(buttonsLeft + btnSave.Width + buttonGap, buttonsY);
+
+            PlaceAddPetBackButtonTopLeft();
+
+            BringLayoutControlsToFront();
+        }
+
+        private void ApplyTransparentLabels()
+        {
+            if (pictureBox1 == null)
+            {
+                return;
+            }
+
+            foreach (Label label in new[] { label1, label9, label2, label3, label4, label5, label6, label7, label8 })
+            {
+                if (label == null)
+                {
+                    continue;
+                }
+
+                if (label.Parent != pictureBox1)
+                {
+                    label.Parent = pictureBox1;
+                }
+
+                label.BackColor = Color.Transparent;
+            }
+        }
+
+        private void LayoutStackedField(
+            Label caption,
+            Control input,
+            int left,
+            int top,
+            int width,
+            int captionHeight,
+            int captionGap,
+            int inputHeight)
+        {
+            if (pictureBox1 != null)
+            {
+                caption.Parent = pictureBox1;
+                input.Parent = pictureBox1;
+            }
+
+            caption.AutoSize = false;
+            caption.BackColor = Color.Transparent;
+            caption.TextAlign = ContentAlignment.MiddleLeft;
+            caption.SetBounds(left, top, width, captionHeight);
+
+            input.SetBounds(left, top + captionHeight + captionGap, width, inputHeight);
+        }
+
+        private void RepositionAllErrorLabels()
+        {
+            PositionErrorLabel(lblPetNameError, txtPetName);
+            PositionErrorLabel(lblAnimalTypeError, cmbAnimalType);
+            PositionErrorLabel(lblWeightError, txtWeight);
+            PositionErrorLabel(lblChipNumberError, txtChipNumber);
+            PositionErrorLabel(lblBirthDateError, dtpBirthDate);
+            PositionErrorLabel(lblLastVaccineError, dtpLastVaccineDate);
+            PositionErrorLabel(lblOwnerError, txtOwner);
+        }
+
+        private static void PositionErrorLabel(Label label, Control input)
+        {
+            if (label == null || input == null)
+            {
+                return;
+            }
+
+            Control host = input.Parent;
+            if (host != null && label.Parent != host)
+            {
+                host.Controls.Add(label);
+            }
+
+            label.Location = new Point(input.Left, input.Bottom + 3);
+        }
+
+        private void BringLayoutControlsToFront()
+        {
+            btnSave.BringToFront();
+            btnClear.BringToFront();
+            btnBack.BringToFront();
+            label1.BringToFront();
+            label9.BringToFront();
+            label2.BringToFront();
+            label3.BringToFront();
+            label4.BringToFront();
+            label5.BringToFront();
+            label6.BringToFront();
+            label7.BringToFront();
+            label8.BringToFront();
+            txtPetName.BringToFront();
+            cmbAnimalType.BringToFront();
+            txtWeight.BringToFront();
+            txtChipNumber.BringToFront();
+            dtpBirthDate.BringToFront();
+            dtpLastVaccineDate.BringToFront();
+            txtOwner.BringToFront();
+            lblPetNameError.BringToFront();
+            lblAnimalTypeError.BringToFront();
+            lblWeightError.BringToFront();
+            lblChipNumberError.BringToFront();
+            lblBirthDateError.BringToFront();
+            lblLastVaccineError.BringToFront();
+            lblOwnerError.BringToFront();
+        }
+
+        private void PlaceAddPetBackButtonTopLeft()
+        {
+            const int margin = 16;
+            const int top = 12;
+            int x = RightToLeftLayout && RightToLeft == RightToLeft.Yes
+                ? ClientSize.Width - btnBack.Width - margin
+                : margin;
+            btnBack.Location = new Point(x, top);
+            btnBack.BringToFront();
+        }
+
+        private void SafeLoadAnimalTypes()
+        {
+            try
+            {
+                LoadAnimalTypes();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Could not load animal types from Excel." + Environment.NewLine + Environment.NewLine + ex.Message,
+                    "ClinicVets",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
         }
 
         private void EnsureErrorLabels()
@@ -45,8 +283,11 @@ namespace ClinicVets.UI
             label.Font = new Font("Segoe UI", 9, FontStyle.Regular);
             label.Location = new Point(control.Left, control.Bottom + 3);
 
-            if (!this.Controls.Contains(label))
-                this.Controls.Add(label);
+            Control host = control.Parent ?? this;
+            if (!host.Controls.Contains(label))
+            {
+                host.Controls.Add(label);
+            }
 
             label.BringToFront();
         }
@@ -55,13 +296,12 @@ namespace ClinicVets.UI
         {
             cmbAnimalType.Items.Clear();
 
-            if (!File.Exists(filePath))
+            if (!PetExcelSupport.TryEnsureWorkbookReady(this, out string workbookPath))
             {
-                MessageBox.Show("Excel file not found");
                 return;
             }
 
-            using (var workbook = new XLWorkbook(filePath))
+            using (var workbook = new XLWorkbook(workbookPath))
             {
                 if (!workbook.Worksheets.Contains("AnimalTypes"))
                 {
@@ -288,9 +528,7 @@ namespace ClinicVets.UI
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            PetManagementForm form = new PetManagementForm();
-            form.ShowDialog();
-            this.Hide();
+            Close();
         }
 
         

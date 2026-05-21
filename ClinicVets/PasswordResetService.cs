@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace ClinicVets
@@ -10,9 +11,11 @@ namespace ClinicVets
         private static readonly object Sync = new object();
         private static readonly Dictionary<string, string> PendingCodes =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Random CodeRandom = new Random();
 
-        internal static bool TrySendVerificationCode(string email, out string errorMessage)
+        internal static bool TrySendVerificationCode(string email, out string verificationCode, out string errorMessage)
         {
+            verificationCode = null;
             email = (email ?? string.Empty).Trim();
 
             errorMessage = ValidationHelper.ValidateEmail(email);
@@ -27,16 +30,11 @@ namespace ClinicVets
                 return false;
             }
 
-            string code = GenerateSixDigitCode();
-
-            if (!EmailService.TrySendVerificationCodeEmail(email, code, out errorMessage))
-            {
-                return false;
-            }
+            verificationCode = GenerateSixDigitCode();
 
             lock (Sync)
             {
-                PendingCodes[email] = code;
+                PendingCodes[email] = verificationCode;
             }
 
             errorMessage = null;
@@ -73,7 +71,7 @@ namespace ClinicVets
                 return false;
             }
 
-            errorMessage = ValidationHelper.ValidatePassword(newPassword);
+            errorMessage = ValidationHelper.ValidateResetPassword(newPassword);
             if (errorMessage != null)
             {
                 return false;
@@ -95,13 +93,45 @@ namespace ClinicVets
                 }
             }
 
-            EmployeeCredentialStore.UpdatePasswordByEmail(email, newPassword);
+            bool employeeInExcel = false;
             try
             {
-                Excel.UpdateEmployeePasswordByEmail(email, newPassword);
+                employeeInExcel = Excel.TryFindEmployeeByEmail(email) != null;
             }
-            catch
+            catch (Exception ex)
             {
+                errorMessage = BuildExcelErrorMessage(ex);
+                return false;
+            }
+
+            EmployeeCredentialStore.UpdatePasswordByEmail(email, newPassword);
+
+            if (employeeInExcel)
+            {
+                try
+                {
+                    if (!File.Exists(ExcelFileManager.FilePath))
+                    {
+                        errorMessage = ExcelFileManager.WorkbookNotFoundMessage;
+                        return false;
+                    }
+
+                    if (!Excel.UpdateEmployeePasswordByEmail(email, newPassword))
+                    {
+                        errorMessage = "Could not update the password in the Employees sheet.";
+                        return false;
+                    }
+                }
+                catch (InvalidOperationException ex)
+                {
+                    errorMessage = ex.Message;
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    errorMessage = BuildExcelErrorMessage(ex);
+                    return false;
+                }
             }
 
             lock (Sync)
@@ -132,8 +162,22 @@ namespace ClinicVets
 
         private static string GenerateSixDigitCode()
         {
-            int value = new Random().Next(100000, 1000000);
-            return value.ToString();
+            lock (Sync)
+            {
+                return CodeRandom.Next(100000, 1000000).ToString();
+            }
+        }
+
+        private static string BuildExcelErrorMessage(Exception ex)
+        {
+            if (ExcelHelper.IsWorkbookLockedException(ex))
+            {
+                return ExcelFileManager.WorkbookLockedMessage;
+            }
+
+            return "Could not access the Excel file."
+                + Environment.NewLine + Environment.NewLine
+                + (ex.Message ?? "Unknown error.");
         }
     }
 }

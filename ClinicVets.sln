@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.37206.5
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11806.211 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicVets", "ClinicVets\ClinicVets.csproj", "{5BE245A0-6763-46B5-8337-566ABF0F47F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicVets.AuthCustomers", "ClinicVets.AuthCustomers\ClinicVets.AuthCustomers.csproj", "{6B60C783-D313-4CD7-8963-3AF2730DED15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicVets.Pets", "ClinicVets.Pets\ClinicVets.Pets.csproj", "{FDEEC92C-7410-4E01-8D80-CFBDCC5CB379}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicVets.Pets", "ClinicVets.Pets\ClinicVets.Pets.csproj", "{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicVets.VisitsMedicines", "ClinicVets.VisitsMedicines\ClinicVets.VisitsMedicines.csproj", "{355E696D-5346-43B1-AA9F-7962B84DF706}"
 EndProject
@@ -25,10 +25,10 @@ Global
 		{6B60C783-D313-4CD7-8963-3AF2730DED15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B60C783-D313-4CD7-8963-3AF2730DED15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B60C783-D313-4CD7-8963-3AF2730DED15}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDEEC92C-7410-4E01-8D80-CFBDCC5CB379}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDEEC92C-7410-4E01-8D80-CFBDCC5CB379}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDEEC92C-7410-4E01-8D80-CFBDCC5CB379}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDEEC92C-7410-4E01-8D80-CFBDCC5CB379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}.Release|Any CPU.Build.0 = Release|Any CPU
 		{355E696D-5346-43B1-AA9F-7962B84DF706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{355E696D-5346-43B1-AA9F-7962B84DF706}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{355E696D-5346-43B1-AA9F-7962B84DF706}.Release|Any CPU.ActiveCfg = Release|Any CPU

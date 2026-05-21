@@ -18,12 +18,17 @@ namespace ClinicVets
         private static readonly Color CardSurface = CardPanel.RegisterCardFill;
         private static readonly Color FormFallbackBack = Color.FromArgb(232, 244, 252);
 
-        private const int InnerPad = 32;
-        private const int FieldWidth = 616;
+        private const int InnerPad = 28;
         private const int CaptionHeight = 22;
         private const int FieldHeight = 32;
         private const int ErrorHeight = 16;
-        private const int RowStride = 72;
+        private const int RowStride = 64;
+        private const int MaxCardWidth = 520;
+        private const int MaxCardHeight = 488;
+        private const int CardTop = 168;
+        private const int CardShiftRight = 118;
+
+        private int _fieldWidth = 464;
 
         private readonly ExcelHelper _excelHelper = new ExcelHelper();
         private readonly List<Customer> _allCustomers = new List<Customer>();
@@ -51,14 +56,14 @@ namespace ClinicVets
                 return;
             }
 
+            ClinicFormLayout.ApplyStandard(this);
             WinFormsUi.SetDoubleBuffered(this);
             ApplyAddCustomerBackground();
 
             pnlCard.UseRegisterLightStyle = true;
             pnlCard.ShowCornerDecorations = false;
             pnlCard.CornerRadius = CardPanel.RegisterCornerRadius;
-            pnlCard.Location = new Point(480, 110);
-            pnlCard.Size = new Size(680, 560);
+            PositionCustomerCard();
             pnlCard.Padding = new Padding(0);
             pnlCard.BackColor = CardSurface;
             pnlCard.AutoScroll = false;
@@ -81,6 +86,35 @@ namespace ClinicVets
             LayoutCustomerControls();
             ReloadCustomersFromExcel();
             txtFullName.Focus();
+            Resize += CustomerManagementForm_Resize;
+        }
+
+        private void CustomerManagementForm_Resize(object sender, EventArgs e)
+        {
+            if (ClientSize.Width < 200 || pnlCard == null)
+            {
+                return;
+            }
+
+            PositionCustomerCard();
+            LayoutCustomerControls();
+        }
+
+        private void PositionCustomerCard()
+        {
+            const int sideMargin = 44;
+            int cardWidth = Math.Min(MaxCardWidth, ClientSize.Width - sideMargin - CardShiftRight - 24);
+            cardWidth = Math.Max(400, cardWidth);
+            int cardHeight = Math.Min(MaxCardHeight, ClientSize.Height - CardTop - 32);
+            cardHeight = Math.Max(452, cardHeight);
+
+            int centeredLeft = (ClientSize.Width - cardWidth) / 2;
+            int cardLeft = Math.Min(centeredLeft + CardShiftRight, ClientSize.Width - cardWidth - sideMargin);
+            cardLeft = Math.Max(sideMargin, cardLeft);
+
+            pnlCard.Location = new Point(cardLeft, CardTop);
+            pnlCard.Size = new Size(cardWidth, cardHeight);
+            _fieldWidth = Math.Max(320, cardWidth - (InnerPad * 2));
         }
 
         private bool EnsureSecretaryAccess()
@@ -160,19 +194,19 @@ namespace ClinicVets
 
         private void LayoutCustomerControls()
         {
-            const int titleLeft = 92;
-            const int headerTextWidth = 556;
+            const int titleLeft = 84;
+            int headerTextWidth = Math.Max(240, _fieldWidth - (titleLeft - InnerPad));
 
-            pnlHeaderIcon.SetBounds(InnerPad, 28, 48, 48);
-            lblTitle.SetBounds(titleLeft, 28, headerTextWidth, 34);
+            pnlHeaderIcon.SetBounds(InnerPad, 22, 44, 44);
+            lblTitle.SetBounds(titleLeft, 22, headerTextWidth, 32);
             lblTitle.TextAlign = ContentAlignment.MiddleLeft;
 
-            lblSubtitle.SetBounds(titleLeft, 66, headerTextWidth, 24);
+            lblSubtitle.SetBounds(titleLeft, 56, headerTextWidth, 22);
             lblSubtitle.TextAlign = ContentAlignment.TopLeft;
 
-            pnlDivider.SetBounds(InnerPad, 104, FieldWidth, 1);
+            pnlDivider.SetBounds(InnerPad, 86, _fieldWidth, 1);
 
-            int y = 122;
+            int y = 100;
             LayoutFieldRow(lblFullName, txtFullName, y);
             PositionFieldError(txtFullName, y, FieldHeight);
 
@@ -188,9 +222,10 @@ namespace ClinicVets
             LayoutFieldRow(lblEmail, txtEmail, y);
             PositionFieldError(txtEmail, y, FieldHeight);
 
-            lblSuccess.SetBounds(InnerPad, 410, FieldWidth, 22);
-            btnAddCustomer.SetBounds(InnerPad, 440, FieldWidth, 44);
-            btnBack.SetBounds(InnerPad, 496, 140, 40);
+            int actionsTop = y + RowStride - 8;
+            lblSuccess.SetBounds(InnerPad, actionsTop, _fieldWidth, 20);
+            btnAddCustomer.SetBounds(InnerPad, actionsTop + 26, _fieldWidth, 42);
+            btnBack.SetBounds(InnerPad, actionsTop + 74, 132, 38);
 
             btnClear.Visible = false;
             btnOpenSearch.Visible = false;
@@ -199,9 +234,9 @@ namespace ClinicVets
         private void LayoutFieldRow(Label caption, TextBox input, int captionY)
         {
             caption.AutoSize = false;
-            caption.SetBounds(InnerPad, captionY, FieldWidth, CaptionHeight);
+            caption.SetBounds(InnerPad, captionY, _fieldWidth, CaptionHeight);
             Control host = GetFieldHost(input);
-            host.SetBounds(InnerPad, captionY + CaptionHeight + 2, FieldWidth, FieldHeight);
+            host.SetBounds(InnerPad, captionY + CaptionHeight + 2, _fieldWidth, FieldHeight);
             AlignChromePlateInner(host);
         }
 
@@ -219,7 +254,7 @@ namespace ClinicVets
             }
 
             int y = captionY + CaptionHeight + 2 + fieldHeight + 2;
-            entry.ErrorLabel.SetBounds(InnerPad, y, FieldWidth, ErrorHeight);
+            entry.ErrorLabel.SetBounds(InnerPad, y, _fieldWidth, ErrorHeight);
         }
 
         private static Control GetFieldHost(Control input)

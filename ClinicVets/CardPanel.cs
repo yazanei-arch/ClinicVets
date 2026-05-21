@@ -39,6 +39,9 @@ namespace ClinicVets
         /// <summary>Light login panel: no shadow, soft blue-gray border only.</summary>
         public bool UseLoginLightStyle { get; set; }
 
+        /// <summary>Soft blue drop shadow under light menu cards (veterinarian menu).</summary>
+        public bool ShowSoftDropShadow { get; set; }
+
         /// <summary>Semi-transparent white panel over a background image (register form).</summary>
         public bool UseRegisterLightStyle { get; set; }
 
@@ -135,6 +138,17 @@ namespace ClinicVets
 
         private void PaintLoginLightCard(Graphics g, RectangleF fillRect, int radius)
         {
+            if (ShowSoftDropShadow)
+            {
+                RectangleF shadowRect = fillRect;
+                shadowRect.Offset(0f, 4f);
+                using (GraphicsPath shadowPath = UiPaths.RoundedRectangle(shadowRect, radius))
+                using (var shadowBrush = new SolidBrush(Color.FromArgb(34, 140, 175, 205)))
+                {
+                    g.FillPath(shadowBrush, shadowPath);
+                }
+            }
+
             Color backdrop = ResolveBackdropColor();
             PaintRoundedSurface(g, Width, Height, fillRect, radius, backdrop, LoginPanelFill, LoginPanelBorder, drawGlassGlow: false);
         }

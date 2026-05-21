@@ -334,8 +334,8 @@ public class ExcelHelper
             }
 
             SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
-            Dictionary<string, int> headerMap = BuildHeaderMap(wsp, sstp);
-            if (headerMap.Count == 0)
+            Dictionary<string, int> headerMap = BuildEmployeeHeaderMapFromSheet(wsp, sstp);
+            if (EmployeeLogicalHeadersMissing(headerMap))
             {
                 return list;
             }
@@ -343,7 +343,7 @@ public class ExcelHelper
             uint lastRow = GetLastUsedRowIndex(wsp, sstp, headerMap);
             for (uint r = 2u; r <= lastRow; r++)
             {
-                string employeeId = GetCellAtRowAny(wsp, sstp, headerMap, r, "EmployeeNumber", "EmployeeID");
+                string employeeId = GetCellAtRowAny(wsp, sstp, headerMap, r, "EmployeeNumber", "EmployeeI", "EmployeeID");
                 string username = GetCellAtRow(wsp, sstp, headerMap, r, "Username");
                 string password = GetCellAtRow(wsp, sstp, headerMap, r, "Password");
                 string email = GetCellAtRow(wsp, sstp, headerMap, r, "Email");
@@ -377,9 +377,10 @@ public class ExcelHelper
             throw new ArgumentNullException(nameof(employee));
         }
 
+        RequireWorkbookForWrite();
+
         try
         {
-            RequireWorkbookForWrite();
             using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, true))
             {
                 WorksheetPart wsp = GetWorksheetPartByName(doc.WorkbookPart, ExcelFileManager.EmployeeSheetName);
@@ -390,11 +391,7 @@ public class ExcelHelper
                 }
 
                 SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
-                Dictionary<string, int> headerMap = BuildHeaderMap(wsp, sstp);
-                if (headerMap.Count == 0)
-                {
-                    throw new InvalidOperationException("The Employees worksheet has no header row.");
-                }
+                Dictionary<string, int> headerMap = EnsureEmployeeHeaderRow(wsp, sstp);
 
                 uint nextRow = GetLastUsedRowIndex(wsp, sstp, headerMap) + 1u;
                 if (nextRow < 2u)
@@ -411,9 +408,18 @@ public class ExcelHelper
                 doc.WorkbookPart.Workbook.Save();
             }
         }
-        catch (Exception ex) when (IsWorkbookLockedException(ex))
+        catch (InvalidOperationException)
         {
-            throw new InvalidOperationException(ExcelFileManager.WorkbookLockedMessage, ex);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            if (IsWorkbookLockedException(ex))
+            {
+                throw new InvalidOperationException(ExcelFileManager.WorkbookLockedMessage, ex);
+            }
+
+            throw;
         }
     }
 
@@ -429,7 +435,7 @@ public class ExcelHelper
         foreach (Employee employee in ReadEmployees())
         {
             if (string.Equals(employee.Username?.Trim(), username, StringComparison.OrdinalIgnoreCase)
-                && string.Equals(employee.Password ?? string.Empty, password, StringComparison.Ordinal))
+                && string.Equals(employee.Password?.Trim() ?? string.Empty, password, StringComparison.Ordinal))
             {
                 return employee;
             }
@@ -480,7 +486,7 @@ public class ExcelHelper
             }
 
             SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
-            Dictionary<string, int> headerMap = BuildHeaderMap(wsp, sstp);
+            Dictionary<string, int> headerMap = BuildEmployeeHeaderMapFromSheet(wsp, sstp);
             uint? rowIndex = FindEmployeeRowIndexByEmail(wsp, sstp, headerMap, email);
             if (!rowIndex.HasValue)
             {
@@ -538,14 +544,206 @@ public class ExcelHelper
         sheetData.InsertAt(row1, 0);
     }
 
+    private static readonly string[] RequiredEmployeeLogicalColumns =
+    {
+        "EmployeeNumber", "Username", "Password", "Email", "ID", "Role"
+    };
+
+    private static bool EmployeeLogicalHeadersMissing(IReadOnlyDictionary<string, int> headerMap)
+    {
+        if (headerMap == null || headerMap.Count == 0)
+        {
+            return true;
+        }
+
+        foreach (string required in RequiredEmployeeLogicalColumns)
+        {
+            if (!headerMap.ContainsKey(required))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Maps legacy header labels (EmployeeI, NationalID, etc.) to canonical columns without moving data.
+    /// </summary>
+    private static Dictionary<string, int> BuildEmployeeHeaderMapFromSheet(WorksheetPart wsp, SharedStringTablePart sstp)
+    {
+        var map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>();
+        if (sheetData == null)
+        {
+            return map;
+        }
+
+        Row first = sheetData.Elements<Row>().OrderBy(r => r.RowIndex?.Value ?? uint.MaxValue).FirstOrDefault();
+        if (first == null)
+        {
+            return map;
+        }
+
+        foreach (Cell cell in first.Elements<Cell>().OrderBy(c => ColumnIndexFromReference(c.CellReference)))
+        {
+            string raw = GetCellRawText(cell, sstp).Trim();
+            if (raw.Length == 0)
+            {
+                continue;
+            }
+
+            int col = ColumnIndexFromReference(cell.CellReference);
+            RegisterEmployeeHeaderAlias(map, raw, col);
+        }
+
+        return map;
+    }
+
+    private static void RegisterEmployeeHeaderAlias(Dictionary<string, int> map, string rawHeader, int columnIndex)
+    {
+        map[rawHeader] = columnIndex;
+
+        string canonical = NormalizeEmployeeHeaderKey(rawHeader);
+        if (canonical.Length > 0)
+        {
+            map[canonical] = columnIndex;
+        }
+    }
+
+    private static string NormalizeEmployeeHeaderKey(string rawHeader)
+    {
+        string trimmed = (rawHeader ?? string.Empty).Trim();
+        if (trimmed.Length == 0)
+        {
+            return string.Empty;
+        }
+
+        string compact = trimmed.Replace(" ", string.Empty);
+        switch (compact.ToUpperInvariant())
+        {
+            case "EMPLOYEEI":
+            case "EMPLOYEEID":
+            case "EMPLOYEENUMBER":
+                return "EmployeeNumber";
+            case "NATIONALID":
+            case "ID":
+                return "ID";
+            case "USERNAME":
+                return "Username";
+            case "PASSWORD":
+                return "Password";
+            case "EMAIL":
+                return "Email";
+            case "ROLE":
+                return "Role";
+            default:
+                return trimmed;
+        }
+    }
+
+    private static bool IsLegacyEmployeeHeaderLabel(string rawHeader, string canonicalHeader)
+    {
+        return string.Equals(NormalizeEmployeeHeaderKey(rawHeader), canonicalHeader, StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(rawHeader.Trim(), canonicalHeader, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Renames header labels in row 1 only (same columns) — does not recreate the workbook or move data.
+    /// </summary>
+    private static void RenameLegacyEmployeeHeaderLabels(WorksheetPart wsp, SharedStringTablePart sstp)
+    {
+        SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>();
+        Row row1 = sheetData?.Elements<Row>().FirstOrDefault(r => (r.RowIndex?.Value ?? 1u) == 1u);
+        if (row1 == null)
+        {
+            return;
+        }
+
+        foreach (Cell cell in row1.Elements<Cell>().ToList())
+        {
+            string raw = GetCellRawText(cell, sstp).Trim();
+            if (raw.Length == 0)
+            {
+                continue;
+            }
+
+            string canonical = NormalizeEmployeeHeaderKey(raw);
+            if (canonical.Length == 0 || !IsLegacyEmployeeHeaderLabel(raw, canonical))
+            {
+                continue;
+            }
+
+            int col = ColumnIndexFromReference(cell.CellReference);
+            if (col <= 0)
+            {
+                continue;
+            }
+
+            cell.Remove();
+            row1.AppendChild(NewInlineTextCell(1u, col, canonical));
+        }
+    }
+
+    /// <summary>
+    /// Uses existing column layout when possible; only creates row 1 when headers are truly missing.
+    /// </summary>
+    private static Dictionary<string, int> EnsureEmployeeHeaderRow(WorksheetPart wsp, SharedStringTablePart sstp)
+    {
+        Dictionary<string, int> headerMap = BuildEmployeeHeaderMapFromSheet(wsp, sstp);
+        if (!EmployeeLogicalHeadersMissing(headerMap))
+        {
+            RenameLegacyEmployeeHeaderLabels(wsp, sstp);
+            return BuildEmployeeHeaderMapFromSheet(wsp, sstp);
+        }
+
+        ReplaceEmployeeHeaderRow(wsp);
+        return BuildStandardEmployeeHeaderMap();
+    }
+
+    private static Dictionary<string, int> BuildStandardEmployeeHeaderMap()
+    {
+        var map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        for (int i = 0; i < ExcelFileManager.EmployeeColumnHeaders.Length; i++)
+        {
+            string header = ExcelFileManager.EmployeeColumnHeaders[i];
+            int col = i + 1;
+            RegisterEmployeeHeaderAlias(map, header, col);
+        }
+
+        return map;
+    }
+
     private static void AppendEmployeeCells(Row row, uint rowIndex, IReadOnlyDictionary<string, int> headerMap, Employee employee)
     {
-        SetCellPrefer(row, rowIndex, headerMap, "Username", employee.Username);
-        SetCellPrefer(row, rowIndex, headerMap, "Password", employee.Password);
-        SetCellPrefer(row, rowIndex, headerMap, "EmployeeNumber", "EmployeeID", employee.EmployeeID);
-        SetCellPrefer(row, rowIndex, headerMap, "Email", employee.Email);
-        SetCellPrefer(row, rowIndex, headerMap, "ID", "NationalID", employee.NationalID);
-        SetCellPrefer(row, rowIndex, headerMap, "Role", employee.Role);
+        SetCellOnRowAny(row, rowIndex, headerMap, (employee.EmployeeID ?? string.Empty).Trim(), "EmployeeNumber", "EmployeeI", "EmployeeID");
+        SetCellOnRowAny(row, rowIndex, headerMap, (employee.Username ?? string.Empty).Trim(), "Username");
+        SetCellOnRowAny(row, rowIndex, headerMap, employee.Password ?? string.Empty, "Password");
+        SetCellOnRowAny(row, rowIndex, headerMap, (employee.Email ?? string.Empty).Trim(), "Email");
+        SetCellOnRowAny(row, rowIndex, headerMap, (employee.NationalID ?? string.Empty).Trim(), "ID", "NationalID");
+        SetCellOnRowAny(row, rowIndex, headerMap, (employee.Role ?? string.Empty).Trim(), "Role");
+    }
+
+    private static void SetCellOnRowAny(
+        Row row,
+        uint rowIndex,
+        IReadOnlyDictionary<string, int> headerMap,
+        string value,
+        params string[] columnNames)
+    {
+        if (columnNames == null)
+        {
+            return;
+        }
+
+        foreach (string columnName in columnNames)
+        {
+            if (headerMap.ContainsKey(columnName))
+            {
+                SetCellOnRow(row, rowIndex, headerMap, columnName, value);
+                return;
+            }
+        }
     }
 
     private IReadOnlyList<Customer> ReadCustomersCore(
@@ -937,14 +1135,15 @@ public class ExcelHelper
         return null;
     }
 
+    /// <summary>Plain string cell (no styles, shared strings, or inline formatting).</summary>
     private static Cell NewInlineTextCell(uint rowIndex, int columnIndex1Based, string text)
     {
         string reference = GetColumnName(columnIndex1Based) + rowIndex.ToString(CultureInfo.InvariantCulture);
         return new Cell
         {
             CellReference = reference,
-            DataType = CellValues.InlineString,
-            InlineString = new InlineString(new Text(text ?? string.Empty))
+            DataType = CellValues.String,
+            CellValue = new CellValue(text ?? string.Empty)
         };
     }
 

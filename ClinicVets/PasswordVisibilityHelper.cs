@@ -63,6 +63,17 @@ namespace ClinicVets
             return toggle;
         }
 
+        internal static void ApplyToggleLayout(ChromeTextPlate plate, TextBox passwordBox, LinkLabel toggle)
+        {
+            if (plate == null || passwordBox == null || toggle == null)
+            {
+                return;
+            }
+
+            LayoutToggle(plate, passwordBox, toggle);
+            toggle.BringToFront();
+        }
+
         internal static void ResetToHidden(TextBox passwordBox, LinkLabel toggle)
         {
             if (passwordBox == null)

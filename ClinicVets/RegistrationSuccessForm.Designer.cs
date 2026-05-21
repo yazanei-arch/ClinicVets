@@ -127,7 +127,7 @@ namespace ClinicVets
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "RegistrationSuccessForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ClinicVets — Registration Successful";
             this.Load += new System.EventHandler(this.RegistrationSuccessForm_Load);
             this.pnlCard.ResumeLayout(false);

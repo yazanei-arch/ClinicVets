@@ -11,6 +11,7 @@ namespace ClinicVets.UI
         public double Weight { get; set; }
         public DateTime BirthDate { get; set; }
         public string Owner { get; set; }
+        public string OwnerID { get; set; }
         public string ChipNumber { get; set; }
         public DateTime LastVaccineDate { get; set; }
     }

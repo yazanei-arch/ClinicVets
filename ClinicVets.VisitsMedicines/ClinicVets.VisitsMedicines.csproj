@@ -1,13 +1,51 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net5.0-windows</TargetFramework>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net472</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
+		<RootNamespace>ClinicVets.VisitsMedicines</RootNamespace>
+		<AssemblyName>ClinicVets.VisitsMedicines</AssemblyName>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Remove="Program.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="Microsoft.VisualBasic" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="ClosedXML" Version="0.105.0" />
+		<PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\ClinicVets\ClinicFormLayout.cs" Link="ClinicFormLayout.cs" />
+		<Compile Include="..\ClinicVets\ExcelFileManager.cs" Link="ExcelFileManager.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="VisitManagementForm.cs">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="VisitManagementForm.Designer.cs">
+			<DependentUpon>VisitManagementForm.cs</DependentUpon>
+		</Compile>
+		<EmbeddedResource Update="VisitManagementForm.resx">
+			<DependentUpon>VisitManagementForm.cs</DependentUpon>
+		</EmbeddedResource>
+		<Compile Update="MedicinesForm.cs">
+			<SubType>Form</SubType>
+		</Compile>
+		<Compile Update="MedicinesForm.Designer.cs">
+			<DependentUpon>MedicinesForm.cs</DependentUpon>
+		</Compile>
+		<EmbeddedResource Update="MedicinesForm.resx">
+			<DependentUpon>MedicinesForm.cs</DependentUpon>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>

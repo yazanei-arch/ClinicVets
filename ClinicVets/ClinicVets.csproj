@@ -12,7 +12,12 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
@@ -51,11 +56,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>packages\DocumentFormat.OpenXml.2.16.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+      <HintPath>..\packages\DocumentFormat.OpenXml.3.1.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml.Framework">
+      <HintPath>..\packages\DocumentFormat.OpenXml.Framework.3.1.1\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.IO.Packaging">
       <HintPath>packages\System.IO.Packaging.6.0.0\lib\net461\System.IO.Packaging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Resources.Extensions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)system.resources.extensions\8.0.0\lib\net462\System.Resources.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -135,12 +148,31 @@
     <Compile Include="RegistrationSuccessForm.Designer.cs">
       <DependentUpon>RegistrationSuccessForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClinicFormLayout.cs" />
+    <Compile Include="NavigationHelper.cs" />
+    <Compile Include="RolePermissions.cs" />
+    <Compile Include="PetAssemblyBootstrap.cs" />
+    <Compile Include="PetFlowBootstrap.cs" />
+    <Compile Include="PetFlowGateway.cs" />
     <Compile Include="RoleNavigationHelper.cs" />
+    <Compile Include="VetVisitsLauncher.cs" />
     <Compile Include="SecretaryMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SecretaryMenuForm.Designer.cs">
       <DependentUpon>SecretaryMenuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VetDashboardNavButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="VetMenuCardPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="VeterinarianMenuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VeterinarianMenuForm.Designer.cs">
+      <DependentUpon>VeterinarianMenuForm.cs</DependentUpon>
     </Compile>
     <Compile Include="RoundedActionButton.cs">
       <SubType>Component</SubType>
@@ -193,6 +225,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClinicVets.VisitsMedicines\ClinicVets.VisitsMedicines.csproj">
+      <Project>{355E696D-5346-43B1-AA9F-7962B84DF706}</Project>
+      <Name>ClinicVets.VisitsMedicines</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,36 +1,126 @@
 ﻿using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace ClinicVets.VisitsMedicines
 {
-    public partial class Form1 : Form
+    public partial class MedicinesForm : Form
     {
+        private const string BackgroundFileName = "background.png";
+
         private List<Medicine> medicines = new List<Medicine>();
-        private string filePath = @"C:\Users\sohel\Desktop\ClinicVets-main_2\ClinicVets-main\ClinicVetsData.xlsx";
+        private string filePath => ExcelFileManager.FilePath;
         TextBox txtName = new TextBox();
         NumericUpDown numQuantity = new NumericUpDown();
         NumericUpDown numPrice = new NumericUpDown();
         DateTimePicker dtpExpiry = new DateTimePicker();
         DataGridView dgvMedicines = new DataGridView();
 
-        public Form1()
+        public MedicinesForm()
         {
             InitializeComponent();
+            FormClosed += MedicinesForm_FormClosed;
+            ApplyBackgroundFromImagesFolder();
             BuildDesign();
+            ClinicFormLayout.ApplyStandard(this);
+            ApplyBackgroundFromImagesFolder();
             LoadMedicines();
             RefreshTable();
         }
 
+        private void MedicinesForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            FormClosed -= MedicinesForm_FormClosed;
+            ReleaseFormBackground();
+        }
+
+        private void ApplyBackgroundFromImagesFolder()
+        {
+            ReleaseFormBackground();
+
+            try
+            {
+                string path = FindBackgroundImagePath();
+                if (path == null)
+                {
+                    return;
+                }
+
+                BackgroundImageLayout = ImageLayout.Stretch;
+                using (Image loaded = Image.FromFile(path))
+                {
+                    BackgroundImage = new Bitmap(loaded);
+                }
+            }
+            catch
+            {
+                BackgroundImage = null;
+            }
+        }
+
+        private void ReleaseFormBackground()
+        {
+            if (BackgroundImage == null)
+            {
+                return;
+            }
+
+            Image previous = BackgroundImage;
+            BackgroundImage = null;
+            previous.Dispose();
+        }
+
+        private static string FindBackgroundImagePath()
+        {
+            foreach (string root in GetBackgroundSearchRoots())
+            {
+                if (string.IsNullOrWhiteSpace(root))
+                {
+                    continue;
+                }
+
+                string resourcesPath = Path.Combine(root, "Resources", BackgroundFileName);
+                if (File.Exists(resourcesPath))
+                {
+                    return resourcesPath;
+                }
+
+                string imagesPath = Path.Combine(root, "images", BackgroundFileName);
+                if (File.Exists(imagesPath))
+                {
+                    return imagesPath;
+                }
+            }
+
+            return null;
+        }
+
+        private static IEnumerable<string> GetBackgroundSearchRoots()
+        {
+            yield return Application.StartupPath;
+            yield return AppDomain.CurrentDomain.BaseDirectory;
+
+            string location = Assembly.GetExecutingAssembly().Location;
+            if (!string.IsNullOrEmpty(location))
+            {
+                string dir = Path.GetDirectoryName(location);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    yield return dir;
+                }
+            }
+
+            yield return Environment.CurrentDirectory;
+        }
+
 private void BuildDesign()
 {
-    this.Text = "Medicine Inventory";
-    this.Width = 1050;
-    this.Height = 680;
-    this.StartPosition = FormStartPosition.CenterScreen;
+    this.Text = "Medicine Inventory / Pharmacy";
     this.Font = new System.Drawing.Font("Segoe UI", 10);
 
     Panel inputPanel = new Panel()
@@ -169,6 +259,21 @@ private void BuildDesign()
     dgvMedicines.ColumnHeadersDefaultCellStyle.Font =
         new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
 
+    Button btnBack = new Button
+    {
+        Text = "← Back",
+        Left = 20,
+        Top = 20,
+        Width = 100,
+        Height = 36,
+        BackColor = System.Drawing.Color.Transparent,
+        FlatStyle = FlatStyle.Flat,
+        ForeColor = System.Drawing.Color.FromArgb(20, 70, 120),
+        Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold)
+    };
+    btnBack.Click += (sender, e) => Close();
+
+    this.Controls.Add(btnBack);
     this.Controls.Add(inputPanel);
     this.Controls.Add(dgvMedicines);
 }

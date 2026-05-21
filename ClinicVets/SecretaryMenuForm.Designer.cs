@@ -24,6 +24,7 @@ namespace ClinicVets
             this.btnAddCustomer = new ClinicVets.RoundedActionButton();
             this.btnSearchCustomer = new ClinicVets.RoundedActionButton();
             this.btnViewCustomers = new ClinicVets.RoundedActionButton();
+            this.btnManagePets = new ClinicVets.RoundedActionButton();
             this.btnLogout = new ClinicVets.RoundedActionButton();
             this.pnlCard.SuspendLayout();
             this.SuspendLayout();
@@ -36,11 +37,12 @@ namespace ClinicVets
             this.pnlCard.Controls.Add(this.btnAddCustomer);
             this.pnlCard.Controls.Add(this.btnSearchCustomer);
             this.pnlCard.Controls.Add(this.btnViewCustomers);
+            this.pnlCard.Controls.Add(this.btnManagePets);
             this.pnlCard.Controls.Add(this.btnLogout);
-            this.pnlCard.Location = new System.Drawing.Point(390, 255);
+            this.pnlCard.Location = new System.Drawing.Point(270, 155);
             this.pnlCard.Name = "pnlCard";
             this.pnlCard.Padding = new System.Windows.Forms.Padding(0);
-            this.pnlCard.Size = new System.Drawing.Size(560, 430);
+            this.pnlCard.Size = new System.Drawing.Size(560, 480);
             this.pnlCard.TabIndex = 0;
             // 
             // lblTitle
@@ -66,7 +68,7 @@ namespace ClinicVets
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Size = new System.Drawing.Size(460, 36);
             this.lblSubtitle.TabIndex = 1;
-            this.lblSubtitle.Text = "Choose a customer task below.";
+            this.lblSubtitle.Text = "Customers and pets only.";
             this.lblSubtitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // btnAddCustomer
@@ -123,6 +125,24 @@ namespace ClinicVets
             this.btnViewCustomers.UseVisualStyleBackColor = false;
             this.btnViewCustomers.Click += new System.EventHandler(this.btnViewCustomers_Click);
             // 
+            // btnManagePets
+            // 
+            this.btnManagePets.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
+            this.btnManagePets.CornerRadius = 8;
+            this.btnManagePets.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnManagePets.FlatAppearance.BorderSize = 0;
+            this.btnManagePets.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnManagePets.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnManagePets.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.btnManagePets.IsOutlineStyle = true;
+            this.btnManagePets.Location = new System.Drawing.Point(50, 330);
+            this.btnManagePets.Name = "btnManagePets";
+            this.btnManagePets.Size = new System.Drawing.Size(460, 48);
+            this.btnManagePets.TabIndex = 5;
+            this.btnManagePets.Text = "Pet Management";
+            this.btnManagePets.UseVisualStyleBackColor = false;
+            this.btnManagePets.Click += new System.EventHandler(this.btnManagePets_Click);
+            // 
             // btnLogout
             // 
             this.btnLogout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
@@ -134,10 +154,10 @@ namespace ClinicVets
             this.btnLogout.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogout.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.btnLogout.IsOutlineStyle = true;
-            this.btnLogout.Location = new System.Drawing.Point(50, 345);
+            this.btnLogout.Location = new System.Drawing.Point(50, 395);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Size = new System.Drawing.Size(460, 48);
-            this.btnLogout.TabIndex = 5;
+            this.btnLogout.TabIndex = 6;
             this.btnLogout.Text = "Logout";
             this.btnLogout.UseVisualStyleBackColor = false;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
@@ -149,13 +169,13 @@ namespace ClinicVets
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(244)))), ((int)(((byte)(252)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnLogout;
-            this.ClientSize = new System.Drawing.Size(1240, 880);
+            this.ClientSize = new System.Drawing.Size(1100, 700);
             this.Controls.Add(this.pnlCard);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "SecretaryMenuForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ClinicVets — Secretary Menu";
             this.Load += new System.EventHandler(this.SecretaryMenuForm_Load);
             this.pnlCard.ResumeLayout(false);
@@ -171,6 +191,7 @@ namespace ClinicVets
         private RoundedActionButton btnAddCustomer;
         private RoundedActionButton btnSearchCustomer;
         private RoundedActionButton btnViewCustomers;
+        private RoundedActionButton btnManagePets;
         private RoundedActionButton btnLogout;
     }
 }

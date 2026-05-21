@@ -43,8 +43,65 @@ namespace ClinicVets
                 return;
             }
 
+            string username = (employee.Username ?? string.Empty).Trim();
+            string email = (employee.Email ?? string.Empty).Trim();
+            string employeeNumber = (employee.EmployeeID ?? string.Empty).Trim();
+
+            if (username.Length == 0)
+            {
+                throw new InvalidOperationException("Username is required.");
+            }
+
+            if (email.Length == 0)
+            {
+                throw new InvalidOperationException("Email is required.");
+            }
+
+            if (employeeNumber.Length == 0)
+            {
+                throw new InvalidOperationException("Employee number is required.");
+            }
+
+            EnsureEmployeeIsUnique(username, email, employeeNumber);
+
             Excel.AppendEmployee(employee);
             EmployeeCredentialStore.Add(employee);
+        }
+
+        private static void EnsureEmployeeIsUnique(string username, string email, string employeeNumber)
+        {
+            foreach (Employee existing in Excel.ReadEmployees())
+            {
+                ThrowIfDuplicate(existing, username, email, employeeNumber);
+            }
+
+            foreach (Employee existing in EmployeeCredentialStore.GetInMemoryEmployees())
+            {
+                ThrowIfDuplicate(existing, username, email, employeeNumber);
+            }
+        }
+
+        private static void ThrowIfDuplicate(Employee existing, string username, string email, string employeeNumber)
+        {
+            if (existing == null)
+            {
+                return;
+            }
+
+            if (string.Equals(existing.Username?.Trim(), username, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("An employee with this username already exists.");
+            }
+
+            if (string.Equals(existing.Email?.Trim(), email, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("An employee with this email already exists.");
+            }
+
+            if (string.Equals(existing.EmployeeID?.Trim(), employeeNumber, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("An employee with this employee number already exists.");
+            }
         }
     }
 }

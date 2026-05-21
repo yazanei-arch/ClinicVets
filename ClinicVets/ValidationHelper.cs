@@ -195,6 +195,61 @@ namespace ClinicVets
       return null;
     }
 
+    /// <summary>Password rules for forgot-password reset only (does not affect login/register).</summary>
+    public static string ValidateResetPassword(string value)
+    {
+      if (string.IsNullOrEmpty(value))
+      {
+        return RequiredMessage;
+      }
+
+      if (value.Length < 8 || value.Length > 10)
+      {
+        return "Password must be 8-10 characters.";
+      }
+
+      bool hasLetter = false;
+      bool hasDigit = false;
+      bool hasSpecial = false;
+
+      foreach (char c in value)
+      {
+        if (IsEnglishLetter(c))
+        {
+          hasLetter = true;
+        }
+        else if (char.IsDigit(c))
+        {
+          hasDigit = true;
+        }
+        else if ("!$#()".IndexOf(c) >= 0)
+        {
+          hasSpecial = true;
+        }
+        else
+        {
+          return "Password may only use letters, digits, and !$#() special characters.";
+        }
+      }
+
+      if (!hasLetter)
+      {
+        return "Password must contain at least one letter.";
+      }
+
+      if (!hasDigit)
+      {
+        return "Password must contain at least one number.";
+      }
+
+      if (!hasSpecial)
+      {
+        return "Password must contain at least one special character (!$#()).";
+      }
+
+      return null;
+    }
+
     public static string ValidateConfirmPassword(string password, string confirm)
     {
       string required = ValidateRequired(confirm);

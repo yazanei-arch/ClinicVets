@@ -246,7 +246,7 @@ namespace ClinicVets
             }
             finally
             {
-                SessionManager.CurrentUser = null;
+                SessionManager.Clear();
                 if (!IsDisposed)
                 {
                     Show();
