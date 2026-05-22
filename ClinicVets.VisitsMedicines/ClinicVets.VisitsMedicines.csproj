@@ -23,8 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Include="..\ClinicVets\ClinicFormLayout.cs" Link="ClinicFormLayout.cs" />
-		<Compile Include="..\ClinicVets\ExcelFileManager.cs" Link="ExcelFileManager.cs" />
+		<ProjectReference Include="..\ClinicVets\ClinicVets.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

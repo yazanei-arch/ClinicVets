@@ -28,7 +28,11 @@
           "net472": {
             "framework": "net472",
             "targetAlias": "net472",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj": {
+                "projectPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -58,6 +62,52 @@
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj",
+        "projectName": "ClinicVets",
+        "projectPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj",
+        "packagesPath": "C:\\Users\\abdal\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "C:\\Users\\abdal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "framework": "net472",
+            "projectReferences": {}
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net472": {
+          "framework": "net472",
+          "dependencies": {
+            "System.Resources.Extensions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          }
         }
       }
     }

@@ -226,6 +226,19 @@
             "related": ".xml"
           }
         }
+      },
+      "ClinicVets/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.7.2",
+        "dependencies": {
+          "System.Resources.Extensions": "8.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ClinicVets.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ClinicVets.dll": {}
+        }
       }
     }
   },
@@ -548,10 +561,16 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "ClinicVets/1.0.0": {
+      "type": "project",
+      "path": "../ClinicVets/ClinicVets.csproj",
+      "msbuildProject": "../ClinicVets/ClinicVets.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net472": [
+      "ClinicVets >= 1.0.0",
       "ClosedXML >= 0.105.0",
       "System.Resources.Extensions >= 8.0.0"
     ]
@@ -583,7 +602,11 @@
         "net472": {
           "framework": "net472",
           "targetAlias": "net472",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj": {
+              "projectPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

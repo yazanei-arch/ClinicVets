@@ -18,6 +18,9 @@
   <ItemGroup>
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
   </ItemGroup>
+  <PropertyGroup>
+    <NuGetPackageRoot Condition="'$(NuGetPackageRoot)' == ''">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +47,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -69,6 +73,30 @@
     </Reference>
     <Reference Include="System.Resources.Extensions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>$(NuGetPackageRoot)system.resources.extensions\8.0.0\lib\net462\System.Resources.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClosedXML">
+      <HintPath>$(NuGetPackageRoot)closedxml\0.105.0\lib\netstandard2.0\ClosedXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClosedXML.Parser">
+      <HintPath>$(NuGetPackageRoot)closedxml.parser\2.0.0\lib\netstandard2.0\ClosedXML.Parser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ExcelNumberFormat">
+      <HintPath>$(NuGetPackageRoot)excelnumberformat\1.1.0\lib\net20\ExcelNumberFormat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RBush">
+      <HintPath>$(NuGetPackageRoot)rbush.signed\4.0.0\lib\net47\RBush.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SixLabors.Fonts">
+      <HintPath>$(NuGetPackageRoot)sixlabors.fonts\1.0.0\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode">
+      <HintPath>$(NuGetPackageRoot)microsoft.bcl.hashcode\1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -155,6 +183,18 @@
     <Compile Include="PetFlowBootstrap.cs" />
     <Compile Include="PetFlowGateway.cs" />
     <Compile Include="RoleNavigationHelper.cs" />
+    <Compile Include="..\ClinicVets.VisitsMedicines\VisitManagementForm.cs" Link="VisitsMedicines\VisitManagementForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\ClinicVets.VisitsMedicines\VisitManagementForm.Designer.cs" Link="VisitsMedicines\VisitManagementForm.Designer.cs">
+      <DependentUpon>VisitManagementForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\ClinicVets.VisitsMedicines\MedicinesForm.cs" Link="VisitsMedicines\MedicinesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\ClinicVets.VisitsMedicines\MedicinesForm.Designer.cs" Link="VisitsMedicines\MedicinesForm.Designer.cs">
+      <DependentUpon>MedicinesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="VetVisitsLauncher.cs" />
     <Compile Include="SecretaryMenuForm.cs">
       <SubType>Form</SubType>
@@ -207,6 +247,12 @@
     <EmbeddedResource Include="SecretaryMenuForm.resx">
       <DependentUpon>SecretaryMenuForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\ClinicVets.VisitsMedicines\VisitManagementForm.resx" Link="VisitsMedicines\VisitManagementForm.resx">
+      <DependentUpon>VisitManagementForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\ClinicVets.VisitsMedicines\MedicinesForm.resx" Link="VisitsMedicines\MedicinesForm.resx">
+      <DependentUpon>MedicinesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -225,12 +271,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ClinicVets.VisitsMedicines\ClinicVets.VisitsMedicines.csproj">
-      <Project>{355E696D-5346-43B1-AA9F-7962B84DF706}</Project>
-      <Name>ClinicVets.VisitsMedicines</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
