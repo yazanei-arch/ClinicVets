@@ -1,20 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj": {}
+    "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj": {}
   },
   "projects": {
-    "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj": {
+    "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.Pets\\ClinicVets.Pets.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
-        "projectName": "ClinicVets.VisitsMedicines",
-        "projectPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
-        "packagesPath": "C:\\Users\\abdal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\obj\\",
+        "projectUniqueName": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.Pets\\ClinicVets.Pets.csproj",
+        "projectName": "ClinicVets.Pets",
+        "projectPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.Pets\\ClinicVets.Pets.csproj",
+        "packagesPath": "C:\\Users\\royal\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.Pets\\obj\\",
         "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
         "configFilePaths": [
-          "C:\\Users\\abdal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\royal\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,11 +27,58 @@
         },
         "frameworks": {
           "net472": {
-            "framework": "net472",
+            "projectReferences": {
+              "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj": {
+                "projectPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net472": {}
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
+        "projectName": "ClinicVets.VisitsMedicines",
+        "projectPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
+        "packagesPath": "C:\\Users\\royal\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\royal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
             "targetAlias": "net472",
             "projectReferences": {
-              "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj": {
-                "projectPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj"
+              "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.Pets\\ClinicVets.Pets.csproj": {
+                "projectPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.Pets\\ClinicVets.Pets.csproj"
+              },
+              "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj": {
+                "projectPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj"
               }
             }
           }
@@ -39,17 +87,10 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "10.0.300"
+        }
       },
       "frameworks": {
         "net472": {
-          "framework": "net472",
           "targetAlias": "net472",
           "dependencies": {
             "ClosedXML": {
@@ -61,23 +102,22 @@
               "version": "[8.0.0, )"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.416\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj": {
+    "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj",
+        "projectUniqueName": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj",
         "projectName": "ClinicVets",
-        "projectPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj",
-        "packagesPath": "C:\\Users\\abdal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\obj\\",
+        "projectPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj",
+        "packagesPath": "C:\\Users\\royal\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
-        "UsingMicrosoftNETSdk": false,
         "configFilePaths": [
-          "C:\\Users\\abdal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\royal\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -89,19 +129,12 @@
         },
         "frameworks": {
           "net472": {
-            "framework": "net472",
             "projectReferences": {}
           }
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net472": {
-          "framework": "net472",
           "dependencies": {
             "System.Resources.Extensions": {
               "target": "Package",
@@ -112,9 +145,6 @@
       },
       "runtimes": {
         "win": {
-          "#import": []
-        },
-        "win-arm64": {
           "#import": []
         },
         "win-x64": {

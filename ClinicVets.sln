@@ -1,15 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.6.11806.211 stable
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.37301.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicVets", "ClinicVets\ClinicVets.csproj", "{5BE245A0-6763-46B5-8337-566ABF0F47F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicVets.AuthCustomers", "ClinicVets.AuthCustomers\ClinicVets.AuthCustomers.csproj", "{6B60C783-D313-4CD7-8963-3AF2730DED15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicVets.AuthCustomers", "ClinicVets.AuthCustomers\ClinicVets.AuthCustomers.csproj", "{6B60C783-D313-4CD7-8963-3AF2730DED15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicVets.Pets", "ClinicVets.Pets\ClinicVets.Pets.csproj", "{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicVets.VisitsMedicines", "ClinicVets.VisitsMedicines\ClinicVets.VisitsMedicines.csproj", "{355E696D-5346-43B1-AA9F-7962B84DF706}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicVets.VisitsMedicines", "ClinicVets.VisitsMedicines\ClinicVets.VisitsMedicines.csproj", "{355E696D-5346-43B1-AA9F-7962B84DF706}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{AE7F0789-13D9-4364-B27A-EA7EB857BC8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{355E696D-5346-43B1-AA9F-7962B84DF706}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{355E696D-5346-43B1-AA9F-7962B84DF706}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{355E696D-5346-43B1-AA9F-7962B84DF706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE7F0789-13D9-4364-B27A-EA7EB857BC8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE7F0789-13D9-4364-B27A-EA7EB857BC8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE7F0789-13D9-4364-B27A-EA7EB857BC8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE7F0789-13D9-4364-B27A-EA7EB857BC8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

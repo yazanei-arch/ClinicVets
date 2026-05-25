@@ -180,16 +180,16 @@
     <Compile Include="PetNavigationHooks.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClinicVets\ClinicVets.csproj">
-      <Project>{5be245a0-6763-46b5-8337-566abf0f47f8}</Project>
-      <Name>ClinicVets</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\WhatsApp Image 2026-05-14 at 16.47.35.jpeg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClinicVets\ClinicVets.csproj">
+      <Project>{5be245a0-6763-46b5-8337-566abf0f47f8}</Project>
+      <Name>ClinicVets</Name>
+    </ProjectReference>
   </ItemGroup>
   <Target Name="CopyToMainAppOutput" AfterTargets="Build">
     <PropertyGroup>
