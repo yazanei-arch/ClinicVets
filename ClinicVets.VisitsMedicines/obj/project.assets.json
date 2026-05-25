@@ -1,7 +1,7 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
-    "net472": {
+    ".NETFramework,Version=v4.7.2": {
       "ClosedXML/0.105.0": {
         "type": "package",
         "dependencies": {
@@ -15,14 +15,10 @@
           "System.Memory": "4.5.5"
         },
         "compile": {
-          "lib/netstandard2.0/ClosedXML.dll": {
-            "related": ".pdb;.xml"
-          }
+          "lib/netstandard2.0/ClosedXML.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/ClosedXML.dll": {
-            "related": ".pdb;.xml"
-          }
+          "lib/netstandard2.0/ClosedXML.dll": {}
         }
       },
       "ClosedXML.Parser/2.0.0": {
@@ -31,14 +27,10 @@
           "System.Memory": "4.5.4"
         },
         "compile": {
-          "lib/netstandard2.0/ClosedXML.Parser.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/ClosedXML.Parser.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/ClosedXML.Parser.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/ClosedXML.Parser.dll": {}
         }
       },
       "DocumentFormat.OpenXml/3.1.1": {
@@ -52,14 +44,10 @@
           "WindowsBase"
         ],
         "compile": {
-          "lib/net46/DocumentFormat.OpenXml.dll": {
-            "related": ".xml"
-          }
+          "lib/net46/DocumentFormat.OpenXml.dll": {}
         },
         "runtime": {
-          "lib/net46/DocumentFormat.OpenXml.dll": {
-            "related": ".xml"
-          }
+          "lib/net46/DocumentFormat.OpenXml.dll": {}
         }
       },
       "DocumentFormat.OpenXml.Framework/3.1.1": {
@@ -70,27 +58,19 @@
           "WindowsBase"
         ],
         "compile": {
-          "lib/net46/DocumentFormat.OpenXml.Framework.dll": {
-            "related": ".xml"
-          }
+          "lib/net46/DocumentFormat.OpenXml.Framework.dll": {}
         },
         "runtime": {
-          "lib/net46/DocumentFormat.OpenXml.Framework.dll": {
-            "related": ".xml"
-          }
+          "lib/net46/DocumentFormat.OpenXml.Framework.dll": {}
         }
       },
       "ExcelNumberFormat/1.1.0": {
         "type": "package",
         "compile": {
-          "lib/net20/ExcelNumberFormat.dll": {
-            "related": ".xml"
-          }
+          "lib/net20/ExcelNumberFormat.dll": {}
         },
         "runtime": {
-          "lib/net20/ExcelNumberFormat.dll": {
-            "related": ".xml"
-          }
+          "lib/net20/ExcelNumberFormat.dll": {}
         }
       },
       "Microsoft.Bcl.HashCode/1.1.1": {
@@ -103,22 +83,16 @@
           "ref/net461/Microsoft.Bcl.HashCode.dll": {}
         },
         "runtime": {
-          "lib/net461/Microsoft.Bcl.HashCode.dll": {
-            "related": ".xml"
-          }
+          "lib/net461/Microsoft.Bcl.HashCode.dll": {}
         }
       },
       "RBush.Signed/4.0.0": {
         "type": "package",
         "compile": {
-          "lib/net47/RBush.dll": {
-            "related": ".xml"
-          }
+          "lib/net47/RBush.dll": {}
         },
         "runtime": {
-          "lib/net47/RBush.dll": {
-            "related": ".xml"
-          }
+          "lib/net47/RBush.dll": {}
         }
       },
       "SixLabors.Fonts/1.0.0": {
@@ -130,14 +104,10 @@
           "System.Runtime.CompilerServices.Unsafe": "4.7.0"
         },
         "compile": {
-          "lib/netstandard2.0/SixLabors.Fonts.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/SixLabors.Fonts.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/SixLabors.Fonts.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/SixLabors.Fonts.dll": {}
         }
       },
       "System.Buffers/4.5.1": {
@@ -146,14 +116,10 @@
           "mscorlib"
         ],
         "compile": {
-          "ref/net45/System.Buffers.dll": {
-            "related": ".xml"
-          }
+          "ref/net45/System.Buffers.dll": {}
         },
         "runtime": {
-          "lib/net461/System.Buffers.dll": {
-            "related": ".xml"
-          }
+          "lib/net461/System.Buffers.dll": {}
         }
       },
       "System.Memory/4.5.5": {
@@ -168,14 +134,10 @@
           "mscorlib"
         ],
         "compile": {
-          "lib/net461/System.Memory.dll": {
-            "related": ".xml"
-          }
+          "lib/net461/System.Memory.dll": {}
         },
         "runtime": {
-          "lib/net461/System.Memory.dll": {
-            "related": ".xml"
-          }
+          "lib/net461/System.Memory.dll": {}
         }
       },
       "System.Numerics.Vectors/4.5.0": {
@@ -185,14 +147,10 @@
           "mscorlib"
         ],
         "compile": {
-          "ref/net46/System.Numerics.Vectors.dll": {
-            "related": ".xml"
-          }
+          "ref/net46/System.Numerics.Vectors.dll": {}
         },
         "runtime": {
-          "lib/net46/System.Numerics.Vectors.dll": {
-            "related": ".xml"
-          }
+          "lib/net46/System.Numerics.Vectors.dll": {}
         }
       },
       "System.Resources.Extensions/8.0.0": {
@@ -201,14 +159,10 @@
           "System.Memory": "4.5.5"
         },
         "compile": {
-          "lib/net462/System.Resources.Extensions.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/System.Resources.Extensions.dll": {}
         },
         "runtime": {
-          "lib/net462/System.Resources.Extensions.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/System.Resources.Extensions.dll": {}
         },
         "build": {
           "buildTransitive/net462/System.Resources.Extensions.targets": {}
@@ -217,14 +171,10 @@
       "System.Runtime.CompilerServices.Unsafe/4.7.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {
-            "related": ".xml"
-          }
+          "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
       "ClinicVets/1.0.0": {
@@ -238,6 +188,19 @@
         },
         "runtime": {
           "bin/placeholder/ClinicVets.dll": {}
+        }
+      },
+      "ClinicVets.Pets/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.7.2",
+        "dependencies": {
+          "ClinicVets": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ClinicVets.Pets.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ClinicVets.Pets.dll": {}
         }
       }
     }
@@ -566,29 +529,35 @@
       "type": "project",
       "path": "../ClinicVets/ClinicVets.csproj",
       "msbuildProject": "../ClinicVets/ClinicVets.csproj"
+    },
+    "ClinicVets.Pets/1.0.0": {
+      "type": "project",
+      "path": "../ClinicVets.Pets/ClinicVets.Pets.csproj",
+      "msbuildProject": "../ClinicVets.Pets/ClinicVets.Pets.csproj"
     }
   },
   "projectFileDependencyGroups": {
-    "net472": [
+    ".NETFramework,Version=v4.7.2": [
       "ClinicVets >= 1.0.0",
+      "ClinicVets.Pets >= 1.0.0",
       "ClosedXML >= 0.105.0",
       "System.Resources.Extensions >= 8.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\abdal\\.nuget\\packages\\": {}
+    "C:\\Users\\royal\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
+      "projectUniqueName": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
       "projectName": "ClinicVets.VisitsMedicines",
-      "projectPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
-      "packagesPath": "C:\\Users\\abdal\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\obj\\",
+      "projectPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj",
+      "packagesPath": "C:\\Users\\royal\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.VisitsMedicines\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\abdal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\royal\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -600,11 +569,13 @@
       },
       "frameworks": {
         "net472": {
-          "framework": "net472",
           "targetAlias": "net472",
           "projectReferences": {
-            "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj": {
-              "projectPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj"
+            "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.Pets\\ClinicVets.Pets.csproj": {
+              "projectPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets.Pets\\ClinicVets.Pets.csproj"
+            },
+            "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj": {
+              "projectPath": "C:\\Users\\royal\\Source\\Repos\\ClinicVets\\ClinicVets\\ClinicVets.csproj"
             }
           }
         }
@@ -613,17 +584,10 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "10.0.300"
+      }
     },
     "frameworks": {
       "net472": {
-        "framework": "net472",
         "targetAlias": "net472",
         "dependencies": {
           "ClosedXML": {
@@ -635,7 +599,7 @@
             "version": "[8.0.0, )"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.416\\RuntimeIdentifierGraph.json"
       }
     }
   }

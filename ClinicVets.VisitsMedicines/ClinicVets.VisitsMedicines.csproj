@@ -23,6 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\ClinicVets.Pets\ClinicVets.Pets.csproj" />
 		<ProjectReference Include="..\ClinicVets\ClinicVets.csproj" />
 	</ItemGroup>
 
