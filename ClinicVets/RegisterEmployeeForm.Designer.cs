@@ -23,6 +23,8 @@ namespace ClinicVets
             this.lblSubtitle = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
             this.txtUsername = new System.Windows.Forms.TextBox();
+            this.lblFullName = new System.Windows.Forms.Label();
+            this.txtFullName = new System.Windows.Forms.TextBox();
             this.lblPassword = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.lblEmployeeNumber = new System.Windows.Forms.Label();
@@ -45,6 +47,8 @@ namespace ClinicVets
             this.pnlCard.Controls.Add(this.lblSubtitle);
             this.pnlCard.Controls.Add(this.lblUsername);
             this.pnlCard.Controls.Add(this.txtUsername);
+            this.pnlCard.Controls.Add(this.lblFullName);
+            this.pnlCard.Controls.Add(this.txtFullName);
             this.pnlCard.Controls.Add(this.lblPassword);
             this.pnlCard.Controls.Add(this.txtPassword);
             this.pnlCard.Controls.Add(this.lblEmployeeNumber);
@@ -109,6 +113,27 @@ namespace ClinicVets
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(470, 32);
             this.txtUsername.TabIndex = 4;
+            // 
+            // lblFullName
+            // 
+            this.lblFullName.AutoSize = false;
+            this.lblFullName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(253)))), ((int)(((byte)(255)))));
+            this.lblFullName.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFullName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.lblFullName.Location = new System.Drawing.Point(45, 195);
+            this.lblFullName.Name = "lblFullName";
+            this.lblFullName.Size = new System.Drawing.Size(470, 22);
+            this.lblFullName.TabIndex = 17;
+            this.lblFullName.Text = "Full Name";
+            // 
+            // txtFullName
+            // 
+            this.txtFullName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtFullName.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFullName.Location = new System.Drawing.Point(45, 220);
+            this.txtFullName.Name = "txtFullName";
+            this.txtFullName.Size = new System.Drawing.Size(470, 32);
+            this.txtFullName.TabIndex = 18;
             // 
             // lblPassword
             // 
@@ -287,6 +312,8 @@ namespace ClinicVets
         private System.Windows.Forms.Label lblSubtitle;
         private System.Windows.Forms.Label lblUsername;
         private System.Windows.Forms.TextBox txtUsername;
+        private System.Windows.Forms.Label lblFullName;
+        private System.Windows.Forms.TextBox txtFullName;
         private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label lblEmployeeNumber;

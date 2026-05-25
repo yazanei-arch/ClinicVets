@@ -343,12 +343,13 @@ public class ExcelHelper
             uint lastRow = GetLastUsedRowIndex(wsp, sstp, headerMap);
             for (uint r = 2u; r <= lastRow; r++)
             {
-                string employeeId = GetCellAtRowAny(wsp, sstp, headerMap, r, "EmployeeNumber", "EmployeeI", "EmployeeID");
+                string employeeId = GetCellAtRowAny(wsp, sstp, headerMap, r, "EmployeeNumber", "EmployeeNum", "EmployeeI", "EmployeeID");
                 string username = GetCellAtRow(wsp, sstp, headerMap, r, "Username");
                 string password = GetCellAtRow(wsp, sstp, headerMap, r, "Password");
                 string email = GetCellAtRow(wsp, sstp, headerMap, r, "Email");
-                string nationalId = GetCellAtRowAny(wsp, sstp, headerMap, r, "ID", "NationalID");
+                string nationalId = GetCellAtRowAny(wsp, sstp, headerMap, r, "NationalID", "ID");
                 string role = GetCellAtRow(wsp, sstp, headerMap, r, "Role");
+                string fullName = GetCellAtRow(wsp, sstp, headerMap, r, "FullName");
 
                 if (string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(password))
                 {
@@ -362,7 +363,8 @@ public class ExcelHelper
                     Password = password,
                     Email = email,
                     NationalID = nationalId,
-                    Role = role
+                    Role = role,
+                    FullName = fullName
                 });
             }
         }
@@ -392,6 +394,11 @@ public class ExcelHelper
 
                 SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
                 Dictionary<string, int> headerMap = EnsureEmployeeHeaderRow(wsp, sstp);
+                headerMap = LabelUnlabeledEmployeeColumns(wsp, sstp, headerMap);
+                foreach (string canonicalHeader in ExcelFileManager.EmployeeColumnHeaders)
+                {
+                    headerMap = EnsureOptionalEmployeeHeaderColumn(wsp, headerMap, canonicalHeader);
+                }
 
                 uint nextRow = GetLastUsedRowIndex(wsp, sstp, headerMap) + 1u;
                 if (nextRow < 2u)
@@ -546,7 +553,7 @@ public class ExcelHelper
 
     private static readonly string[] RequiredEmployeeLogicalColumns =
     {
-        "EmployeeNumber", "Username", "Password", "Email", "ID", "Role"
+        "EmployeeNumber", "Username", "Password", "Email", "NationalID", "Role"
     };
 
     private static bool EmployeeLogicalHeadersMissing(IReadOnlyDictionary<string, int> headerMap)
@@ -625,10 +632,14 @@ public class ExcelHelper
             case "EMPLOYEEI":
             case "EMPLOYEEID":
             case "EMPLOYEENUMBER":
+            case "EMPLOYEENUM":
+            case "EMPLOYEENO":
+            case "EMPNUMBER":
                 return "EmployeeNumber";
             case "NATIONALID":
             case "ID":
-                return "ID";
+            case "IDNUMBER":
+                return "NationalID";
             case "USERNAME":
                 return "Username";
             case "PASSWORD":
@@ -637,6 +648,10 @@ public class ExcelHelper
                 return "Email";
             case "ROLE":
                 return "Role";
+            case "FULLNAME":
+            case "FULL_NAME":
+            case "NAME":
+                return "FullName";
             default:
                 return trimmed;
         }
@@ -716,12 +731,141 @@ public class ExcelHelper
 
     private static void AppendEmployeeCells(Row row, uint rowIndex, IReadOnlyDictionary<string, int> headerMap, Employee employee)
     {
-        SetCellOnRowAny(row, rowIndex, headerMap, (employee.EmployeeID ?? string.Empty).Trim(), "EmployeeNumber", "EmployeeI", "EmployeeID");
+        SetCellOnRowAny(row, rowIndex, headerMap, (employee.EmployeeID ?? string.Empty).Trim(), "EmployeeNumber", "EmployeeNum", "EmployeeI", "EmployeeID");
         SetCellOnRowAny(row, rowIndex, headerMap, (employee.Username ?? string.Empty).Trim(), "Username");
+        SetCellOnRowAny(row, rowIndex, headerMap, (employee.FullName ?? string.Empty).Trim(), "FullName");
         SetCellOnRowAny(row, rowIndex, headerMap, employee.Password ?? string.Empty, "Password");
         SetCellOnRowAny(row, rowIndex, headerMap, (employee.Email ?? string.Empty).Trim(), "Email");
-        SetCellOnRowAny(row, rowIndex, headerMap, (employee.NationalID ?? string.Empty).Trim(), "ID", "NationalID");
+        SetCellOnRowAny(row, rowIndex, headerMap, (employee.NationalID ?? string.Empty).Trim(), "NationalID", "ID");
         SetCellOnRowAny(row, rowIndex, headerMap, (employee.Role ?? string.Empty).Trim(), "Role");
+    }
+
+    /// <summary>
+    /// Labels columns that contain data but have a blank/missing header cell in row 1.
+    /// If exactly one canonical Employees header is missing AND exactly one data column is unlabeled,
+    /// the unlabeled column receives the missing canonical name without moving any data.
+    /// </summary>
+    private static Dictionary<string, int> LabelUnlabeledEmployeeColumns(
+        WorksheetPart wsp,
+        SharedStringTablePart sstp,
+        Dictionary<string, int> headerMap)
+    {
+        SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>();
+        if (sheetData == null)
+        {
+            return headerMap;
+        }
+
+        Row row1 = sheetData.Elements<Row>().FirstOrDefault(r => (r.RowIndex?.Value ?? 1u) == 1u);
+        if (row1 == null)
+        {
+            return headerMap;
+        }
+
+        int maxDataColumn = 0;
+        foreach (Row dataRow in sheetData.Elements<Row>())
+        {
+            uint rowIdx = dataRow.RowIndex?.Value ?? 0u;
+            if (rowIdx <= 1u)
+            {
+                continue;
+            }
+
+            foreach (Cell cell in dataRow.Elements<Cell>())
+            {
+                int col = ColumnIndexFromReference(cell.CellReference);
+                if (col > maxDataColumn)
+                {
+                    maxDataColumn = col;
+                }
+            }
+        }
+
+        if (maxDataColumn <= 0)
+        {
+            return headerMap;
+        }
+
+        var labeledColumns = new HashSet<int>(headerMap.Values);
+        var unlabeledColumns = new List<int>();
+        for (int col = 1; col <= maxDataColumn; col++)
+        {
+            if (!labeledColumns.Contains(col))
+            {
+                unlabeledColumns.Add(col);
+            }
+        }
+
+        var missingCanonicalHeaders = new List<string>();
+        foreach (string canonicalHeader in ExcelFileManager.EmployeeColumnHeaders)
+        {
+            if (!headerMap.ContainsKey(canonicalHeader))
+            {
+                missingCanonicalHeaders.Add(canonicalHeader);
+            }
+        }
+
+        if (unlabeledColumns.Count != 1 || missingCanonicalHeaders.Count != 1)
+        {
+            return headerMap;
+        }
+
+        int targetColumn = unlabeledColumns[0];
+        string headerName = missingCanonicalHeaders[0];
+
+        InsertOrReplaceCellInRow(row1, 1u, targetColumn, headerName);
+
+        var updated = new Dictionary<string, int>(headerMap, StringComparer.OrdinalIgnoreCase)
+        {
+            [headerName] = targetColumn
+        };
+        return updated;
+    }
+
+    /// <summary>
+    /// Ensures an optional header column exists at the end of the existing header row
+    /// without removing or moving any existing columns or data.
+    /// </summary>
+    private static Dictionary<string, int> EnsureOptionalEmployeeHeaderColumn(
+        WorksheetPart wsp,
+        Dictionary<string, int> headerMap,
+        string canonicalHeaderName)
+    {
+        if (headerMap == null || string.IsNullOrEmpty(canonicalHeaderName))
+        {
+            return headerMap;
+        }
+
+        if (headerMap.ContainsKey(canonicalHeaderName))
+        {
+            return headerMap;
+        }
+
+        SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>();
+        Row row1 = sheetData?.Elements<Row>().FirstOrDefault(r => (r.RowIndex?.Value ?? 1u) == 1u);
+        if (row1 == null)
+        {
+            return headerMap;
+        }
+
+        int maxColumn = 0;
+        foreach (Cell existing in row1.Elements<Cell>())
+        {
+            int col = ColumnIndexFromReference(existing.CellReference);
+            if (col > maxColumn)
+            {
+                maxColumn = col;
+            }
+        }
+
+        int newColumn = maxColumn + 1;
+        row1.AppendChild(NewInlineTextCell(1u, newColumn, canonicalHeaderName));
+
+        var updated = new Dictionary<string, int>(headerMap, StringComparer.OrdinalIgnoreCase)
+        {
+            [canonicalHeaderName] = newColumn
+        };
+        return updated;
     }
 
     private static void SetCellOnRowAny(
@@ -1307,7 +1451,34 @@ public class ExcelHelper
             return;
         }
 
-        row.AppendChild(NewInlineTextCell(rowIndex, col, value ?? string.Empty));
+        InsertOrReplaceCellInRow(row, rowIndex, col, value);
+    }
+
+    /// <summary>
+    /// Inserts a cell into a row while keeping the row's cells in ascending column order.
+    /// Existing cell at the same column is replaced. Required by OpenXML / Excel readers.
+    /// </summary>
+    private static void InsertOrReplaceCellInRow(Row row, uint rowIndex, int col, string value)
+    {
+        Cell newCell = NewInlineTextCell(rowIndex, col, value ?? string.Empty);
+
+        foreach (Cell existing in row.Elements<Cell>().ToList())
+        {
+            int existingCol = ColumnIndexFromReference(existing.CellReference);
+            if (existingCol == col)
+            {
+                row.ReplaceChild(newCell, existing);
+                return;
+            }
+
+            if (existingCol > col)
+            {
+                row.InsertBefore(newCell, existing);
+                return;
+            }
+        }
+
+        row.AppendChild(newCell);
     }
 
     private static uint? FindEmployeeRowIndexByEmail(

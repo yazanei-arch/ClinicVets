@@ -46,6 +46,7 @@ namespace ClinicVets
             string username = (employee.Username ?? string.Empty).Trim();
             string email = (employee.Email ?? string.Empty).Trim();
             string employeeNumber = (employee.EmployeeID ?? string.Empty).Trim();
+            string nationalId = (employee.NationalID ?? string.Empty).Trim();
 
             if (username.Length == 0)
             {
@@ -62,26 +63,26 @@ namespace ClinicVets
                 throw new InvalidOperationException("Employee number is required.");
             }
 
-            EnsureEmployeeIsUnique(username, email, employeeNumber);
+            EnsureEmployeeIsUnique(username, email, employeeNumber, nationalId);
 
             Excel.AppendEmployee(employee);
             EmployeeCredentialStore.Add(employee);
         }
 
-        private static void EnsureEmployeeIsUnique(string username, string email, string employeeNumber)
+        private static void EnsureEmployeeIsUnique(string username, string email, string employeeNumber, string nationalId)
         {
             foreach (Employee existing in Excel.ReadEmployees())
             {
-                ThrowIfDuplicate(existing, username, email, employeeNumber);
+                ThrowIfDuplicate(existing, username, email, employeeNumber, nationalId);
             }
 
             foreach (Employee existing in EmployeeCredentialStore.GetInMemoryEmployees())
             {
-                ThrowIfDuplicate(existing, username, email, employeeNumber);
+                ThrowIfDuplicate(existing, username, email, employeeNumber, nationalId);
             }
         }
 
-        private static void ThrowIfDuplicate(Employee existing, string username, string email, string employeeNumber)
+        private static void ThrowIfDuplicate(Employee existing, string username, string email, string employeeNumber, string nationalId)
         {
             if (existing == null)
             {
@@ -90,7 +91,7 @@ namespace ClinicVets
 
             if (string.Equals(existing.Username?.Trim(), username, StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException("An employee with this username already exists.");
+                throw new InvalidOperationException("Username already exists.");
             }
 
             if (string.Equals(existing.Email?.Trim(), email, StringComparison.OrdinalIgnoreCase))
@@ -100,7 +101,13 @@ namespace ClinicVets
 
             if (string.Equals(existing.EmployeeID?.Trim(), employeeNumber, StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException("An employee with this employee number already exists.");
+                throw new InvalidOperationException("An employee with this ID already exists.");
+            }
+
+            if (nationalId.Length > 0
+                && string.Equals(existing.NationalID?.Trim(), nationalId, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("An employee with this ID already exists.");
             }
         }
     }

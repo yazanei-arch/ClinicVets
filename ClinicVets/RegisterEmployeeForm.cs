@@ -111,6 +111,7 @@ namespace ClinicVets
             foreach (Label label in new[]
             {
                 lblUsername,
+                lblFullName,
                 lblPassword,
                 lblEmployeeNumber,
                 lblEmail,
@@ -170,7 +171,7 @@ namespace ClinicVets
             int rowStride = CaptionHeight + CaptionToFieldGap + FieldHeight + ErrorHeight + FieldRowGap;
             int buttonBlock = ButtonHeight + ButtonGap + ButtonHeight;
             int headerBlock = TitleHeight + 6 + SubtitleHeight + HeaderBottomGap;
-            int contentHeight = headerBlock + (rowStride * 6) + buttonBlock + (InnerPad * 2);
+            int contentHeight = headerBlock + (rowStride * 7) + buttonBlock + (InnerPad * 2);
 
             int maxPanelHeight = clientH - (MarginVertical * 2);
             int panelHeight = Math.Min(contentHeight, maxPanelHeight);
@@ -191,6 +192,7 @@ namespace ClinicVets
             y += SubtitleHeight + HeaderBottomGap;
 
             y = LayoutFieldRow(lblUsername, txtUsername, y, fieldWidth);
+            y = LayoutFieldRow(lblFullName, txtFullName, y, fieldWidth);
             y = LayoutFieldRow(lblPassword, txtPassword, y, fieldWidth);
             y = LayoutFieldRow(lblEmployeeNumber, txtEmployeeNumber, y, fieldWidth);
             y = LayoutFieldRow(lblEmail, txtEmail, y, fieldWidth);
@@ -267,6 +269,7 @@ namespace ClinicVets
         {
             _validation = new ValidationFieldBinder(pnlCard);
             _validation.BindTextBox(txtUsername, ValidationHelper.ValidateUsername, lblUsername);
+            _validation.BindTextBox(txtFullName, ValidationHelper.ValidateName, lblFullName);
             _validation.BindTextBox(txtPassword, ValidationHelper.ValidatePassword, lblPassword);
             _validation.BindTextBox(txtEmployeeNumber, ValidationHelper.ValidateEmployeeNumber, lblEmployeeNumber);
             _validation.BindTextBox(txtEmail, ValidationHelper.ValidateEmail, lblEmail);
@@ -295,7 +298,8 @@ namespace ClinicVets
                 Password = txtPassword.Text,
                 Email = txtEmail.Text.Trim(),
                 NationalID = txtId.Text.Trim(),
-                Role = cmbRole.SelectedItem?.ToString() ?? string.Empty
+                Role = cmbRole.SelectedItem?.ToString() ?? string.Empty,
+                FullName = txtFullName.Text.Trim()
             };
 
             try

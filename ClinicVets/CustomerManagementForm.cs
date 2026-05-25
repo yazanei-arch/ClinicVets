@@ -21,11 +21,11 @@ namespace ClinicVets
         private const int InnerPad = 28;
         private const int CaptionHeight = 22;
         private const int FieldHeight = 32;
-        private const int ErrorHeight = 16;
-        private const int RowStride = 64;
+        private const int ErrorHeight = 18;
+        private const int RowStride = 84;
         private const int MaxCardWidth = 520;
-        private const int MaxCardHeight = 488;
-        private const int CardTop = 168;
+        private const int MaxCardHeight = 580;
+        private const int CardTop = 100;
         private const int CardShiftRight = 118;
 
         private int _fieldWidth = 464;
@@ -106,7 +106,7 @@ namespace ClinicVets
             int cardWidth = Math.Min(MaxCardWidth, ClientSize.Width - sideMargin - CardShiftRight - 24);
             cardWidth = Math.Max(400, cardWidth);
             int cardHeight = Math.Min(MaxCardHeight, ClientSize.Height - CardTop - 32);
-            cardHeight = Math.Max(452, cardHeight);
+            cardHeight = Math.Max(540, cardHeight);
 
             int centeredLeft = (ClientSize.Width - cardWidth) / 2;
             int cardLeft = Math.Min(centeredLeft + CardShiftRight, ClientSize.Width - cardWidth - sideMargin);
@@ -222,10 +222,10 @@ namespace ClinicVets
             LayoutFieldRow(lblEmail, txtEmail, y);
             PositionFieldError(txtEmail, y, FieldHeight);
 
-            int actionsTop = y + RowStride - 8;
+            int actionsTop = y + RowStride + 10;
             lblSuccess.SetBounds(InnerPad, actionsTop, _fieldWidth, 20);
-            btnAddCustomer.SetBounds(InnerPad, actionsTop + 26, _fieldWidth, 42);
-            btnBack.SetBounds(InnerPad, actionsTop + 74, 132, 38);
+            btnAddCustomer.SetBounds(InnerPad, actionsTop + 28, _fieldWidth, 42);
+            btnBack.SetBounds(InnerPad, actionsTop + 78, 132, 38);
 
             btnClear.Visible = false;
             btnOpenSearch.Visible = false;

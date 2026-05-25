@@ -154,7 +154,7 @@ namespace ClinicVets.VisitsMedicines
 
             try
             {
-                string filePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\..\ClinicVetsData.xlsx";
+                string filePath = ExcelFileManager.FilePath;
 
                 using (var workbook = new XLWorkbook(filePath))
                 {
@@ -237,8 +237,7 @@ namespace ClinicVets.VisitsMedicines
             if (cmbPets.SelectedItem == null) return;
             
             string selectedPet = cmbPets.SelectedItem.ToString();
-            // Ensure filePath is defined (usually at the top of your class or here)
-            string filePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\..\ClinicVetsData.xlsx";
+            string filePath = ExcelFileManager.FilePath;
 
             try
             {
@@ -292,7 +291,7 @@ namespace ClinicVets.VisitsMedicines
         private void clbMedicines_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             string itemName = clbMedicines.Items[e.Index].ToString();
-            string filePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\..\ClinicVetsData.xlsx";
+            string filePath = ExcelFileManager.FilePath;
 
             // 1. STOCK CHECK (We keep this so they can't buy empty stock)
             if (e.NewValue == CheckState.Checked)
