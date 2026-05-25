@@ -166,6 +166,78 @@ public class ExcelHelper
         }
     }
 
+    /// <summary>
+    /// Reads the Pets sheet and groups pet names by their owner name (case-insensitive).
+    /// Used by views that join customers to their pets without touching pet-management logic.
+    /// </summary>
+    public IReadOnlyDictionary<string, List<string>> ReadPetOwnerIndex()
+    {
+        var index = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        if (!File.Exists(_workbookPath))
+        {
+            return index;
+        }
+
+        using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, false))
+        {
+            WorksheetPart wsp = GetWorksheetPartByName(doc.WorkbookPart, "Pets");
+            if (wsp == null)
+            {
+                return index;
+            }
+
+            SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
+            Dictionary<string, int> headerMap = BuildHeaderMap(wsp, sstp);
+
+            int colPetName = ResolveFirstColumn(headerMap, "PetName", "Pet Name", "Name");
+            int colOwner = ResolveFirstColumn(headerMap, "Owner", "OwnerName", "Owner Name");
+
+            if (colPetName <= 0)
+            {
+                colPetName = 2;
+            }
+
+            if (colOwner <= 0)
+            {
+                colOwner = 6;
+            }
+
+            SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>();
+            if (sheetData == null)
+            {
+                return index;
+            }
+
+            foreach (Row row in sheetData.Elements<Row>())
+            {
+                uint ri = row.RowIndex?.Value ?? 0u;
+                if (ri < 2u)
+                {
+                    continue;
+                }
+
+                Dictionary<int, Cell> cellsByCol = IndexRowCellsByColumn(row);
+                string petName = ReadCellTrimmed(cellsByCol, colPetName, sstp);
+                string owner = ReadCellTrimmed(cellsByCol, colOwner, sstp);
+
+                if (string.IsNullOrWhiteSpace(petName) || string.IsNullOrWhiteSpace(owner))
+                {
+                    continue;
+                }
+
+                if (!index.TryGetValue(owner, out List<string> pets))
+                {
+                    pets = new List<string>();
+                    index[owner] = pets;
+                }
+
+                pets.Add(petName);
+            }
+        }
+
+        return index;
+    }
+
     public IReadOnlyList<Customer> ReadCustomers()
     {
         var list = new List<Customer>();
@@ -340,16 +412,32 @@ public class ExcelHelper
                 return list;
             }
 
-            uint lastRow = GetLastUsedRowIndex(wsp, sstp, headerMap);
-            for (uint r = 2u; r <= lastRow; r++)
+            SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>();
+            if (sheetData == null)
             {
-                string employeeId = GetCellAtRowAny(wsp, sstp, headerMap, r, "EmployeeNumber", "EmployeeNum", "EmployeeI", "EmployeeID");
-                string username = GetCellAtRow(wsp, sstp, headerMap, r, "Username");
-                string password = GetCellAtRow(wsp, sstp, headerMap, r, "Password");
-                string email = GetCellAtRow(wsp, sstp, headerMap, r, "Email");
-                string nationalId = GetCellAtRowAny(wsp, sstp, headerMap, r, "NationalID", "ID");
-                string role = GetCellAtRow(wsp, sstp, headerMap, r, "Role");
-                string fullName = GetCellAtRow(wsp, sstp, headerMap, r, "FullName");
+                return list;
+            }
+
+            int colEmployeeId = ResolveFirstColumn(headerMap, "EmployeeNumber", "EmployeeNum", "EmployeeI", "EmployeeID");
+            int colUsername = ResolveFirstColumn(headerMap, "Username");
+            int colPassword = ResolveFirstColumn(headerMap, "Password");
+            int colEmail = ResolveFirstColumn(headerMap, "Email");
+            int colNationalId = ResolveFirstColumn(headerMap, "NationalID", "ID");
+            int colRole = ResolveFirstColumn(headerMap, "Role");
+            int colFullName = ResolveFirstColumn(headerMap, "FullName");
+
+            foreach (Row row in sheetData.Elements<Row>())
+            {
+                uint ri = row.RowIndex?.Value ?? 0u;
+                if (ri < 2u)
+                {
+                    continue;
+                }
+
+                Dictionary<int, Cell> cellsByCol = IndexRowCellsByColumn(row);
+
+                string username = ReadCellTrimmed(cellsByCol, colUsername, sstp);
+                string password = ReadCellTrimmed(cellsByCol, colPassword, sstp);
 
                 if (string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(password))
                 {
@@ -358,13 +446,13 @@ public class ExcelHelper
 
                 list.Add(new Employee
                 {
-                    EmployeeID = employeeId,
+                    EmployeeID = ReadCellTrimmed(cellsByCol, colEmployeeId, sstp),
                     Username = username,
                     Password = password,
-                    Email = email,
-                    NationalID = nationalId,
-                    Role = role,
-                    FullName = fullName
+                    Email = ReadCellTrimmed(cellsByCol, colEmail, sstp),
+                    NationalID = ReadCellTrimmed(cellsByCol, colNationalId, sstp),
+                    Role = ReadCellTrimmed(cellsByCol, colRole, sstp),
+                    FullName = ReadCellTrimmed(cellsByCol, colFullName, sstp)
                 });
             }
         }
@@ -430,21 +518,88 @@ public class ExcelHelper
         }
     }
 
+    /// <summary>
+    /// Login-only Excel read: resolves Username/Password/Role columns by header name
+    /// (never by fixed column letters/indexes) and authenticates against trimmed values.
+    /// Tolerant of other Employees columns being missing or reordered.
+    /// </summary>
     public Employee TryAuthenticateEmployee(string username, string password)
     {
         username = (username ?? string.Empty).Trim();
-        password = password ?? string.Empty;
+        password = (password ?? string.Empty).Trim();
         if (username.Length == 0 || password.Length == 0)
         {
             return null;
         }
 
-        foreach (Employee employee in ReadEmployees())
+        if (!File.Exists(_workbookPath))
         {
-            if (string.Equals(employee.Username?.Trim(), username, StringComparison.OrdinalIgnoreCase)
-                && string.Equals(employee.Password?.Trim() ?? string.Empty, password, StringComparison.Ordinal))
+            return null;
+        }
+
+        using (SpreadsheetDocument doc = SpreadsheetDocument.Open(_workbookPath, false))
+        {
+            WorksheetPart wsp = GetWorksheetPartByName(doc.WorkbookPart, ExcelFileManager.EmployeeSheetName);
+            if (wsp == null)
             {
-                return employee;
+                return null;
+            }
+
+            SharedStringTablePart sstp = doc.WorkbookPart.SharedStringTablePart;
+            Dictionary<string, int> headerMap = BuildEmployeeHeaderMapFromSheet(wsp, sstp);
+
+            int colUsername = ResolveFirstColumn(headerMap, "Username");
+            int colPassword = ResolveFirstColumn(headerMap, "Password");
+            int colRole = ResolveFirstColumn(headerMap, "Role");
+            if (colUsername <= 0 || colPassword <= 0)
+            {
+                return null;
+            }
+
+            int colEmployeeId = ResolveFirstColumn(headerMap, "EmployeeNumber", "EmployeeNum", "EmployeeI", "EmployeeID");
+            int colEmail = ResolveFirstColumn(headerMap, "Email");
+            int colNationalId = ResolveFirstColumn(headerMap, "NationalID", "ID");
+            int colFullName = ResolveFirstColumn(headerMap, "FullName");
+
+            SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>();
+            if (sheetData == null)
+            {
+                return null;
+            }
+
+            foreach (Row row in sheetData.Elements<Row>())
+            {
+                uint ri = row.RowIndex?.Value ?? 0u;
+                if (ri < 2u)
+                {
+                    continue;
+                }
+
+                Dictionary<int, Cell> cellsByCol = IndexRowCellsByColumn(row);
+                string rowUsername = ReadCellTrimmed(cellsByCol, colUsername, sstp);
+                string rowPassword = ReadCellTrimmed(cellsByCol, colPassword, sstp);
+
+                if (rowUsername.Length == 0 || rowPassword.Length == 0)
+                {
+                    continue;
+                }
+
+                if (!string.Equals(rowUsername, username, StringComparison.OrdinalIgnoreCase)
+                    || !string.Equals(rowPassword, password, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                return new Employee
+                {
+                    EmployeeID = ReadCellTrimmed(cellsByCol, colEmployeeId, sstp),
+                    Username = rowUsername,
+                    Password = rowPassword,
+                    Email = ReadCellTrimmed(cellsByCol, colEmail, sstp),
+                    NationalID = ReadCellTrimmed(cellsByCol, colNationalId, sstp),
+                    Role = ReadCellTrimmed(cellsByCol, colRole, sstp),
+                    FullName = ReadCellTrimmed(cellsByCol, colFullName, sstp)
+                };
             }
         }
 
@@ -901,17 +1056,39 @@ public class ExcelHelper
             return list;
         }
 
-        uint lastRow = GetLastUsedRowIndex(wsp, sstp, headerMap);
-        for (uint r = 2u; r <= lastRow; r++)
+        SheetData sheetData = wsp.Worksheet.GetFirstChild<SheetData>();
+        if (sheetData == null)
         {
-            string email = GetCellAtRow(wsp, sstp, headerMap, r, "Email");
-            string phone = GetCellAtRow(wsp, sstp, headerMap, r, "Phone");
-            string address = GetCellAtRow(wsp, sstp, headerMap, r, "Address");
-            string lastName = GetCellAtRow(wsp, sstp, headerMap, r, "LastName");
-            string firstName = GetCellAtRow(wsp, sstp, headerMap, r, "FirstName");
-            string customerId = GetCellAtRow(wsp, sstp, headerMap, r, "CustomerID");
-            string idNumber = GetCellAtRow(wsp, sstp, headerMap, r, "IDNumber");
-            string fullName = GetCellAtRow(wsp, sstp, headerMap, r, "FullName");
+            return list;
+        }
+
+        int colEmail = ResolveFirstColumn(headerMap, "Email");
+        int colPhone = ResolveFirstColumn(headerMap, "Phone");
+        int colAddress = ResolveFirstColumn(headerMap, "Address");
+        int colLastName = ResolveFirstColumn(headerMap, "LastName");
+        int colFirstName = ResolveFirstColumn(headerMap, "FirstName");
+        int colCustomerId = ResolveFirstColumn(headerMap, "CustomerID");
+        int colIdNumber = ResolveFirstColumn(headerMap, "IDNumber");
+        int colFullName = ResolveFirstColumn(headerMap, "FullName");
+
+        foreach (Row row in sheetData.Elements<Row>())
+        {
+            uint ri = row.RowIndex?.Value ?? 0u;
+            if (ri < 2u)
+            {
+                continue;
+            }
+
+            Dictionary<int, Cell> cellsByCol = IndexRowCellsByColumn(row);
+
+            string email = ReadCellTrimmed(cellsByCol, colEmail, sstp);
+            string phone = ReadCellTrimmed(cellsByCol, colPhone, sstp);
+            string address = ReadCellTrimmed(cellsByCol, colAddress, sstp);
+            string lastName = ReadCellTrimmed(cellsByCol, colLastName, sstp);
+            string firstName = ReadCellTrimmed(cellsByCol, colFirstName, sstp);
+            string customerId = ReadCellTrimmed(cellsByCol, colCustomerId, sstp);
+            string idNumber = ReadCellTrimmed(cellsByCol, colIdNumber, sstp);
+            string fullName = ReadCellTrimmed(cellsByCol, colFullName, sstp);
 
             if (string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName) && !string.IsNullOrWhiteSpace(fullName))
             {
@@ -945,6 +1122,64 @@ public class ExcelHelper
         }
 
         return list;
+    }
+
+    private static int ResolveFirstColumn(IReadOnlyDictionary<string, int> headerMap, params string[] candidateNames)
+    {
+        if (headerMap == null || candidateNames == null)
+        {
+            return 0;
+        }
+
+        foreach (string name in candidateNames)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                continue;
+            }
+
+            if (headerMap.TryGetValue(name, out int col) && col > 0)
+            {
+                return col;
+            }
+        }
+
+        return 0;
+    }
+
+    private static Dictionary<int, Cell> IndexRowCellsByColumn(Row row)
+    {
+        var cellsByCol = new Dictionary<int, Cell>();
+        if (row == null)
+        {
+            return cellsByCol;
+        }
+
+        foreach (Cell cell in row.Elements<Cell>())
+        {
+            int col = ColumnIndexFromReference(cell.CellReference);
+            if (col > 0)
+            {
+                cellsByCol[col] = cell;
+            }
+        }
+
+        return cellsByCol;
+    }
+
+    private static string ReadCellTrimmed(IReadOnlyDictionary<int, Cell> cellsByCol, int columnIndex1Based, SharedStringTablePart sstp)
+    {
+        if (cellsByCol == null || columnIndex1Based <= 0)
+        {
+            return string.Empty;
+        }
+
+        if (!cellsByCol.TryGetValue(columnIndex1Based, out Cell cell) || cell == null)
+        {
+            return string.Empty;
+        }
+
+        return GetCellRawText(cell, sstp).Trim();
     }
 
     private static void RewriteCustomerSheet(WorksheetPart wsp, IReadOnlyList<Customer> customers)

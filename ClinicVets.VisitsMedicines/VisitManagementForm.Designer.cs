@@ -42,7 +42,7 @@ namespace ClinicVets.VisitsMedicines
             txtReason = new System.Windows.Forms.TextBox();
             label6 = new System.Windows.Forms.Label();
             label7 = new System.Windows.Forms.Label();
-            txtVetName = new System.Windows.Forms.TextBox();
+            txtVetName = new System.Windows.Forms.ComboBox();
             dtpVisitTime = new System.Windows.Forms.DateTimePicker();
             lblPetError = new System.Windows.Forms.Label();
             lblVetEmpty = new System.Windows.Forms.Label();
@@ -56,7 +56,7 @@ namespace ClinicVets.VisitsMedicines
             // cmbPets
             // 
             cmbPets.FormattingEnabled = true;
-            cmbPets.Location = new System.Drawing.Point(518, 171);
+            cmbPets.Location = new System.Drawing.Point(658, 206);
             cmbPets.Name = "cmbPets";
             cmbPets.Size = new System.Drawing.Size(151, 28);
             cmbPets.TabIndex = 1;
@@ -64,7 +64,7 @@ namespace ClinicVets.VisitsMedicines
             // 
             // rtbSummary
             // 
-            rtbSummary.Location = new System.Drawing.Point(519, 365);
+            rtbSummary.Location = new System.Drawing.Point(659, 400);
             rtbSummary.Name = "rtbSummary";
             rtbSummary.Size = new System.Drawing.Size(431, 67);
             rtbSummary.TabIndex = 2;
@@ -73,7 +73,7 @@ namespace ClinicVets.VisitsMedicines
             // dtpVisitDate
             // 
             dtpVisitDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            dtpVisitDate.Location = new System.Drawing.Point(519, 235);
+            dtpVisitDate.Location = new System.Drawing.Point(659, 270);
             dtpVisitDate.Name = "dtpVisitDate";
             dtpVisitDate.Size = new System.Drawing.Size(106, 27);
             dtpVisitDate.TabIndex = 3;
@@ -84,7 +84,7 @@ namespace ClinicVets.VisitsMedicines
             lblVaccineAlert.BackColor = System.Drawing.Color.White;
             lblVaccineAlert.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             lblVaccineAlert.ForeColor = System.Drawing.Color.Red;
-            lblVaccineAlert.Location = new System.Drawing.Point(710, 174);
+            lblVaccineAlert.Location = new System.Drawing.Point(850, 209);
             lblVaccineAlert.Name = "lblVaccineAlert";
             lblVaccineAlert.Size = new System.Drawing.Size(187, 20);
             lblVaccineAlert.TabIndex = 4;
@@ -94,7 +94,7 @@ namespace ClinicVets.VisitsMedicines
             // clbMedicines
             // 
             clbMedicines.FormattingEnabled = true;
-            clbMedicines.Location = new System.Drawing.Point(518, 463);
+            clbMedicines.Location = new System.Drawing.Point(658, 498);
             clbMedicines.Name = "clbMedicines";
             clbMedicines.Size = new System.Drawing.Size(150, 70);
             clbMedicines.TabIndex = 5;
@@ -104,7 +104,7 @@ namespace ClinicVets.VisitsMedicines
             // 
             lblTotalCost.AutoSize = true;
             lblTotalCost.BackColor = System.Drawing.Color.FromArgb(243, 247, 250);
-            lblTotalCost.Location = new System.Drawing.Point(540, 626);
+            lblTotalCost.Location = new System.Drawing.Point(700, 673);
             lblTotalCost.Name = "lblTotalCost";
             lblTotalCost.Size = new System.Drawing.Size(133, 20);
             lblTotalCost.TabIndex = 6;
@@ -117,7 +117,7 @@ namespace ClinicVets.VisitsMedicines
             btnSaveVisit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             btnSaveVisit.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             btnSaveVisit.ForeColor = System.Drawing.Color.FromArgb(53, 93, 136);
-            btnSaveVisit.Location = new System.Drawing.Point(308, 617);
+            btnSaveVisit.Location = new System.Drawing.Point(448, 652);
             btnSaveVisit.Name = "btnSaveVisit";
             btnSaveVisit.Size = new System.Drawing.Size(185, 36);
             btnSaveVisit.TabIndex = 7;
@@ -131,7 +131,7 @@ namespace ClinicVets.VisitsMedicines
             label2.BackColor = System.Drawing.Color.FromArgb(243, 247, 250);
             label2.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             label2.ForeColor = System.Drawing.Color.FromArgb(55, 97, 139);
-            label2.Location = new System.Drawing.Point(308, 171);
+            label2.Location = new System.Drawing.Point(448, 206);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(93, 23);
             label2.TabIndex = 9;
@@ -143,7 +143,7 @@ namespace ClinicVets.VisitsMedicines
             label3.BackColor = System.Drawing.Color.FromArgb(243, 247, 250);
             label3.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             label3.ForeColor = System.Drawing.Color.FromArgb(55, 97, 139);
-            label3.Location = new System.Drawing.Point(308, 235);
+            label3.Location = new System.Drawing.Point(448, 270);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(186, 23);
             label3.TabIndex = 10;
@@ -155,7 +155,7 @@ namespace ClinicVets.VisitsMedicines
             label4.BackColor = System.Drawing.Color.FromArgb(243, 247, 250);
             label4.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             label4.ForeColor = System.Drawing.Color.FromArgb(55, 97, 139);
-            label4.Location = new System.Drawing.Point(308, 366);
+            label4.Location = new System.Drawing.Point(448, 401);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(133, 23);
             label4.TabIndex = 11;
@@ -167,7 +167,7 @@ namespace ClinicVets.VisitsMedicines
             label5.BackColor = System.Drawing.Color.FromArgb(243, 247, 250);
             label5.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             label5.ForeColor = System.Drawing.Color.FromArgb(55, 97, 139);
-            label5.Location = new System.Drawing.Point(308, 463);
+            label5.Location = new System.Drawing.Point(448, 498);
             label5.Name = "label5";
             label5.Size = new System.Drawing.Size(150, 23);
             label5.TabIndex = 12;
@@ -175,7 +175,7 @@ namespace ClinicVets.VisitsMedicines
             // 
             // txtReason
             // 
-            txtReason.Location = new System.Drawing.Point(519, 297);
+            txtReason.Location = new System.Drawing.Point(659, 332);
             txtReason.Name = "txtReason";
             txtReason.Size = new System.Drawing.Size(150, 27);
             txtReason.TabIndex = 13;
@@ -187,7 +187,7 @@ namespace ClinicVets.VisitsMedicines
             label6.BackColor = System.Drawing.Color.FromArgb(243, 247, 250);
             label6.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             label6.ForeColor = System.Drawing.Color.FromArgb(55, 97, 139);
-            label6.Location = new System.Drawing.Point(308, 297);
+            label6.Location = new System.Drawing.Point(448, 332);
             label6.Name = "label6";
             label6.Size = new System.Drawing.Size(111, 23);
             label6.TabIndex = 14;
@@ -199,24 +199,26 @@ namespace ClinicVets.VisitsMedicines
             label7.BackColor = System.Drawing.Color.Transparent;
             label7.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             label7.ForeColor = System.Drawing.Color.FromArgb(55, 97, 139);
-            label7.Location = new System.Drawing.Point(308, 555);
+            label7.Location = new System.Drawing.Point(448, 590);
             label7.Name = "label7";
             label7.Size = new System.Drawing.Size(93, 23);
             label7.TabIndex = 15;
             label7.Text = "Vet Name:";
             // 
             // txtVetName
-            // 
-            txtVetName.Location = new System.Drawing.Point(518, 555);
+            //
+            txtVetName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            txtVetName.FormattingEnabled = true;
+            txtVetName.Location = new System.Drawing.Point(658, 590);
             txtVetName.Name = "txtVetName";
-            txtVetName.Size = new System.Drawing.Size(150, 27);
+            txtVetName.Size = new System.Drawing.Size(150, 28);
             txtVetName.TabIndex = 16;
             txtVetName.Leave += txtVetName_Leave;
             // 
             // dtpVisitTime
             // 
             dtpVisitTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            dtpVisitTime.Location = new System.Drawing.Point(648, 235);
+            dtpVisitTime.Location = new System.Drawing.Point(788, 270);
             dtpVisitTime.Name = "dtpVisitTime";
             dtpVisitTime.ShowUpDown = true;
             dtpVisitTime.Size = new System.Drawing.Size(91, 27);
@@ -229,7 +231,7 @@ namespace ClinicVets.VisitsMedicines
             lblPetError.BackColor = System.Drawing.Color.White;
             lblPetError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             lblPetError.ForeColor = System.Drawing.Color.Red;
-            lblPetError.Location = new System.Drawing.Point(518, 202);
+            lblPetError.Location = new System.Drawing.Point(658, 237);
             lblPetError.Name = "lblPetError";
             lblPetError.Size = new System.Drawing.Size(121, 17);
             lblPetError.TabIndex = 18;
@@ -242,7 +244,7 @@ namespace ClinicVets.VisitsMedicines
             lblVetEmpty.BackColor = System.Drawing.Color.White;
             lblVetEmpty.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             lblVetEmpty.ForeColor = System.Drawing.Color.Red;
-            lblVetEmpty.Location = new System.Drawing.Point(519, 585);
+            lblVetEmpty.Location = new System.Drawing.Point(659, 620);
             lblVetEmpty.Name = "lblVetEmpty";
             lblVetEmpty.Size = new System.Drawing.Size(174, 17);
             lblVetEmpty.TabIndex = 19;
@@ -255,7 +257,7 @@ namespace ClinicVets.VisitsMedicines
             lblReasonError.BackColor = System.Drawing.Color.White;
             lblReasonError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             lblReasonError.ForeColor = System.Drawing.Color.Red;
-            lblReasonError.Location = new System.Drawing.Point(519, 327);
+            lblReasonError.Location = new System.Drawing.Point(659, 362);
             lblReasonError.Name = "lblReasonError";
             lblReasonError.Size = new System.Drawing.Size(215, 17);
             lblReasonError.TabIndex = 20;
@@ -268,7 +270,7 @@ namespace ClinicVets.VisitsMedicines
             lblTimeError.BackColor = System.Drawing.Color.White;
             lblTimeError.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             lblTimeError.ForeColor = System.Drawing.Color.Red;
-            lblTimeError.Location = new System.Drawing.Point(648, 265);
+            lblTimeError.Location = new System.Drawing.Point(788, 300);
             lblTimeError.Name = "lblTimeError";
             lblTimeError.Size = new System.Drawing.Size(176, 17);
             lblTimeError.TabIndex = 21;
@@ -281,7 +283,7 @@ namespace ClinicVets.VisitsMedicines
             lblVetInvalid.BackColor = System.Drawing.Color.White;
             lblVetInvalid.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             lblVetInvalid.ForeColor = System.Drawing.Color.Red;
-            lblVetInvalid.Location = new System.Drawing.Point(519, 585);
+            lblVetInvalid.Location = new System.Drawing.Point(659, 620);
             lblVetInvalid.Name = "lblVetInvalid";
             lblVetInvalid.Size = new System.Drawing.Size(264, 17);
             lblVetInvalid.TabIndex = 22;
@@ -352,7 +354,7 @@ namespace ClinicVets.VisitsMedicines
         private System.Windows.Forms.TextBox txtReason;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox txtVetName;
+        private System.Windows.Forms.ComboBox txtVetName;
         private System.Windows.Forms.DateTimePicker dtpVisitTime;
         private System.Windows.Forms.Label lblPetError;
         private System.Windows.Forms.Label lblVetEmpty;

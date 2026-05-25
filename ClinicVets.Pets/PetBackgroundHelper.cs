@@ -11,6 +11,9 @@ namespace ClinicVets.UI
     {
         private const string BackgroundFileName = "background.png";
 
+        private static Image _cachedBackground;
+        private static readonly object _cachedBackgroundLock = new object();
+
         internal static void ApplyToPictureBox(PictureBox pictureBox)
         {
             if (pictureBox == null)
@@ -22,17 +25,13 @@ namespace ClinicVets.UI
 
             try
             {
-                string path = FindBackgroundImagePath();
-                if (path == null)
+                Image source = GetCachedBackgroundImage();
+                if (source == null)
                 {
                     return;
                 }
 
-                using (var loaded = Image.FromFile(path))
-                {
-                    pictureBox.Image = new Bitmap(loaded);
-                }
-
+                pictureBox.Image = new Bitmap(source);
                 pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             }
             catch
@@ -50,21 +49,55 @@ namespace ClinicVets.UI
 
             try
             {
-                string path = FindBackgroundImagePath();
-                if (path == null)
+                Image source = GetCachedBackgroundImage();
+                if (source == null)
                 {
                     return;
                 }
 
                 form.BackgroundImageLayout = ImageLayout.Stretch;
-                using (var loaded = Image.FromFile(path))
-                {
-                    form.BackgroundImage = new Bitmap(loaded);
-                }
+                form.BackgroundImage = new Bitmap(source);
             }
             catch
             {
                 form.BackgroundImage = null;
+            }
+        }
+
+        private static Image GetCachedBackgroundImage()
+        {
+            if (_cachedBackground != null)
+            {
+                return _cachedBackground;
+            }
+
+            lock (_cachedBackgroundLock)
+            {
+                if (_cachedBackground != null)
+                {
+                    return _cachedBackground;
+                }
+
+                string path = FindBackgroundImagePath();
+                if (path == null)
+                {
+                    return null;
+                }
+
+                try
+                {
+                    using (Image fromFile = Image.FromFile(path))
+                    {
+                        _cachedBackground = new Bitmap(fromFile);
+                    }
+
+                    return _cachedBackground;
+                }
+                catch
+                {
+                    _cachedBackground = null;
+                    return null;
+                }
             }
         }
 

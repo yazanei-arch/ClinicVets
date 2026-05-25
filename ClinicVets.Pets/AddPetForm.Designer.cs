@@ -39,7 +39,7 @@ namespace ClinicVets.UI
             this.label4 = new System.Windows.Forms.Label();
             this.dtpBirthDate = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
-            this.txtOwner = new System.Windows.Forms.TextBox();
+            this.txtOwner = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.txtChipNumber = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -164,13 +164,14 @@ namespace ClinicVets.UI
             // txtOwner
             // 
             this.txtOwner.BackColor = System.Drawing.Color.White;
-            this.txtOwner.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtOwner.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.txtOwner.FormattingEnabled = true;
             this.txtOwner.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.txtOwner.ForeColor = System.Drawing.Color.Black;
             this.txtOwner.Location = new System.Drawing.Point(117, 422);
             this.txtOwner.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtOwner.Name = "txtOwner";
-            this.txtOwner.Size = new System.Drawing.Size(350, 36);
+            this.txtOwner.Size = new System.Drawing.Size(350, 38);
             this.txtOwner.TabIndex = 1;
             // 
             // label6
@@ -333,7 +334,7 @@ namespace ClinicVets.UI
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DateTimePicker dtpBirthDate;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txtOwner;
+        private System.Windows.Forms.ComboBox txtOwner;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtChipNumber;
         private System.Windows.Forms.Label label7;

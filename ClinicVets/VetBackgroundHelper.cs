@@ -13,6 +13,51 @@ namespace ClinicVets
         private static Image _cachedLoginBackground;
         private static Image _cachedRegisterBackground;
 
+        private static readonly Dictionary<string, Image> _imageCacheByFile =
+            new Dictionary<string, Image>(StringComparer.OrdinalIgnoreCase);
+        private static readonly object _imageCacheLock = new object();
+
+        /// <summary>
+        /// Returns a shared <see cref="Image"/> for the given file name (from any standard
+        /// background-search root). The image is read from disk only once per app run;
+        /// callers must clone before assigning to a Form/PictureBox they will dispose.
+        /// </summary>
+        internal static Image GetCachedImage(string imageFileName)
+        {
+            if (string.IsNullOrWhiteSpace(imageFileName))
+            {
+                return null;
+            }
+
+            lock (_imageCacheLock)
+            {
+                if (_imageCacheByFile.TryGetValue(imageFileName, out Image cached))
+                {
+                    return cached;
+                }
+
+                string path = FindImagePath(imageFileName);
+                if (path == null)
+                {
+                    return null;
+                }
+
+                try
+                {
+                    using (Image fromFile = Image.FromFile(path))
+                    {
+                        Image inMemory = new Bitmap(fromFile);
+                        _imageCacheByFile[imageFileName] = inMemory;
+                        return inMemory;
+                    }
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
         internal static void ApplyVetBackground(Form form)
         {
             ApplyPremiumBackground(form);

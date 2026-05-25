@@ -1,0 +1,129 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6B60C783-D313-4CD7-8963-3AF2730DED15}|ClinicVets.AuthCustomers\\ClinicVets.AuthCustomers.csproj|c:\\users\\abdal\\source\\repos\\clinicvets\\clinicvets.authcustomers\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{6B60C783-D313-4CD7-8963-3AF2730DED15}|ClinicVets.AuthCustomers\\ClinicVets.AuthCustomers.csproj|solutionrelative:clinicvets.authcustomers\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}|ClinicVets.Pets\\ClinicVets.Pets.csproj|C:\\Users\\abdal\\source\\repos\\ClinicVets\\clinicvets.pets\\allpetsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}|ClinicVets.Pets\\ClinicVets.Pets.csproj|solutionrelative:clinicvets.pets\\allpetsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}|ClinicVets.Pets\\ClinicVets.Pets.csproj|C:\\Users\\abdal\\source\\repos\\ClinicVets\\clinicvets.pets\\allpetsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}|ClinicVets.Pets\\ClinicVets.Pets.csproj|solutionrelative:clinicvets.pets\\allpetsform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}|ClinicVets.Pets\\ClinicVets.Pets.csproj|C:\\Users\\abdal\\source\\repos\\ClinicVets\\clinicvets.pets\\addpetform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}|ClinicVets.Pets\\ClinicVets.Pets.csproj|solutionrelative:clinicvets.pets\\addpetform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}|ClinicVets.Pets\\ClinicVets.Pets.csproj|C:\\Users\\abdal\\source\\repos\\ClinicVets\\clinicvets.pets\\searchpetform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}|ClinicVets.Pets\\ClinicVets.Pets.csproj|solutionrelative:clinicvets.pets\\searchpetform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}|ClinicVets.Pets\\ClinicVets.Pets.csproj|C:\\Users\\abdal\\source\\repos\\ClinicVets\\clinicvets.pets\\petmanagementform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{A6570A4F-36FC-47F9-A52A-6B64B3BF2F91}|ClinicVets.Pets\\ClinicVets.Pets.csproj|solutionrelative:clinicvets.pets\\petmanagementform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{355E696D-5346-43B1-AA9F-7962B84DF706}|ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj|c:\\users\\abdal\\source\\repos\\clinicvets\\clinicvets.visitsmedicines\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{355E696D-5346-43B1-AA9F-7962B84DF706}|ClinicVets.VisitsMedicines\\ClinicVets.VisitsMedicines.csproj|solutionrelative:clinicvets.visitsmedicines\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "App.config",
+              "DocumentMoniker": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.AuthCustomers\\App.config",
+              "RelativeDocumentMoniker": "ClinicVets.AuthCustomers\\App.config",
+              "ToolTip": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.AuthCustomers\\App.config",
+              "RelativeToolTip": "ClinicVets.AuthCustomers\\App.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2026-05-23T15:24:03.881Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AllPetsForm.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.Pets\\AllPetsForm.cs",
+              "RelativeDocumentMoniker": "ClinicVets.Pets\\AllPetsForm.cs",
+              "ToolTip": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.Pets\\AllPetsForm.cs",
+              "RelativeToolTip": "ClinicVets.Pets\\AllPetsForm.cs",
+              "ViewState": "AgIAAMgAAAAAAAAAAADwv9gAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T12:06:46.292Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AllPetsForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.Pets\\AllPetsForm.cs",
+              "RelativeDocumentMoniker": "ClinicVets.Pets\\AllPetsForm.cs",
+              "ToolTip": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.Pets\\AllPetsForm.cs [Design]",
+              "RelativeToolTip": "ClinicVets.Pets\\AllPetsForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T12:06:38.317Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AddPetForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.Pets\\AddPetForm.cs",
+              "RelativeDocumentMoniker": "ClinicVets.Pets\\AddPetForm.cs",
+              "ToolTip": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.Pets\\AddPetForm.cs [Design]",
+              "RelativeToolTip": "ClinicVets.Pets\\AddPetForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003525|",
+              "WhenOpened": "2026-05-21T12:06:23.358Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SearchPetForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.Pets\\SearchPetForm.cs",
+              "RelativeDocumentMoniker": "ClinicVets.Pets\\SearchPetForm.cs",
+              "ToolTip": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.Pets\\SearchPetForm.cs [Design]",
+              "RelativeToolTip": "ClinicVets.Pets\\SearchPetForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003525|",
+              "WhenOpened": "2026-05-21T12:06:18.782Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PetManagementForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.Pets\\PetManagementForm.cs",
+              "RelativeDocumentMoniker": "ClinicVets.Pets\\PetManagementForm.cs",
+              "ToolTip": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.Pets\\PetManagementForm.cs [Design]",
+              "RelativeToolTip": "ClinicVets.Pets\\PetManagementForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003525|",
+              "WhenOpened": "2026-05-21T12:06:08.733Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\Program.cs",
+              "RelativeDocumentMoniker": "ClinicVets.VisitsMedicines\\Program.cs",
+              "ToolTip": "C:\\Users\\abdal\\source\\repos\\ClinicVets\\ClinicVets.VisitsMedicines\\Program.cs",
+              "RelativeToolTip": "ClinicVets.VisitsMedicines\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-20T09:03:05.508Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

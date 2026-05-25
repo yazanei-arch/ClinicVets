@@ -90,8 +90,8 @@ namespace ClinicVets
             ClearMenuBackground();
             BackgroundImageLayout = ImageLayout.Stretch;
 
-            string path = FindMenuBackgroundPath();
-            if (path == null)
+            Image cached = VetBackgroundHelper.GetCachedImage("secretary_menu_bg.png");
+            if (cached == null)
             {
                 BackColor = FormFallbackBack;
                 Invalidate(true);
@@ -100,8 +100,7 @@ namespace ClinicVets
 
             try
             {
-                _ownedBackgroundImage = Image.FromFile(path);
-                BackgroundImage = (Image)_ownedBackgroundImage.Clone();
+                BackgroundImage = (Image)cached.Clone();
                 BackColor = FormFallbackBack;
                 Invalidate(true);
             }

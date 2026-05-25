@@ -56,9 +56,14 @@ namespace ClinicVets.UI
             ApplyAddPetContentLayout();
             ApplyTransparentLabels();
             SafeLoadAnimalTypes();
+            SafeLoadCustomerOwners();
             if (!string.IsNullOrEmpty(_ownerId))
             {
-                txtOwner.Text = _ownerId;
+                int preselect = txtOwner.Items.IndexOf(_ownerId);
+                if (preselect >= 0)
+                {
+                    txtOwner.SelectedIndex = preselect;
+                }
             }
 
             Resize += AddPetForm_Resize;
@@ -263,6 +268,91 @@ namespace ClinicVets.UI
             }
         }
 
+        private void SafeLoadCustomerOwners()
+        {
+            try
+            {
+                LoadCustomerOwners();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Could not load customers from Excel." + Environment.NewLine + Environment.NewLine + ex.Message,
+                    "ClinicVets",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        private void LoadCustomerOwners()
+        {
+            txtOwner.Items.Clear();
+            txtOwner.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            if (!PetExcelSupport.TryEnsureWorkbookReady(this, out string workbookPath))
+            {
+                return;
+            }
+
+            using (var workbook = new XLWorkbook(workbookPath))
+            {
+                const string customerSheetName = "Customer";
+                if (!workbook.Worksheets.Contains(customerSheetName))
+                {
+                    return;
+                }
+
+                var sheet = workbook.Worksheet(customerSheetName);
+                var range = sheet.RangeUsed();
+                if (range == null)
+                {
+                    return;
+                }
+
+                int fullNameColumn = -1;
+                var headerRow = range.FirstRowUsed();
+                if (headerRow == null)
+                {
+                    return;
+                }
+
+                foreach (var headerCell in headerRow.CellsUsed())
+                {
+                    string header = headerCell.GetValue<string>().Trim();
+                    if (string.Equals(header, "FullName", StringComparison.OrdinalIgnoreCase))
+                    {
+                        fullNameColumn = headerCell.Address.ColumnNumber;
+                        break;
+                    }
+                }
+
+                if (fullNameColumn <= 0)
+                {
+                    return;
+                }
+
+                var added = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var row in range.RowsUsed())
+                {
+                    if (row.RowNumber() == headerRow.RowNumber())
+                    {
+                        continue;
+                    }
+
+                    string name = row.Cell(fullNameColumn).GetValue<string>().Trim();
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        continue;
+                    }
+
+                    if (added.Add(name))
+                    {
+                        txtOwner.Items.Add(name);
+                    }
+                }
+            }
+        }
+
         private void EnsureErrorLabels()
         {
             SetupErrorLabel(lblPetNameError, txtPetName);
@@ -353,7 +443,7 @@ namespace ClinicVets.UI
             cmbAnimalType.SelectedIndex = -1;
             txtWeight.Clear();
             txtChipNumber.Clear();
-            txtOwner.Clear();
+            txtOwner.SelectedIndex = -1;
 
             dtpBirthDate.Value = DateTime.Now;
             dtpLastVaccineDate.Value = DateTime.Now;

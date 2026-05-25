@@ -49,24 +49,12 @@ namespace ClinicVets
 
         private void TryLoadBackgroundImage()
         {
-            string path = Path.Combine(Application.StartupPath, "images", "view_customers_bg.png");
-            if (!File.Exists(path))
-            {
-                path = @"images\view_customers_bg.png";
-            }
-
-            string resolved = FindViewCustomersBackgroundPath();
-            if (!string.IsNullOrEmpty(resolved) && File.Exists(resolved))
-            {
-                path = resolved;
-            }
-
             try
             {
-                if (File.Exists(path))
+                Image cached = VetBackgroundHelper.GetCachedImage("view_customers_bg.png");
+                if (cached != null)
                 {
-                    _ownedBackgroundImage = Image.FromFile(path);
-                    BackgroundImage = (Image)_ownedBackgroundImage.Clone();
+                    BackgroundImage = (Image)cached.Clone();
                 }
             }
             catch
@@ -197,30 +185,16 @@ namespace ClinicVets
             dgvCustomers.Columns.Clear();
             dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "CustomerId",
-                HeaderText = "Customer ID",
-                FillWeight = 18,
+                Name = "CustomerName",
+                HeaderText = "Customer Name",
+                FillWeight = 40,
                 ReadOnly = true
             });
             dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "FullName",
-                HeaderText = "Full Name",
-                FillWeight = 28,
-                ReadOnly = true
-            });
-            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Phone",
-                HeaderText = "Phone",
-                FillWeight = 18,
-                ReadOnly = true
-            });
-            dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Email",
-                HeaderText = "Email",
-                FillWeight = 26,
+                Name = "Pets",
+                HeaderText = "Pets",
+                FillWeight = 60,
                 ReadOnly = true
             });
             dgvCustomers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -261,19 +235,26 @@ namespace ClinicVets
             dgvCustomers.Rows.Clear();
             try
             {
+                IReadOnlyDictionary<string, List<string>> petsByOwner;
+                try
+                {
+                    petsByOwner = _excelHelper.ReadPetOwnerIndex();
+                }
+                catch
+                {
+                    petsByOwner = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+                }
+
                 foreach (Customer customer in _excelHelper.ReadCustomers())
                 {
-                    string customerId = customer.CustomerID;
-                    if (string.IsNullOrWhiteSpace(customerId))
+                    string customerName = (customer.DisplayName ?? string.Empty).Trim();
+                    if (customerName.Length == 0)
                     {
-                        customerId = customer.IDNumber;
+                        continue;
                     }
 
-                    dgvCustomers.Rows.Add(
-                        customerId ?? string.Empty,
-                        customer.DisplayName,
-                        customer.Phone ?? string.Empty,
-                        customer.Email ?? string.Empty);
+                    string petsText = BuildPetsCellText(customerName, petsByOwner);
+                    dgvCustomers.Rows.Add(customerName, petsText);
                 }
             }
             catch (Exception ex)
@@ -285,6 +266,21 @@ namespace ClinicVets
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
             }
+        }
+
+        private static string BuildPetsCellText(
+            string customerName,
+            IReadOnlyDictionary<string, List<string>> petsByOwner)
+        {
+            if (petsByOwner != null
+                && petsByOwner.TryGetValue(customerName, out List<string> pets)
+                && pets != null
+                && pets.Count > 0)
+            {
+                return string.Join(", ", pets);
+            }
+
+            return "No pets";
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
