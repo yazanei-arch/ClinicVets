@@ -448,10 +448,32 @@ namespace ClinicVets.UI
             txtChipNumber.Clear();
             txtOwner.SelectedIndex = -1;
 
-            dtpBirthDate.Value = DateTime.Now;
-            dtpLastVaccineDate.Value = DateTime.Now;
+            SetSafeDateTimePickerValue(dtpBirthDate, DateTime.Now);
+            SetSafeDateTimePickerValue(dtpLastVaccineDate, DateTime.Now);
 
             ClearErrorLabels();
+        }
+
+        private static void SetSafeDateTimePickerValue(DateTimePicker picker, DateTime loadedDate)
+        {
+            if (picker == null)
+            {
+                return;
+            }
+
+            DateTime safeDate = loadedDate;
+
+            if (safeDate < picker.MinDate)
+            {
+                safeDate = picker.MinDate;
+            }
+
+            if (safeDate > picker.MaxDate)
+            {
+                safeDate = picker.MaxDate;
+            }
+
+            picker.Value = safeDate;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -542,6 +564,11 @@ namespace ClinicVets.UI
             if (dtpLastVaccineDate.Value.Date > DateTime.Now.Date)
             {
                 lblLastVaccineError.Text = "Vaccine date cannot be future.";
+                isValid = false;
+            }
+            else if (dtpLastVaccineDate.Value.Date < dtpBirthDate.Value.Date)
+            {
+                lblLastVaccineError.Text = "Last vaccine date cannot be before the pet birth date.";
                 isValid = false;
             }
 

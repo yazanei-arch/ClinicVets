@@ -62,13 +62,13 @@ namespace ClinicVets.UI
         {
             const int contentShiftLeft = 48;
             const int gridWidth = 756;
-            const int gridHeight = 295;
             const int fieldWidth = 225;
             const int fieldHeight = 36;
             const int buttonWidth = 180;
             const int buttonHeight = 56;
             const int buttonGap = 28;
             const int edgeMargin = 24;
+            const int gridToActionGap = 12;
 
             int centerX = (ClientSize.Width / 2) - contentShiftLeft;
             int gridLeft = centerX - (gridWidth / 2);
@@ -77,7 +77,6 @@ namespace ClinicVets.UI
             const int subtitleTop = 212;
             const int searchTop = 248;
             const int gridTop = 302;
-            const int buttonsTop = gridTop + gridHeight + 20;
 
             label1.AutoSize = true;
             label1.BackColor = Color.Transparent;
@@ -104,16 +103,24 @@ namespace ClinicVets.UI
                 nameLabelWidth,
                 30);
 
+            int bottomButtonsTop = ClientSize.Height - buttonHeight - edgeMargin;
+            int reservedBelowGrid = gridToActionGap;
+            if (_btnOpenVisit != null)
+            {
+                reservedBelowGrid += _btnOpenVisit.Height + gridToActionGap;
+            }
+
+            int maxGridBottom = bottomButtonsTop - reservedBelowGrid;
+            int gridHeight = Math.Max(120, maxGridBottom - gridTop);
             dgvPets.SetBounds(gridLeft, gridTop, gridWidth, gridHeight);
 
             int buttonsRowWidth = (buttonWidth * 2) + buttonGap;
             int buttonsLeft = centerX - (buttonsRowWidth / 2);
-            int bottomButtonsTop = Math.Min(buttonsTop, ClientSize.Height - buttonHeight - edgeMargin);
             btnSearch.SetBounds(buttonsLeft, bottomButtonsTop, buttonWidth, buttonHeight);
             btnClear2.SetBounds(buttonsLeft + buttonWidth + buttonGap, bottomButtonsTop, buttonWidth, buttonHeight);
 
             PlaceBackButtonTopLeft();
-            PositionVetVisitButton(bottomButtonsTop);
+            PositionVetVisitButton(bottomButtonsTop, gridLeft, gridWidth);
 
             dgvPets.BringToFront();
             btnSearch.BringToFront();
@@ -137,19 +144,19 @@ namespace ClinicVets.UI
             btnBack.BringToFront();
         }
 
-        private void PositionVetVisitButton(int referenceButtonsTop)
+        private void PositionVetVisitButton(int searchButtonsTop, int gridLeft, int gridWidth)
         {
             if (_btnOpenVisit == null)
             {
                 return;
             }
 
-            const int edgeMargin = 24;
-            int y = Math.Max(referenceButtonsTop - _btnOpenVisit.Height - 12, 520);
-            int x = Math.Max(edgeMargin, ClientSize.Width - _btnOpenVisit.Width - edgeMargin);
+            const int gapAboveSearch = 12;
+            int y = searchButtonsTop - gapAboveSearch - _btnOpenVisit.Height;
+            int x = gridLeft + gridWidth - _btnOpenVisit.Width;
             if (RightToLeftLayout && RightToLeft == RightToLeft.Yes)
             {
-                x = edgeMargin;
+                x = gridLeft;
             }
 
             _btnOpenVisit.Location = new Point(x, y);

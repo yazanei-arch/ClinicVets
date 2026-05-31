@@ -22,7 +22,13 @@ namespace ClinicVets
         private const int FieldWidth = 440;
         private const int FieldHeight = 32;
         private const int CaptionHeight = 22;
-        private const int ErrorHeight = 16;
+        private const int CaptionToFieldGap = 2;
+        private const int ErrorAfterFieldGap = 2;
+        private const int ErrorHeight = 18;
+        private const int FieldRowGap = 7;
+        private const int FieldsBeforeButtonsGap = 6;
+        private const int ButtonHeight = 44;
+        private const int ButtonGap = 4;
 
         private ValidationFieldBinder _validation;
         private Image _ownedBackgroundImage;
@@ -103,11 +109,24 @@ namespace ClinicVets
         {
             const int top = 48;
             const int sideMargin = 40;
+            const int bottomMargin = 40;
             int cardWidth = Math.Min(520, ClientSize.Width - (sideMargin * 2));
-            int cardHeight = Math.Min(620, ClientSize.Height - top - 40);
+            int requiredHeight = CalculateRequiredCardHeight();
+            int maxHeight = ClientSize.Height - top - bottomMargin;
+            int cardHeight = Math.Min(Math.Max(requiredHeight, 520), maxHeight);
             int cardLeft = (ClientSize.Width - cardWidth) / 2;
             pnlCard.Location = new Point(cardLeft, top);
             pnlCard.Size = new Size(cardWidth, cardHeight);
+            pnlCard.AutoScroll = requiredHeight > maxHeight;
+        }
+
+        private static int CalculateRequiredCardHeight()
+        {
+            const int firstFieldY = 140;
+            const int bottomPadding = 12;
+            int fieldBlock = 4 * (CaptionHeight + CaptionToFieldGap + FieldHeight + ErrorAfterFieldGap + ErrorHeight + FieldRowGap);
+            int buttonBlock = FieldsBeforeButtonsGap + (ButtonHeight * 3) + (ButtonGap * 2);
+            return firstFieldY + fieldBlock + buttonBlock + bottomPadding;
         }
 
         private void ApplyForgotTypography()
@@ -196,45 +215,44 @@ namespace ClinicVets
 
             pnlDivider.SetBounds(InnerX, 128, FieldWidth, 1);
 
-            LayoutFieldRow(lblEmail, txtEmail, 140);
-            LayoutFieldRow(lblVerificationCode, txtVerificationCode, 208);
-            LayoutFieldRow(lblNewPassword, txtNewPassword, 276);
-            LayoutFieldRow(lblConfirmPassword, txtConfirmPassword, 344);
+            int y = 140;
+            y = LayoutFieldRow(lblEmail, txtEmail, y);
+            y = LayoutFieldRow(lblVerificationCode, txtVerificationCode, y);
+            y = LayoutFieldRow(lblNewPassword, txtNewPassword, y);
+            y = LayoutFieldRow(lblConfirmPassword, txtConfirmPassword, y);
 
-            PositionFieldError(txtEmail, 140);
-            PositionFieldError(txtVerificationCode, 208);
-            PositionFieldError(txtNewPassword, 276);
-            PositionFieldError(txtConfirmPassword, 344);
-
-            btnSendCode.SetBounds(InnerX, 418, FieldWidth, 44);
-            btnResetPassword.SetBounds(InnerX, 472, FieldWidth, 44);
-            btnBack.SetBounds(InnerX, 526, FieldWidth, 44);
+            y += FieldsBeforeButtonsGap;
+            btnSendCode.SetBounds(InnerX, y, FieldWidth, ButtonHeight);
+            y += ButtonHeight + ButtonGap;
+            btnResetPassword.SetBounds(InnerX, y, FieldWidth, ButtonHeight);
+            y += ButtonHeight + ButtonGap;
+            btnBack.SetBounds(InnerX, y, FieldWidth, ButtonHeight);
         }
 
-        private void LayoutFieldRow(Label caption, TextBox input, int captionY)
+        private int LayoutFieldRow(Label caption, TextBox input, int captionY)
         {
             caption.AutoSize = false;
             caption.SetBounds(InnerX, captionY, FieldWidth, CaptionHeight);
+
+            int fieldY = captionY + CaptionHeight + CaptionToFieldGap;
             Control host = GetFieldHost(input);
-            host.SetBounds(InnerX, captionY + CaptionHeight + 2, FieldWidth, FieldHeight);
+            host.SetBounds(InnerX, fieldY, FieldWidth, FieldHeight);
             AlignChromePlateInner(host);
-        }
 
-        private void PositionFieldError(TextBox input, int captionY)
-        {
-            if (_validation == null)
+            if (_validation != null)
             {
-                return;
+                ValidationFieldBinder.FieldEntry entry = _validation.Entries.FirstOrDefault(e => e.InputControl == input);
+                if (entry != null)
+                {
+                    entry.ErrorLabel.SetBounds(
+                        InnerX,
+                        fieldY + FieldHeight + ErrorAfterFieldGap,
+                        FieldWidth,
+                        ErrorHeight);
+                }
             }
 
-            ValidationFieldBinder.FieldEntry entry = _validation.Entries.FirstOrDefault(e => e.InputControl == input);
-            if (entry == null)
-            {
-                return;
-            }
-
-            int y = captionY + CaptionHeight + 2 + FieldHeight + 2;
-            entry.ErrorLabel.SetBounds(InnerX, y, FieldWidth, ErrorHeight);
+            return captionY + CaptionHeight + CaptionToFieldGap + FieldHeight + ErrorAfterFieldGap + ErrorHeight + FieldRowGap;
         }
 
         private static Control GetFieldHost(Control input)
