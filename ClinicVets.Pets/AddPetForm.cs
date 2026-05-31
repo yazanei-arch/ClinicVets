@@ -43,6 +43,9 @@ namespace ClinicVets.UI
 
         private void AddPetForm_Load(object sender, EventArgs e)
         {
+            dtpBirthDate.MaxDate = DateTime.Now;
+            dtpLastVaccineDate.MaxDate = DateTime.Today;
+
             ClinicFormLayout.ApplyStandard(this);
             StartPosition = FormStartPosition.CenterScreen;
             WindowState = FormWindowState.Normal;

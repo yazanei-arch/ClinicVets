@@ -10,6 +10,10 @@ using System.Windows.Forms;
 using System.IO;
 using ClosedXML.Excel;
 using ClinicVets;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Color = System.Drawing.Color;
+using Font = System.Drawing.Font;
+
 
 namespace ClinicVets.UI
 {
@@ -279,6 +283,7 @@ namespace ClinicVets.UI
 
                 // Pet Code should not be changed
                 dgvPets.Rows[editingRowIndex].Cells[0].ReadOnly = true;
+                dgvPets.Rows[editingRowIndex].Cells[2].ReadOnly = true;
 
                 isUpdateMode = true;
                 btnUpdatePet.Text = "Save Update";
@@ -287,6 +292,141 @@ namespace ClinicVets.UI
             }
             else
             {
+
+                string message = "";
+                bool name = false, fWeight = false, owner = false, chip = false, birth = false, vaccine = false;
+
+                if (string.IsNullOrWhiteSpace(dgvPets.Rows[editingRowIndex].Cells[1].Value?.ToString()))
+                {
+                    name = true;
+                    dgvPets.Rows[editingRowIndex].Cells[1].Style.BackColor = Color.FromArgb(255, 200, 200);
+                    message += "Pet name is required\n";
+                }
+                else if (!string.IsNullOrWhiteSpace(dgvPets.Rows[editingRowIndex].Cells[1].Value?.ToString()))
+                {
+                    foreach (char c in dgvPets.Rows[editingRowIndex].Cells[1].Value.ToString().Trim())
+                    {
+                        if (!char.IsLetter(c) && c != ' ')
+                        {
+                            name = true;
+                            dgvPets.Rows[editingRowIndex].Cells[1].Style.BackColor = Color.FromArgb(255, 200, 200);
+                            message += "Pet name must be only letters\n";                       
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    dgvPets.Rows[editingRowIndex].Cells[1].Style.BackColor = Color.Empty;
+                }
+
+                double weight = 0;
+                string weightText = dgvPets.Rows[editingRowIndex].Cells[3].Value?.ToString().Trim();
+                if (string.IsNullOrWhiteSpace(weightText))
+                {
+                    fWeight = true;
+                    message += "Weight is required\n";
+                    dgvPets.Rows[editingRowIndex].Cells[3].Style.BackColor = Color.FromArgb(255, 200, 200);
+                }
+                else if (!double.TryParse(weightText, out weight)) 
+                {
+                    fWeight = true;
+                    message += "Weight must be a number\n";
+                    dgvPets.Rows[editingRowIndex].Cells[3].Style.BackColor = Color.FromArgb(255, 200, 200);
+                }
+                else if (weight < 0.1 || weight > 100)
+                {
+                    fWeight = true;
+                    message += "Weight must be 0.1 - 100\n";
+                    dgvPets.Rows[editingRowIndex].Cells[3].Style.BackColor = Color.FromArgb(255, 200, 200);
+                }
+                else
+                {
+                    dgvPets.Rows[editingRowIndex].Cells[3].Style.BackColor = Color.Empty;
+                }
+
+                if (Convert.ToDateTime(dgvPets.Rows[editingRowIndex].Cells[4].Value) > DateTime.Today)
+                {
+                    birth = true;
+                    dgvPets.Rows[editingRowIndex].Cells[4].Style.BackColor = Color.FromArgb(255, 200, 200);
+                    message += "The birth date cant be in the future\n";
+                }
+                else
+                {
+                    dgvPets.Rows[editingRowIndex].Cells[4].Style.BackColor = Color.Empty;
+                }
+
+                string ownerName = dgvPets.Rows[editingRowIndex].Cells[5].Value?.ToString().Trim();
+
+                if (string.IsNullOrWhiteSpace(ownerName))
+                {
+                    owner = true;
+                    dgvPets.Rows[editingRowIndex].Cells[5].Style.BackColor = Color.FromArgb(255, 200, 200);
+                    message = "Owner is required\n";
+                }
+                else if (!string.IsNullOrWhiteSpace(ownerName))
+                {
+                    foreach (char c in dgvPets.Rows[editingRowIndex].Cells[5].Value.ToString())
+                    {
+                        if (!char.IsLetter(c) && c != ' ')
+                        {
+                            owner = true;
+                            dgvPets.Rows[editingRowIndex].Cells[5].Style.BackColor = Color.FromArgb(255, 200, 200);
+                            message += "Owner name has to be only letters\n";
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    dgvPets.Rows[editingRowIndex].Cells[5].Style.BackColor = Color.Empty;
+                }
+
+                string chipNumber = dgvPets.Rows[editingRowIndex].Cells[6].Value?.ToString().Trim();
+
+                if (string.IsNullOrWhiteSpace(chipNumber))
+                {
+                    chip = true;
+                    dgvPets.Rows[editingRowIndex].Cells[6].Style.BackColor = Color.FromArgb(255, 200, 200);
+                    message = "Chip number is required\n";
+                }
+                else if (!string.IsNullOrWhiteSpace(chipNumber))
+                {
+                    string cellText = dgvPets.Rows[editingRowIndex].Cells[6].Value?.ToString() ?? "";
+
+                    foreach (char c in cellText)
+                    {
+                        if (!char.IsDigit(c) && c != ' ')
+                        {
+                            owner = true;
+                            dgvPets.Rows[editingRowIndex].Cells[6].Style.BackColor = Color.FromArgb(255, 200, 200);
+                            message += "Chip number must be only numbers\n";
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    dgvPets.Rows[editingRowIndex].Cells[6].Style.BackColor = Color.Empty;
+                }
+
+                if (Convert.ToDateTime(dgvPets.Rows[editingRowIndex].Cells[7].Value) > DateTime.Today)
+                {
+                    vaccine = true;
+                    dgvPets.Rows[editingRowIndex].Cells[7].Style.BackColor = Color.FromArgb(255, 200, 200);
+                    message += "The birth date cant be in the future\n";
+                }
+                else
+                {
+                    dgvPets.Rows[editingRowIndex].Cells[7].Style.BackColor = Color.Empty;
+                }
+
+                if (birth || vaccine || name || fWeight || owner || chip)
+                {
+                    MessageBox.Show(message);
+                    return;
+                }
+
                 SaveUpdatedPetToExcel();
 
                 dgvPets.ReadOnly = true;
@@ -341,6 +481,8 @@ namespace ClinicVets.UI
                     MessageBox.Show("No data found in Pets sheet");
                     return;
                 }
+
+                
 
                 foreach (var row in usedRange.RowsUsed())
                 {
