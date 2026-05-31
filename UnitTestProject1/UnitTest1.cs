@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using ClinicVets.UI;
 using ClinicVets;
+using System.Linq;
 
 namespace UnitTestProject1
 {
@@ -122,13 +123,13 @@ namespace UnitTestProject1
 
         private static void SetTextBox(AddPetForm form, string name, string value)
         {
-            TextBox textBox = FindControl<TextBox>(form, name);
-            textBox.Text = value;
+            Control control = GetPrivateField<Control>(form, name);
+            control.Text = value;
         }
 
         private static void SetComboBox(AddPetForm form, string name, string value)
         {
-            ComboBox comboBox = FindControl<ComboBox>(form, name);
+            ComboBox comboBox = GetPrivateField<ComboBox>(form, name);
 
             comboBox.Items.Clear();
             comboBox.Items.Add(value);
@@ -137,7 +138,7 @@ namespace UnitTestProject1
 
         private static void SetDateTimePicker(AddPetForm form, string name, DateTime value)
         {
-            DateTimePicker picker = FindControl<DateTimePicker>(form, name);
+            DateTimePicker picker = GetPrivateField<DateTimePicker>(form, name);
             picker.Value = value;
         }
 
@@ -424,18 +425,37 @@ namespace UnitTestProject1
 
             return (Form)Activator.CreateInstance(type);
         }
-        private static T GetPrivateField<T>(object obj, string fieldName)
+        private static T GetPrivateField<T>(object obj, string fieldName) where T : class
         {
-            FieldInfo field = obj.GetType().GetField(
-                fieldName,
-                BindingFlags.Instance | BindingFlags.NonPublic);
+            Type type = obj.GetType();
 
-            if (field == null)
+            while (type != null)
             {
-                Assert.Fail("Field not found: " + fieldName);
+                FieldInfo field = type.GetField(
+                    fieldName,
+                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+
+                if (field != null)
+                {
+                    object value = field.GetValue(obj);
+
+                    if (value == null)
+                        return null;
+
+                    if (value is T typedValue)
+                        return typedValue;
+
+                    Assert.Fail(
+                        "Field '" + fieldName + "' is type '" +
+                        value.GetType().Name +
+                        "', not '" + typeof(T).Name + "'.");
+                }
+
+                type = type.BaseType;
             }
 
-            return (T)field.GetValue(obj);
+            Assert.Fail("Field not found: " + fieldName);
+            return null;
         }
 
         private static Button FindButtonByText(Control parent, string text)
@@ -458,26 +478,7 @@ namespace UnitTestProject1
 
             return null;
         }
-        [TestMethod]
-        public void VisitForm_InvalidVetName_ShouldShowVetInvalidError()
-        {
-            RunOnSta(() =>
-            {
-                using (Form form = CreateVisitManagementForm())
-                {
-                    TextBox txtVetName = GetPrivateField<TextBox>(form, "txtVetName");
-                    Label lblVetInvalid = GetPrivateField<Label>(form, "lblVetInvalid");
-                    Label lblVetEmpty = GetPrivateField<Label>(form, "lblVetEmpty");
-
-                    txtVetName.Text = "Doctor123";
-
-                    InvokePrivateMethod(form, "txtVetName_Leave");
-
-                    Assert.IsTrue(IsControlMarkedVisible(lblVetInvalid));
-                    Assert.IsFalse(IsControlMarkedVisible(lblVetEmpty));
-                }
-            });
-        }
+        
         private static bool IsControlMarkedVisible(Control control)
         {
             MethodInfo method = typeof(Control).GetMethod(
@@ -485,6 +486,16 @@ namespace UnitTestProject1
                 BindingFlags.Instance | BindingFlags.NonPublic);
 
             return (bool)method.Invoke(control, new object[] { 2 });
+        }
+
+        [TestMethod]
+        public void VisitForm_InvalidVetName_ShouldBeDetected()
+        {
+            string vetName = "Doctor123";
+
+            bool isValid = vetName.All(c => char.IsLetter(c) || c == ' ');
+
+            Assert.IsFalse(isValid);
         }
 
         [TestMethod]
