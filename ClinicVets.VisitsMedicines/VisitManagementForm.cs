@@ -65,6 +65,7 @@ namespace ClinicVets.VisitsMedicines
             try
             {
                 dtpVisitDate.MaxDate = DateTime.Today;
+                dtpVisitDate.MinDate = new DateTime(2000, 1, 1);
 
                 using (var workbook = new XLWorkbook(filePath))
                 {
@@ -146,6 +147,8 @@ namespace ClinicVets.VisitsMedicines
                 lblTimeError.Visible = true;
                 isValid = false;
             }
+
+
 
             if (string.IsNullOrWhiteSpace(txtReason.Text))
             {
