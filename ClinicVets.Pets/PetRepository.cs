@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using ClosedXML.Excel;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+
 
 namespace ClinicVets.UI
 {
@@ -12,8 +16,59 @@ namespace ClinicVets.UI
             pets = new List<Pet>();
         }
 
+        public List<Pet> LoadPetsFromExcel()
+        {
+            List<Pet> loadedPets = new List<Pet>();
+            string filePath = ExcelFileManager.FilePath; // Ensure this matches your file path logic
+
+            if (!File.Exists(filePath))
+            {
+                return loadedPets; // Return empty list if file doesn't exist yet
+            }
+
+            try
+            {
+                using (var workbook = new XLWorkbook(filePath))
+                {
+                    if (!workbook.Worksheets.Contains("Pets"))
+                    {
+                        return loadedPets;
+                    }
+
+                    var sheet = workbook.Worksheet("Pets");
+                    var range = sheet.RangeUsed();
+
+                    if (range == null) return loadedPets;
+
+                    // Loop through all rows, skipping the first row (headers)
+                    foreach (var row in range.RowsUsed().Skip(1))
+                    {
+                        Pet p = new Pet
+                        {
+                            PetID = row.Cell(1).GetValue<string>(),
+                            PetName = row.Cell(2).GetValue<string>(),
+                            AnimalType = row.Cell(3).GetValue<string>(),
+                            Weight = row.Cell(4).GetValue<double>(),
+                            BirthDate = row.Cell(5).GetValue<DateTime>(),
+                            Owner = row.Cell(6).GetValue<string>(),
+                            ChipNumber = row.Cell(7).GetValue<string>(),
+                            LastVaccineDate = row.Cell(8).GetValue<DateTime>()
+                        };
+
+                        loadedPets.Add(p);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // If Excel is locked or corrupt, it just returns what it has so far
+            }
+
+            return loadedPets;
+        }
         public string GeneratePetID()
         {
+            this.pets = LoadPetsFromExcel();
             int nextId = pets.Count + 1;
             return "P" + nextId.ToString("000");
         }

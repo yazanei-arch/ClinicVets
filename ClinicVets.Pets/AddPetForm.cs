@@ -3,6 +3,7 @@ using System.IO;
 using ClosedXML.Excel;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 using ClinicVets;
 
 namespace ClinicVets.UI
@@ -43,8 +44,9 @@ namespace ClinicVets.UI
 
         private void AddPetForm_Load(object sender, EventArgs e)
         {
-            dtpBirthDate.MaxDate = DateTime.Now;
-            dtpLastVaccineDate.MaxDate = DateTime.Today;
+            dtpBirthDate.MaxDate = DateTime.Now.Date.AddDays(1).AddTicks(-1);
+            dtpLastVaccineDate.MaxDate = DateTime.Now.Date.AddDays(1).AddTicks(-1);
+
 
             ClinicFormLayout.ApplyStandard(this);
             StartPosition = FormStartPosition.CenterScreen;
@@ -539,9 +541,22 @@ namespace ClinicVets.UI
                 isValid = false;
             }
 
+            else if (IsDuplicateChipNumber(chipNumber))
+            {
+                lblChipNumberError.Text = "This chip number is already registered.";
+                txtChipNumber.BackColor = Color.MistyRose;
+                isValid = false;
+            }
+
             if (dtpLastVaccineDate.Value.Date > DateTime.Now.Date)
             {
                 lblLastVaccineError.Text = "Vaccine date cannot be future.";
+                isValid = false;
+            }
+
+            if(dtpLastVaccineDate.Value.Date < dtpBirthDate.Value.Date)
+            {
+                MessageBox.Show("Vaccine date cant be after birth date");
                 isValid = false;
             }
 
@@ -552,7 +567,8 @@ namespace ClinicVets.UI
 
             Pet pet = new Pet
             {
-                PetID = repo.GeneratePetID(),
+                // 🔴 UPDATED: Uses the new dynamic ID generator
+                PetID = GenerateDynamicPetID(),
                 PetName = petName,
                 AnimalType = animalType,
                 Weight = weight,
@@ -562,11 +578,87 @@ namespace ClinicVets.UI
                 LastVaccineDate = dtpLastVaccineDate.Value.Date
             };
 
-            repo.AddPet(pet);
-            SavePetToExcel(pet);
+            // 🔴 UPDATED: Wrapped in a try-catch to prevent Excel lock crashes
+            try
+            {
+                repo.AddPet(pet);
+                SavePetToExcel(pet);
 
-            MessageBox.Show("Pet saved successfully.");
-            btnClear_Click(sender, e);
+                MessageBox.Show("Pet saved successfully.");
+                btnClear_Click(sender, e);
+            }
+            catch (IOException)
+            {
+                MessageBox.Show("Could not save pet because the Excel data file is open. Please close 'ClinicVetsData.xlsx' and try again.", "File Lock Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unexpected save error occurred: {ex.Message}", "Save Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GenerateDynamicPetID()
+        {
+            int nextIdNum = 1;
+
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    using (var workbook = new XLWorkbook(filePath))
+                    {
+                        if (workbook.Worksheets.Contains("Pets"))
+                        {
+                            var sheet = workbook.Worksheet("Pets");
+                            var lastRow = sheet.LastRowUsed();
+                            if (lastRow != null && lastRow.RowNumber() > 1)
+                            {
+                                // Finds the last used row number to generate the next ID
+                                nextIdNum = lastRow.RowNumber();
+                            }
+                        }
+                    }
+                }
+                catch { /* Fallback to default if locked */ }
+            }
+
+            return "P" + nextIdNum.ToString("000");
+        }
+
+        private bool IsDuplicateChipNumber(string chip)
+        {
+            if (!File.Exists(filePath)) return false;
+
+            try
+            {
+                using (var workbook = new XLWorkbook(filePath))
+                {
+                    if (!workbook.Worksheets.Contains("Pets")) return false;
+
+                    var sheet = workbook.Worksheet("Pets");
+                    var range = sheet.RangeUsed();
+                    if (range == null) return false;
+
+                    var headerRow = range.FirstRowUsed();
+                    int chipColNum = 7; // Assuming Column G (7) is ChipNumber
+
+                    // Scans all rows skipping the header
+                    foreach (var row in range.RowsUsed().Skip(1))
+                    {
+                        string existingChip = row.Cell(chipColNum).GetValue<string>().Trim();
+                        if (string.Equals(existingChip, chip, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return true; // Match found!
+                        }
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                MessageBox.Show("Warning: Unable to check duplicate chip numbers because the file is open elsewhere.", "File Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            return false;
         }
 
         private void SavePetToExcel(Pet pet)
