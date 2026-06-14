@@ -115,88 +115,91 @@ namespace ClinicVets
       return null;
     }
 
-    public static string ValidateUsername(string value)
-    {
-      string required = ValidateRequired(value);
-      if (required != null)
-      {
-        return required;
-      }
-
-      value = value.Trim();
-      if (value.Length < 4 || value.Length > 20)
-      {
-        return "Username must be between 4 and 20 characters.";
-      }
-
-      if (value.Any(char.IsWhiteSpace))
-      {
-        return "Username cannot contain spaces.";
-      }
-
-      foreach (char c in value)
-      {
-        if (!IsEnglishLetter(c) && !char.IsDigit(c))
+        public static string ValidateUsername(string value)
         {
-          return "Username may contain English letters and numbers only.";
+            string required = ValidateRequired(value);
+            if (required != null)
+            {
+                return required;
+            }
+
+            value = value.Trim();
+
+            if (value.Length < 6 || value.Length > 8)
+            {
+                return "Username must be 6-8 characters.";
+            }
+
+            int digitCount = value.Count(char.IsDigit);
+
+            if (digitCount > 2)
+            {
+                return "Username may contain up to 2 digits only.";
+            }
+
+            foreach (char c in value)
+            {
+                if (!IsEnglishLetter(c) && !char.IsDigit(c))
+                {
+                    return "Username may contain English letters and numbers only.";
+                }
+            }
+
+            return null;
         }
-      }
 
-      return null;
-    }
-
-    public static string ValidatePassword(string value)
-    {
-      if (string.IsNullOrEmpty(value))
-      {
-        return RequiredMessage;
-      }
-
-      if (value.Length < 6)
-      {
-        return "Password must be at least 6 characters.";
-      }
-
-      bool hasUpper = false;
-      bool hasLower = false;
-      bool hasDigit = false;
-
-      foreach (char c in value)
-      {
-        if (char.IsUpper(c) && IsEnglishLetter(c))
+        public static string ValidatePassword(string value)
         {
-          hasUpper = true;
+            if (string.IsNullOrEmpty(value))
+            {
+                return RequiredMessage;
+            }
+
+            if (value.Length < 8 || value.Length > 10)
+            {
+                return "Password must be 8-10 characters.";
+            }
+
+            bool hasLetter = false;
+            bool hasDigit = false;
+            bool hasSpecial = false;
+
+            foreach (char c in value)
+            {
+                if (IsEnglishLetter(c))
+                {
+                    hasLetter = true;
+                }
+                else if (char.IsDigit(c))
+                {
+                    hasDigit = true;
+                }
+                else if (c == '!' || c == '#' || c == '$')
+                {
+                    hasSpecial = true;
+                }
+            }
+
+            if (!hasLetter)
+            {
+                return "Password must contain at least one letter.";
+            }
+
+            if (!hasDigit)
+            {
+                return "Password must contain at least one number.";
+            }
+
+            if (!hasSpecial)
+            {
+                return "Password must contain at least one special character (!,#,$).";
+            }
+
+            return null;
         }
-        else if (char.IsLower(c) && IsEnglishLetter(c))
-        {
-          hasLower = true;
-        }
-        else if (char.IsDigit(c))
-        {
-          hasDigit = true;
-        }
-      }
 
-      if (!hasUpper)
-      {
-        return "Password must contain at least one uppercase letter.";
-      }
-
-      if (!hasLower)
-      {
-        return "Password must contain at least one lowercase letter.";
-      }
-
-      if (!hasDigit)
-      {
-        return "Password must contain at least one number.";
-      }
-
-      return null;
-    }
-
-    /// <summary>Password rules for forgot-password reset only (does not affect login/register).</summary>
-    public static string ValidateResetPassword(string value)
+        /// <summary>Password rules for forgot-password reset only (does not affect login/register).</summary>
+        public static string ValidateResetPassword(string value)
     {
       if (string.IsNullOrEmpty(value))
       {
